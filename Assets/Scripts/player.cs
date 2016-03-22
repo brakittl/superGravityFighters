@@ -38,6 +38,14 @@ public class player : MonoBehaviour {
 
   public orientation player_orientation;
 
+    AudioSource sound;
+    public AudioClip gunshot;
+    public GameObject bullet;
+    GameObject bulletGO;
+    public float shotVelocity = 5f, numBullets = 1;
+    float fireRate = 1.5f, nextFire = 0f;
+    string lastDirection = "right";
+
   void Start(){
     player_animator = GetComponent<Animator>();
     body = gameObject.GetComponent<Rigidbody2D>();
@@ -50,7 +58,8 @@ public class player : MonoBehaviour {
         side_slash.GetComponent<BoxCollider2D>().enabled = false;
         up_slash.GetComponent<BoxCollider2D>().enabled = false;
         down_slash.GetComponent<BoxCollider2D>().enabled = false;
-  }
+        sound = GetComponent<AudioSource>();
+    }
   
   void Update(){
 
@@ -60,8 +69,7 @@ public class player : MonoBehaviour {
     up = new Vector2(0f, acceleration);
 
     // swap gravity orientation
-    if((Input.GetButtonDown("Controller " + playerNumber + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up) { 
-    //if(Input.GetKey(KeyCode.W) && player_orientation != orientation.up){
+    if((Input.GetButtonDown("Controller " + playerNumber + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up) {
       body.velocity = new Vector2(0f, 0f);
       player_orientation = orientation.up;
       // Physics2D.gravity = up;
@@ -95,6 +103,12 @@ public class player : MonoBehaviour {
       Attack();
     }
 
+        if ((Input.GetAxis("Controller " + playerNumber + " Right Bumper") >= 0.9 || Input.GetKey(KeyCode.LeftShift)) 
+            && Time.time > nextFire && numBullets > 0)
+        {
+            Shoot();
+        }
+
     // block
     if(Input.GetAxis("Controller " + playerNumber + " Left Trigger") >= 0.9 || Input.GetKey(KeyCode.Q)){
       Block();
@@ -120,64 +134,80 @@ public class player : MonoBehaviour {
     if(Input.GetAxis("Controller " + playerNumber + " Left Stick X Axis") >= 0.9f || Input.GetKey(KeyCode.RightArrow)){
       if(player_orientation == orientation.up){
         move_left = true;
+        lastDirection = "left";
       }
       else if(player_orientation == orientation.left){
         move_up = true;
-      }
+                lastDirection = "up";
+            }
       else if(player_orientation == orientation.right){
         move_down = true;
-      }
+                lastDirection = "down";
+            }
       else{
         move_right = true;
-      }
+                lastDirection = "right";
+            }
     }
 
     // move left
     if(Input.GetAxis("Controller " + playerNumber + " Left Stick X Axis") <= -0.9f || Input.GetKey(KeyCode.LeftArrow)){
       if(player_orientation == orientation.up){
         move_right = true;
-      }
+                lastDirection = "right";
+            }
       else if(player_orientation == orientation.left){
         move_down = true;
-      }
+                lastDirection = "down";
+            }
       else if(player_orientation == orientation.right){
         move_up = true;
-      }
+                lastDirection = "up";
+            }
       else{
         move_left = true;
-      }
+                lastDirection = "left";
+            }
     }
 
     // move up
     if(Input.GetAxis("Controller " + playerNumber + " Left Stick Y Axis") <= -0.9f || Input.GetKey(KeyCode.UpArrow)){
       if(player_orientation == orientation.up){
         move_down = true;
-      }
+                lastDirection = "down";
+            }
       else if(player_orientation == orientation.left){
         move_left = true;
-      }
+                lastDirection = "left";
+            }
       else if(player_orientation == orientation.right){
         move_right = true;
-      }
+                lastDirection = "right";
+            }
       else{
         move_up = true;
-      }
+                lastDirection = "up";
+            }
     }
 
     // move down
     if(Input.GetAxis("Controller " + playerNumber + " Left Stick Y Axis") >= 0.9f || Input.GetKey(KeyCode.DownArrow)){
       if(player_orientation == orientation.up){
         move_up = true;
-      }
+                lastDirection = "up";
+            }
       else if(player_orientation == orientation.left){
         move_right = true;
-      }
+                lastDirection = "right";
+            }
       else if(player_orientation == orientation.right){
         move_left = true;
-      }
+                lastDirection = "left";
+            }
       else{
         move_down = true;
-      }
+                lastDirection = "down";
+            }
     }
 
         // apply left movement
@@ -336,6 +366,69 @@ public class player : MonoBehaviour {
         }
 
     }
+    
+    void Shoot()
+    {
+        sound.PlayOneShot(gunshot);
+        //numBullets--;
+        nextFire = Time.time + fireRate;
+
+        //Bullet location
+        //Bullet Orientation
+        //Bullet Velocity Direction
+
+        Vector3 pos = transform.position, rot = transform.rotation.eulerAngles;
+        if ((lastDirection == "right" && player_orientation == orientation.down) || 
+            (lastDirection == "left" && player_orientation == orientation.up) ||
+            (lastDirection == "down" && player_orientation == orientation.right) ||
+            (lastDirection == "up" && player_orientation == orientation.left))
+        {
+            pos.x = transform.position.x + 0.15f;
+            rot.z = 90;
+            bulletGO = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
+            bulletGO.GetComponent<Rigidbody2D>().velocity = Vector3.right * shotVelocity;
+        }
+        else if((lastDirection == "left" && player_orientation == orientation.down) || 
+                (lastDirection == "right" && player_orientation == orientation.up) ||
+            (lastDirection == "up" && player_orientation == orientation.right) ||
+            (lastDirection == "down" && player_orientation == orientation.left))
+        {
+            pos.x = transform.position.x - 0.15f;
+            rot.z = 90;
+            bulletGO = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
+            bulletGO.GetComponent<Rigidbody2D>().velocity = Vector3.left * shotVelocity;
+        }
+        else if ((lastDirection == "up" && player_orientation == orientation.down) ||
+            (lastDirection == "down" && player_orientation == orientation.up) ||
+            (lastDirection == "right" && player_orientation == orientation.right) ||
+            (lastDirection == "left" && player_orientation == orientation.left))
+        {
+            pos.y = transform.position.y + 0.15f;
+            if(player_orientation == orientation.right || player_orientation == orientation.left)
+                rot.z = 0;
+            bulletGO = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
+            bulletGO.GetComponent<Rigidbody2D>().velocity = Vector3.up * shotVelocity;
+        }
+        else if ((lastDirection == "down" && (player_orientation == orientation.down) || 
+            lastDirection == "up" && player_orientation == orientation.up) ||
+            (lastDirection == "left" && player_orientation == orientation.right) ||
+            (lastDirection == "right" && player_orientation == orientation.left))
+        {
+            pos.y = transform.position.y - 0.15f;
+            if (player_orientation == orientation.right || player_orientation == orientation.left)
+                rot.z = 0;
+            bulletGO = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
+            bulletGO.GetComponent<Rigidbody2D>().velocity = Vector3.down * shotVelocity;
+        }
+        //else if()
+        //rot.z = 90;
+        //pos.x = transform.position.x + 0.15f;
+        //bulletGO = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
+        //bulletGO.GetComponent<Rigidbody2D>().velocity = Vector3.right * shotVelocity;
+
+        //move_up, move_down, move_left, move_right
+        //player_orientation == orientation.up .left .right .down
+    }
 
   void Block(){
     player_animator.Play("Block");
@@ -376,7 +469,7 @@ public class player : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.tag == "slash" && !respawn)
+        if ((col.tag == "slash" || col.tag == "bullet") && !respawn)
         {
             KillPlayer();
         }
