@@ -3,6 +3,8 @@ using System.Collections;
 
 public class player : MonoBehaviour {
 
+    public int playerNumber;
+
   public enum orientation { up, down, left, right };
 
   // public GameObject slash;
@@ -14,6 +16,7 @@ public class player : MonoBehaviour {
   public Animator down_slash_animator;
   public Animator shield_animator;
   Rigidbody2D body;
+
   
   
     public GameObject slash;
@@ -41,9 +44,7 @@ public class player : MonoBehaviour {
     grounded = 0;
     // Physics2D.gravity = down;
     player_orientation = orientation.down;
-    body.gravityScale = 0;
-    
-    
+    body.gravityScale = 0;    
 
         slash.GetComponent<BoxCollider2D>().enabled = false;
         side_slash.GetComponent<BoxCollider2D>().enabled = false;
@@ -59,28 +60,29 @@ public class player : MonoBehaviour {
     up = new Vector2(0f, acceleration);
 
     // swap gravity orientation
-    if(Input.GetKey(KeyCode.W) && player_orientation != orientation.up){
+    if((Input.GetButtonDown("Controller " + playerNumber + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up) { 
+    //if(Input.GetKey(KeyCode.W) && player_orientation != orientation.up){
       body.velocity = new Vector2(0f, 0f);
       player_orientation = orientation.up;
       // Physics2D.gravity = up;
       transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, 180f);
       player_animator.Play("Swap");
     }
-    if(Input.GetKey(KeyCode.S) && player_orientation != orientation.down){
+    if((Input.GetButtonDown("Controller " + playerNumber + " A Button") || Input.GetKey(KeyCode.S)) && player_orientation != orientation.down){
       body.velocity = new Vector2(0f, 0f);
       player_orientation = orientation.down;
       // Physics2D.gravity = down;
       transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
       player_animator.Play("Swap");
     }
-    if(Input.GetKey(KeyCode.A) && player_orientation != orientation.left){
+    if((Input.GetButtonDown("Controller " + playerNumber + " X Button") || Input.GetKey(KeyCode.A)) && player_orientation != orientation.left){
       body.velocity = new Vector2(0f, 0f);
       player_orientation = orientation.left;
       // Physics2D.gravity = left;
       transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, 0f, -90f);
       player_animator.Play("Swap");
     }
-    if(Input.GetKey(KeyCode.D) && player_orientation != orientation.right){
+    if((Input.GetButtonDown("Controller " + playerNumber + " B Button") || Input.GetKey(KeyCode.D)) && player_orientation != orientation.right){
       body.velocity = new Vector2(0f, 0f);
       player_orientation = orientation.right;
       // Physics2D.gravity = right;
@@ -89,17 +91,17 @@ public class player : MonoBehaviour {
     }
 
     // attack
-    if(Input.GetKey(KeyCode.Space)){
+    if(Input.GetAxis("Controller " + playerNumber + " Right Trigger") >= 0.9 || Input.GetKey(KeyCode.Space)){
       Attack();
     }
 
     // block
-    if(Input.GetKey(KeyCode.Q)){
+    if(Input.GetAxis("Controller " + playerNumber + " Left Trigger") >= 0.9 || Input.GetKey(KeyCode.Q)){
       Block();
     }
 
     // super slash for shits and gigs
-    if(Input.GetKey(KeyCode.F)){
+    if(Input.GetButtonDown("Controller " + playerNumber + " Left Bumper") || Input.GetKey(KeyCode.F)){
       down_slash_animator.Play("Slash");
       up_slash_animator.Play("Slash");
       slash_animator.Play("Slash");
@@ -112,7 +114,7 @@ public class player : MonoBehaviour {
     move_down = false;
 
     // move right
-    if(Input.GetKey(KeyCode.RightArrow)){
+    if(Input.GetAxis("Controller " + playerNumber + " Left Stick X Axis") >= 0.9f || Input.GetKey(KeyCode.RightArrow)){
       if(player_orientation == orientation.up){
         move_left = true;
       }
@@ -128,7 +130,7 @@ public class player : MonoBehaviour {
     }
 
     // move left
-    if(Input.GetKey(KeyCode.LeftArrow)){
+    if(Input.GetAxis("Controller " + playerNumber + " Left Stick X Axis") <= -0.9f || Input.GetKey(KeyCode.LeftArrow)){
       if(player_orientation == orientation.up){
         move_right = true;
       }
@@ -144,7 +146,7 @@ public class player : MonoBehaviour {
     }
 
     // move up
-    if(Input.GetKey(KeyCode.UpArrow)){
+    if(Input.GetAxis("Controller " + playerNumber + " Left Stick Y Axis") <= -0.9f || Input.GetKey(KeyCode.UpArrow)){
       if(player_orientation == orientation.up){
         move_down = true;
       }
@@ -160,7 +162,7 @@ public class player : MonoBehaviour {
     }
 
     // move down
-    if(Input.GetKey(KeyCode.DownArrow)){
+    if(Input.GetAxis("Controller " + playerNumber + " Left Stick Y Axis") >= 0.9f || Input.GetKey(KeyCode.DownArrow)){
       if(player_orientation == orientation.up){
         move_up = true;
       }
@@ -175,7 +177,11 @@ public class player : MonoBehaviour {
       }
     }
 
-    // apply left movement
+        // apply left movement
+        //if (Input.GetButtonDown("Controller " + playerNumber + " A Button"))
+        //{
+        //    move_up = true;
+        //}
     if(move_right){
       Run(true);
     }
@@ -364,6 +370,15 @@ public class player : MonoBehaviour {
       }
     }
   }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.tag == "slash" && !respawn)
+        {
+            KillPlayer();
+        }
+
+    }
 
 
     bool respawn = false, respawning = false;
