@@ -1,9 +1,20 @@
 fileFormatVersion: 2
 guid: 67233d443e6af4ed3b593a00a192a3c1
-timeCreated: 1458616955
+timeCreated: 1458679142
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: green_attack_0
+    21300002: green_attack_1
+    21300004: green_attack_2
+    21300006: green_attack_3
+    21300008: green_attack_4
+    21300010: green_attack_5
+    21300012: green_attack_6
+    21300014: green_attack_7
+    21300016: green_attack_8
+    21300018: green_attack_9
+    21300020: green_attack_10
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -29,27 +40,337 @@ TextureImporter:
   textureFormat: -1
   maxTextureSize: 2048
   textureSettings:
-    filterMode: -1
-    aniso: -1
+    filterMode: 0
+    aniso: 16
     mipBias: -1
-    wrapMode: -1
-  nPOTScale: 1
+    wrapMode: 1
+  nPOTScale: 0
   lightmap: 0
   rGBM: 0
   compressionQuality: 50
   allowsAlphaSplitting: 0
-  spriteMode: 0
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
-  alphaIsTransparency: 0
-  textureType: -1
+  alphaIsTransparency: 1
+  textureType: 8
   buildTargetSettings: []
   spriteSheet:
-    sprites: []
+    sprites:
+    - name: green_attack_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 430
+        width: 70
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -19, y: 12.5}
+        - {x: -25, y: -1.5}
+        - {x: -25, y: -18.5}
+        - {x: -20, y: -21.5}
+        - {x: 9, y: -21.5}
+        - {x: 9, y: 12.5}
+    - name: green_attack_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 387
+        width: 70
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -12, y: 13.5}
+        - {x: -23, y: 9.5}
+        - {x: -28, y: -1.5}
+        - {x: -28, y: -17.5}
+        - {x: -22, y: -21.5}
+        - {x: 6, y: -21.5}
+        - {x: 6, y: 10.5}
+        - {x: 3, y: 13.5}
+    - name: green_attack_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 344
+        width: 70
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -16, y: 15.5}
+        - {x: -27, y: -4.5}
+        - {x: -29, y: -9.5}
+        - {x: -29, y: -18.5}
+        - {x: -25, y: -21.5}
+        - {x: 6, y: -21.5}
+        - {x: 6, y: 9.5}
+        - {x: -4, y: 15.5}
+    - name: green_attack_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 301
+        width: 70
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 12, y: 9.5}
+        - {x: 8, y: 5.5}
+        - {x: -5, y: 14.5}
+        - {x: -20, y: 14.5}
+        - {x: -34, y: -4.5}
+        - {x: -34, y: -21.5}
+        - {x: 27, y: -21.5}
+        - {x: 27, y: -9.5}
+        - {x: 24, y: 2.5}
+    - name: green_attack_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 258
+        width: 70
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -21, y: 20.5}
+        - {x: -22, y: 19.5}
+        - {x: -27, y: -0.5}
+        - {x: -27, y: -20.5}
+        - {x: -25, y: -21.5}
+        - {x: 33, y: -21.5}
+        - {x: 33, y: -0.5}
+        - {x: 14, y: 20.5}
+    - name: green_attack_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 215
+        width: 70
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 20, y: 10.5}
+        - {x: 19, y: 7.5}
+        - {x: 0, y: 21.5}
+        - {x: -24, y: 21.5}
+        - {x: -32, y: 18.5}
+        - {x: -28, y: 9.5}
+        - {x: -22, y: 2.5}
+        - {x: -19, y: 3.5}
+        - {x: -18, y: 6.5}
+        - {x: -20, y: 1.5}
+        - {x: -23, y: 3.5}
+        - {x: -28, y: 4.5}
+        - {x: -35, y: -7.5}
+        - {x: -35, y: -21.5}
+        - {x: 33, y: -21.5}
+        - {x: 33, y: -8.5}
+        - {x: 24, y: 13.5}
+    - name: green_attack_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 172
+        width: 70
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 10, y: 16.5}
+        - {x: -7, y: 12.5}
+        - {x: -29, y: 6.5}
+        - {x: -34, y: -9.5}
+        - {x: -34, y: -21.5}
+        - {x: 35, y: -21.5}
+        - {x: 35, y: 1.5}
+        - {x: 29, y: 16.5}
+      - - {x: -24, y: 21.5}
+        - {x: -27, y: 19.5}
+        - {x: -27, y: 10.5}
+        - {x: -20, y: 4.5}
+        - {x: -16, y: 5.5}
+        - {x: -4, y: 19.5}
+        - {x: -5, y: 21.5}
+    - name: green_attack_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 129
+        width: 70
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -17, y: 7.5}
+        - {x: -20, y: 5.5}
+        - {x: -18, y: 8.5}
+        - {x: -19, y: 21.5}
+        - {x: -27, y: 21.5}
+        - {x: -35, y: 1.5}
+        - {x: -35, y: -21.5}
+        - {x: 35, y: -21.5}
+        - {x: 35, y: 13.5}
+        - {x: 3, y: 16.5}
+      - - {x: 24, y: 13.5}
+        - {x: 28, y: 7.5}
+        - {x: 31, y: 8.5}
+        - {x: 31, y: 11.5}
+        - {x: 27, y: 16.5}
+        - {x: 25, y: 16.5}
+    - name: green_attack_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 86
+        width: 70
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -30, y: 16.5}
+        - {x: -35, y: 10.5}
+        - {x: -35, y: -21.5}
+        - {x: 35, y: -21.5}
+        - {x: 35, y: 10.5}
+        - {x: 28, y: 16.5}
+      - - {x: 26, y: 14.5}
+        - {x: 30, y: 9.5}
+        - {x: 33, y: 10.5}
+        - {x: 33, y: 13.5}
+        - {x: 29, y: 17.5}
+        - {x: 27, y: 17.5}
+      - - {x: -26, y: 14.5}
+        - {x: -23, y: 11.5}
+        - {x: -20, y: 13.5}
+        - {x: -21, y: 20.5}
+        - {x: -22, y: 21.5}
+        - {x: -26, y: 21.5}
+    - name: green_attack_9
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 43
+        width: 70
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 15, y: 8.5}
+        - {x: -30, y: 8.5}
+        - {x: -34, y: 1.5}
+        - {x: -34, y: -16.5}
+        - {x: -26, y: -21.5}
+        - {x: 11, y: -21.5}
+        - {x: 15, y: -18.5}
+      - - {x: 13, y: -21.5}
+        - {x: 16, y: -20.5}
+        - {x: 16, y: -17.5}
+        - {x: 13, y: -16.5}
+        - {x: 11, y: -18.5}
+      - - {x: 31, y: -7.5}
+        - {x: 33, y: -7.5}
+        - {x: 35, y: -5.5}
+        - {x: 35, y: -0.5}
+        - {x: 28, y: 5.5}
+        - {x: 19, y: 10.5}
+        - {x: 12, y: 10.5}
+        - {x: 12, y: 3.5}
+        - {x: 16, y: -13.5}
+        - {x: 29, y: -18.5}
+        - {x: 33, y: -18.5}
+        - {x: 35, y: -15.5}
+        - {x: 35, y: -8.5}
+        - {x: 34, y: -7.5}
+      - - {x: 28, y: 6.5}
+        - {x: 28, y: 5.5}
+        - {x: 31, y: 2.5}
+        - {x: 34, y: 3.5}
+        - {x: 34, y: 7.5}
+        - {x: 32, y: 9.5}
+        - {x: 31, y: 9.5}
+    - name: green_attack_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 70
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 3, y: 10.5}
+        - {x: -8, y: 10.5}
+        - {x: -12, y: 8.5}
+        - {x: -28, y: 1.5}
+        - {x: -31, y: -3.5}
+        - {x: -31, y: -16.5}
+        - {x: -23, y: -21.5}
+        - {x: 9, y: -21.5}
+        - {x: 11, y: -17.5}
+        - {x: 11, y: -0.5}
+      - - {x: 18, y: -3.5}
+        - {x: 18, y: -7.5}
+        - {x: 21, y: -8.5}
+        - {x: 23, y: -8.5}
+        - {x: 27, y: -18.5}
+        - {x: 34, y: -18.5}
+        - {x: 35, y: -17.5}
+        - {x: 35, y: 1.5}
+        - {x: 34, y: 2.5}
+        - {x: 27, y: 2.5}
+        - {x: 21, y: 0.5}
+      - - {x: -32, y: -13.5}
+        - {x: -29, y: -12.5}
+        - {x: -29, y: -9.5}
+        - {x: -32, y: -8.5}
+        - {x: -34, y: -10.5}
+      - - {x: 12, y: -3.5}
+        - {x: 15, y: -2.5}
+        - {x: 15, y: 0.5}
+        - {x: 12, y: 1.5}
+        - {x: 10, y: -0.5}
+      - - {x: 13, y: 3.5}
+        - {x: 15, y: 1.5}
+        - {x: 21, y: 1.5}
+        - {x: 24, y: 3.5}
+        - {x: 24, y: 5.5}
+        - {x: 21, y: 9.5}
+        - {x: 13, y: 9.5}
+      - - {x: -25, y: 4.5}
+        - {x: -23, y: 2.5}
+        - {x: -20, y: 3.5}
+        - {x: -20, y: 6.5}
+        - {x: -22, y: 8.5}
+        - {x: -25, y: 7.5}
+      - - {x: 28, y: 8.5}
+        - {x: 28, y: 5.5}
+        - {x: 29, y: 3.5}
+        - {x: 31, y: 3.5}
+        - {x: 34, y: 6.5}
+        - {x: 33, y: 9.5}
+        - {x: 30, y: 9.5}
     outline: []
   spritePackingTag: 
   userData: 

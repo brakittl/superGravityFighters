@@ -3,32 +3,31 @@ using System.Collections;
 
 public class player : MonoBehaviour {
 
-    public int playerNumber;
+  public int player_number;
+  public string player_color;
 
   public enum orientation { up, down, left, right };
-
-  // public GameObject slash;
+  public orientation player_orientation;
 
   Animator player_animator;
+  Rigidbody2D body;
+
   public Animator slash_animator;
   public Animator side_slash_animator;
   public Animator up_slash_animator;
   public Animator down_slash_animator;
   public Animator shield_animator;
-  Rigidbody2D body;
-
   
-  
-    public GameObject slash;
-    public GameObject side_slash;
-    public GameObject up_slash;
-    public GameObject down_slash;
+  public GameObject slash;
+  public GameObject side_slash;
+  public GameObject up_slash;
+  public GameObject down_slash;
 
   public float speed;
   public float thrust;
   public float acceleration;
-
   public int grounded;
+
   bool move_left = false;
   bool move_right = false;
   bool move_up = false;
@@ -36,80 +35,72 @@ public class player : MonoBehaviour {
 
   Vector2 right, left, down, up;
 
-  public orientation player_orientation;
-
   void Start(){
     player_animator = GetComponent<Animator>();
     body = gameObject.GetComponent<Rigidbody2D>();
     grounded = 0;
-    // Physics2D.gravity = down;
     player_orientation = orientation.down;
     body.gravityScale = 0;    
-
-        slash.GetComponent<BoxCollider2D>().enabled = false;
-        side_slash.GetComponent<BoxCollider2D>().enabled = false;
-        up_slash.GetComponent<BoxCollider2D>().enabled = false;
-        down_slash.GetComponent<BoxCollider2D>().enabled = false;
+    slash.GetComponent<BoxCollider2D>().enabled = false;
+    side_slash.GetComponent<BoxCollider2D>().enabled = false;
+    up_slash.GetComponent<BoxCollider2D>().enabled = false;
+    down_slash.GetComponent<BoxCollider2D>().enabled = false;
   }
   
   void Update(){
 
+    // gravity vectors
     right = new Vector2(acceleration, 0f);
     left = new Vector2(-acceleration, 0f);
     down = new Vector2(0f, -acceleration);
     up = new Vector2(0f, acceleration);
 
     // swap gravity orientation
-    if((Input.GetButtonDown("Controller " + playerNumber + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up) { 
-    //if(Input.GetKey(KeyCode.W) && player_orientation != orientation.up){
+    if((Input.GetButtonDown("Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up) { 
       body.velocity = new Vector2(0f, 0f);
       player_orientation = orientation.up;
-      // Physics2D.gravity = up;
       transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, 180f);
       player_animator.Play("Swap");
     }
-    if((Input.GetButtonDown("Controller " + playerNumber + " A Button") || Input.GetKey(KeyCode.S)) && player_orientation != orientation.down){
+    if((Input.GetButtonDown("Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S)) && player_orientation != orientation.down){
       body.velocity = new Vector2(0f, 0f);
       player_orientation = orientation.down;
-      // Physics2D.gravity = down;
       transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
       player_animator.Play("Swap");
     }
-    if((Input.GetButtonDown("Controller " + playerNumber + " X Button") || Input.GetKey(KeyCode.A)) && player_orientation != orientation.left){
+    if((Input.GetButtonDown("Controller " + player_number + " X Button") || Input.GetKey(KeyCode.A)) && player_orientation != orientation.left){
       body.velocity = new Vector2(0f, 0f);
       player_orientation = orientation.left;
-      // Physics2D.gravity = left;
       transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, 0f, -90f);
       player_animator.Play("Swap");
     }
-    if((Input.GetButtonDown("Controller " + playerNumber + " B Button") || Input.GetKey(KeyCode.D)) && player_orientation != orientation.right){
+    if((Input.GetButtonDown("Controller " + player_number + " B Button") || Input.GetKey(KeyCode.D)) && player_orientation != orientation.right){
       body.velocity = new Vector2(0f, 0f);
       player_orientation = orientation.right;
-      // Physics2D.gravity = right;
       transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, 0f, 90f);
       player_animator.Play("Swap");
     }
 
     // attack
-    if(Input.GetAxis("Controller " + playerNumber + " Right Trigger") >= 0.9 || Input.GetKey(KeyCode.Space)){
+    if(Input.GetAxis("Controller " + player_number + " Right Trigger") >= 0.9 || Input.GetKey(KeyCode.Space)){
       Attack();
     }
 
     // block
-    if(Input.GetAxis("Controller " + playerNumber + " Left Trigger") >= 0.9 || Input.GetKey(KeyCode.Q)){
+    if(Input.GetAxis("Controller " + player_number + " Left Trigger") >= 0.9 || Input.GetKey(KeyCode.Q)){
       Block();
     }
 
     // super slash for shits and gigs
-    if(Input.GetButtonDown("Controller " + playerNumber + " Left Bumper") || Input.GetKey(KeyCode.F)){
+    if(Input.GetButtonDown("Controller " + player_number + " Left Bumper") || Input.GetKey(KeyCode.F)){
       down_slash_animator.Play("Slash");
       up_slash_animator.Play("Slash");
       slash_animator.Play("Slash");
       player_animator.Play("Attack");
-            slash.GetComponent<BoxCollider2D>().enabled = true;
-            up_slash.GetComponent<BoxCollider2D>().enabled = true;
-            down_slash.GetComponent<BoxCollider2D>().enabled = true;
-        }
+      slash.GetComponent<BoxCollider2D>().enabled = true;
+      up_slash.GetComponent<BoxCollider2D>().enabled = true;
+      down_slash.GetComponent<BoxCollider2D>().enabled = true;
+    }
 
     move_left = false;
     move_right = false;
@@ -117,7 +108,7 @@ public class player : MonoBehaviour {
     move_down = false;
 
     // move right
-    if(Input.GetAxis("Controller " + playerNumber + " Left Stick X Axis") >= 0.9f || Input.GetKey(KeyCode.RightArrow)){
+    if(Input.GetAxis("Controller " + player_number + " Left Stick X Axis") >= 0.9f || Input.GetKey(KeyCode.RightArrow)){
       if(player_orientation == orientation.up){
         move_left = true;
       }
@@ -133,7 +124,7 @@ public class player : MonoBehaviour {
     }
 
     // move left
-    if(Input.GetAxis("Controller " + playerNumber + " Left Stick X Axis") <= -0.9f || Input.GetKey(KeyCode.LeftArrow)){
+    if(Input.GetAxis("Controller " + player_number + " Left Stick X Axis") <= -0.9f || Input.GetKey(KeyCode.LeftArrow)){
       if(player_orientation == orientation.up){
         move_right = true;
       }
@@ -149,7 +140,7 @@ public class player : MonoBehaviour {
     }
 
     // move up
-    if(Input.GetAxis("Controller " + playerNumber + " Left Stick Y Axis") <= -0.9f || Input.GetKey(KeyCode.UpArrow)){
+    if(Input.GetAxis("Controller " + player_number + " Left Stick Y Axis") <= -0.9f || Input.GetKey(KeyCode.UpArrow)){
       if(player_orientation == orientation.up){
         move_down = true;
       }
@@ -165,7 +156,7 @@ public class player : MonoBehaviour {
     }
 
     // move down
-    if(Input.GetAxis("Controller " + playerNumber + " Left Stick Y Axis") >= 0.9f || Input.GetKey(KeyCode.DownArrow)){
+    if(Input.GetAxis("Controller " + player_number + " Left Stick Y Axis") >= 0.9f || Input.GetKey(KeyCode.DownArrow)){
       if(player_orientation == orientation.up){
         move_up = true;
       }
@@ -180,11 +171,7 @@ public class player : MonoBehaviour {
       }
     }
 
-        // apply left movement
-        //if (Input.GetButtonDown("Controller " + playerNumber + " A Button"))
-        //{
-        //    move_up = true;
-        //}
+    // apply movement
     if(move_right){
       Run(true);
     }
@@ -192,38 +179,35 @@ public class player : MonoBehaviour {
       Run(false);
     }
 
+    // crouch
     player_animator.SetBool("crouched", false);
     if(move_down){
       Crouch();
     }
-
-    if(Input.GetKey(KeyCode.B)){
-      player_animator.Play("Death");
-      
-    }
     
+
     if(!Input.anyKey){
       player_animator.SetBool("run", false);
     }
 
-        if (!player_animator.GetBool("attack"))
-        {
-            slash.GetComponent<BoxCollider2D>().enabled = false;
-            side_slash.GetComponent<BoxCollider2D>().enabled = false;
-            up_slash.GetComponent<BoxCollider2D>().enabled = false;
-            down_slash.GetComponent<BoxCollider2D>().enabled = false;
-        }
+    if(!player_animator.GetBool("attack")){
+      slash.GetComponent<BoxCollider2D>().enabled = false;
+      side_slash.GetComponent<BoxCollider2D>().enabled = false;
+      up_slash.GetComponent<BoxCollider2D>().enabled = false;
+      down_slash.GetComponent<BoxCollider2D>().enabled = false;
+    }
 
-        if (respawn && respawning)
-        {
-            respawning = false;
-            StartCoroutine(Blink());
-        }
+    // respawn
+    if(respawn && respawning){
+      respawning = false;
+      StartCoroutine(Blink());
+    }
 
   }
 
   void FixedUpdate(){
 
+    // apply gravity
     if(player_orientation == orientation.down){
       body.AddForce(down);
     }
@@ -237,9 +221,11 @@ public class player : MonoBehaviour {
       body.AddForce(right);
     }
     
+    // apply jump
     if(move_up && grounded == 1){
       Jump();
     }
+
   }
 
   void Crouch(){
@@ -297,43 +283,38 @@ public class player : MonoBehaviour {
 
    void Attack(){
 
-        if (!player_animator.GetBool("attack") && !respawn)
-        {
+      if(!player_animator.GetBool("attack") && !respawn){
 
-            player_animator.SetBool("attack", true);
+        player_animator.SetBool("attack", true);
 
-            if (!player_animator.GetBool("grounded"))
-            {
-                if (move_left || move_right)
-                {
-                    player_animator.Play("Side_Attack");
-                    side_slash_animator.Play("Slash");
-                    side_slash.GetComponent<BoxCollider2D>().enabled = true;
-                }
-                else if (move_down)
-                {
-                    player_animator.Play("Down_Attack");
-                    down_slash_animator.Play("Slash");
-                    down_slash.GetComponent<BoxCollider2D>().enabled = true;
-                }
-                else if (move_up)
-                {
-                    player_animator.Play("Up_Attack");
-                    up_slash_animator.Play("Slash");
-                    up_slash.GetComponent<BoxCollider2D>().enabled = true;
-                }
-                else {
-                    player_animator.Play("Attack");
-                    slash_animator.Play("Slash");
-                    slash.GetComponent<BoxCollider2D>().enabled = true;
-                }
-            }
-            else {
-                player_animator.Play("Attack");
-                slash_animator.Play("Slash");
-                slash.GetComponent<BoxCollider2D>().enabled = true;
-            }
+        if(!player_animator.GetBool("grounded")){
+          if(move_left || move_right){
+            player_animator.Play("Side_Attack");
+            side_slash_animator.Play("Slash");
+            side_slash.GetComponent<BoxCollider2D>().enabled = true;
+          }
+          else if (move_down){
+            player_animator.Play("Down_Attack");
+            down_slash_animator.Play("Slash");
+            down_slash.GetComponent<BoxCollider2D>().enabled = true;
+          }
+          else if (move_up){
+            player_animator.Play("Up_Attack");
+            up_slash_animator.Play("Slash");
+            up_slash.GetComponent<BoxCollider2D>().enabled = true;
+          }
+          else {
+            player_animator.Play("Attack");
+            slash_animator.Play("Slash");
+            slash.GetComponent<BoxCollider2D>().enabled = true;
+          }
         }
+        else {
+          player_animator.Play("Attack");
+          slash_animator.Play("Slash");
+          slash.GetComponent<BoxCollider2D>().enabled = true;
+        }
+      }
 
     }
 
@@ -374,61 +355,57 @@ public class player : MonoBehaviour {
     }
   }
 
-    void OnTriggerEnter2D(Collider2D col)
-    {
-        if (col.tag == "slash" && !respawn)
-        {
-            KillPlayer();
-        }
-
+    void OnTriggerEnter2D(Collider2D col){
+      if (col.tag == "slash" && !respawn){
+        KillPlayer();
+      }
     }
 
 
     bool respawn = false, respawning = false;
-    void KillPlayer()
-    {
-        player_animator.Play("Death");
-        body.velocity = new Vector2(0f, 0f);
-        player_orientation = orientation.down;
-        StartCoroutine(Wait());
-
+    void KillPlayer(){
+      player_animator.Play("Death");
+      body.velocity = new Vector2(0f, 0f);
+      player_orientation = orientation.down;
+      StartCoroutine(Wait());
     }
 
     public Vector3 offscreen = new Vector3(-1000, -1000, -1000);
-    IEnumerator Wait()
-    {
-        yield return new WaitForSeconds(0.75f);
-        transform.position = offscreen;
-        yield return new WaitForSeconds(2f);
-        //transform.position = Level.S.findRespawn();
-        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
-        transform.position = Level.S.respawnPoints[UnityEngine.Random.Range(0, Level.S.respawnPoints.Length)];
-        respawn = true;
-        respawning = true;
+    
+    IEnumerator Wait(){
+      yield return new WaitForSeconds(0.75f);
+      transform.position = offscreen;
+      yield return new WaitForSeconds(2f);
+      //transform.position = Level.S.findRespawn();
+      transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
+      transform.position = Level.S.respawnPoints[UnityEngine.Random.Range(0, Level.S.respawnPoints.Length)];
+      respawn = true;
+      respawning = true;
     }
 
-    IEnumerator Blink()
-    {
-        transform.GetComponent<Renderer>().enabled = false; ;
-        yield return new WaitForSeconds(0.2f);
-        transform.GetComponent<Renderer>().enabled = true;
-        yield return new WaitForSeconds(0.5f);
+    IEnumerator Blink(){
 
-        transform.GetComponent<Renderer>().enabled = false; ;
-        yield return new WaitForSeconds(0.2f);
-        transform.GetComponent<Renderer>().enabled = true;
-        yield return new WaitForSeconds(0.5f);
+      transform.GetComponent<Renderer>().enabled = false;
+      yield return new WaitForSeconds(0.2f);
+      transform.GetComponent<Renderer>().enabled = true;
+      yield return new WaitForSeconds(0.5f);
 
-        transform.GetComponent<Renderer>().enabled = false;
-        yield return new WaitForSeconds(0.2f);
-        transform.GetComponent<Renderer>().enabled = true;
-        yield return new WaitForSeconds(0.75f);
+      transform.GetComponent<Renderer>().enabled = false;
+      yield return new WaitForSeconds(0.2f);
+      transform.GetComponent<Renderer>().enabled = true;
+      yield return new WaitForSeconds(0.5f);
 
-        transform.GetComponent<Renderer>().enabled = false;
-        yield return new WaitForSeconds(0.1f);
-        transform.GetComponent<Renderer>().enabled = true;
-        yield return new WaitForSeconds(1f);
-        respawn = false;
+      transform.GetComponent<Renderer>().enabled = false;
+      yield return new WaitForSeconds(0.2f);
+      transform.GetComponent<Renderer>().enabled = true;
+      yield return new WaitForSeconds(0.75f);
+
+      transform.GetComponent<Renderer>().enabled = false;
+      yield return new WaitForSeconds(0.1f);
+      transform.GetComponent<Renderer>().enabled = true;
+      yield return new WaitForSeconds(1f);
+      respawn = false;
+
     }
 
 }
