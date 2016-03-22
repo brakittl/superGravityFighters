@@ -373,18 +373,39 @@ public class player : MonoBehaviour {
         //numBullets--;
         nextFire = Time.time + fireRate;
 
-        //Bullet location
-        //Bullet Orientation
-        //Bullet Velocity Direction
-
         Vector3 pos = transform.position, rot = transform.rotation.eulerAngles;
+        rot.x = 0;
+        rot.y = 0;
+        //Bullet Rotation
+        if (lastDirection == "up" && player_orientation == orientation.down ||
+             (lastDirection == "up" && player_orientation == orientation.up) ||
+             (lastDirection == "left" && player_orientation == orientation.left) ||
+             (lastDirection == "right" && player_orientation == orientation.right))
+            rot.z = 90;
+        else if (lastDirection == "left" && player_orientation == orientation.down ||
+             (lastDirection == "right" && player_orientation == orientation.up) ||
+             (lastDirection == "down" && player_orientation == orientation.left) ||
+             (lastDirection == "up" && player_orientation == orientation.right))
+            rot.z = 180;
+        else if (lastDirection == "down" && player_orientation == orientation.down ||
+             (lastDirection == "down" && player_orientation == orientation.down) ||
+             (lastDirection == "right" && player_orientation == orientation.left) ||
+             (lastDirection == "left" && player_orientation == orientation.right))
+            rot.z = 270;
+        else if ((lastDirection == "down" && player_orientation == orientation.down) ||
+             (lastDirection == "left" && player_orientation == orientation.up) ||
+             (lastDirection == "up" && player_orientation == orientation.left) ||
+             (lastDirection == "down" && player_orientation == orientation.right))
+            rot.z = 0;
+
+
+        //BUllet Initiation
         if ((lastDirection == "right" && player_orientation == orientation.down) || 
             (lastDirection == "left" && player_orientation == orientation.up) ||
             (lastDirection == "down" && player_orientation == orientation.right) ||
             (lastDirection == "up" && player_orientation == orientation.left))
         {
             pos.x = transform.position.x + 0.15f;
-            rot.z = 90;
             bulletGO = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
             bulletGO.GetComponent<Rigidbody2D>().velocity = Vector3.right * shotVelocity;
         }
@@ -394,7 +415,6 @@ public class player : MonoBehaviour {
             (lastDirection == "down" && player_orientation == orientation.left))
         {
             pos.x = transform.position.x - 0.15f;
-            rot.z = 90;
             bulletGO = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
             bulletGO.GetComponent<Rigidbody2D>().velocity = Vector3.left * shotVelocity;
         }
@@ -404,8 +424,6 @@ public class player : MonoBehaviour {
             (lastDirection == "left" && player_orientation == orientation.left))
         {
             pos.y = transform.position.y + 0.15f;
-            if(player_orientation == orientation.right || player_orientation == orientation.left)
-                rot.z = 0;
             bulletGO = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
             bulletGO.GetComponent<Rigidbody2D>().velocity = Vector3.up * shotVelocity;
         }
@@ -415,19 +433,9 @@ public class player : MonoBehaviour {
             (lastDirection == "right" && player_orientation == orientation.left))
         {
             pos.y = transform.position.y - 0.15f;
-            if (player_orientation == orientation.right || player_orientation == orientation.left)
-                rot.z = 0;
             bulletGO = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
             bulletGO.GetComponent<Rigidbody2D>().velocity = Vector3.down * shotVelocity;
         }
-        //else if()
-        //rot.z = 90;
-        //pos.x = transform.position.x + 0.15f;
-        //bulletGO = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
-        //bulletGO.GetComponent<Rigidbody2D>().velocity = Vector3.right * shotVelocity;
-
-        //move_up, move_down, move_left, move_right
-        //player_orientation == orientation.up .left .right .down
     }
 
   void Block(){
