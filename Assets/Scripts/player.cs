@@ -106,7 +106,10 @@ public class player : MonoBehaviour {
       up_slash_animator.Play("Slash");
       slash_animator.Play("Slash");
       player_animator.Play("Attack");
-    }
+            slash.GetComponent<BoxCollider2D>().enabled = true;
+            up_slash.GetComponent<BoxCollider2D>().enabled = true;
+            down_slash.GetComponent<BoxCollider2D>().enabled = true;
+        }
 
     move_left = false;
     move_right = false;
@@ -294,7 +297,7 @@ public class player : MonoBehaviour {
 
    void Attack(){
 
-        if (!player_animator.GetBool("attack"))
+        if (!player_animator.GetBool("attack") && !respawn)
         {
 
             player_animator.SetBool("attack", true);
@@ -385,7 +388,10 @@ public class player : MonoBehaviour {
     void KillPlayer()
     {
         player_animator.Play("Death");
+        body.velocity = new Vector2(0f, 0f);
+        player_orientation = orientation.down;
         StartCoroutine(Wait());
+
     }
 
     public Vector3 offscreen = new Vector3(-1000, -1000, -1000);
@@ -395,6 +401,7 @@ public class player : MonoBehaviour {
         transform.position = offscreen;
         yield return new WaitForSeconds(2f);
         //transform.position = Level.S.findRespawn();
+        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
         transform.position = Level.S.respawnPoints[UnityEngine.Random.Range(0, Level.S.respawnPoints.Length)];
         respawn = true;
         respawning = true;
