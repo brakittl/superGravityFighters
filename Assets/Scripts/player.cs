@@ -55,6 +55,8 @@ public class player : MonoBehaviour {
     side_slash.GetComponent<BoxCollider2D>().enabled = false;
     up_slash.GetComponent<BoxCollider2D>().enabled = false;
     down_slash.GetComponent<BoxCollider2D>().enabled = false;
+
+        sound = GetComponent<AudioSource>();
   }
   
   void Update(){

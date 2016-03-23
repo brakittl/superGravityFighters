@@ -23,7 +23,7 @@ public class Bullet : MonoBehaviour
         {
             GetComponent<Rigidbody>().velocity = -GetComponent<Rigidbody>().velocity * reflectMultiplier;
         }
-        else if (col.tag == "ground" || col.tag == "Bullet")
+        else if (col.tag == "ground" || col.tag == "bullet")
         {
             Destroy(this.gameObject);
         }
