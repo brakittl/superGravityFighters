@@ -23,8 +23,8 @@ public class player : MonoBehaviour {
   public GameObject up_slash;
   public GameObject down_slash;
 
-  public float speed;
-  public float thrust;
+  public float speed, run_speed;
+  public float thrust, jump_speed;
   public float acceleration;
   public int grounded;
 
@@ -45,7 +45,8 @@ public class player : MonoBehaviour {
   float fireRate = 1.5f, nextFire = 0f;
   string lastDirection = "right";
 
-    public int lives = 10;
+    public int lives = 3;
+    public bool dead = false;
 
   void Start(){
     player_animator = GetComponent<Animator>();
@@ -59,6 +60,8 @@ public class player : MonoBehaviour {
     down_slash.GetComponent<BoxCollider2D>().enabled = false;
 
         sound = GetComponent<AudioSource>();
+        jump_speed = thrust;
+        run_speed = speed;
   }
   
   void Update(){
@@ -69,46 +72,66 @@ public class player : MonoBehaviour {
     down = new Vector2(0f, -acceleration);
     up = new Vector2(0f, acceleration);
 
-    // swap gravity orientation
-    if((Input.GetButtonDown("Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up) { 
-      body.velocity = new Vector2(0f, 0f);
-      player_orientation = orientation.up;
-      transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, 180f);
-      player_animator.Play("Swap");
-    }
-    if((Input.GetButtonDown("Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S)) && player_orientation != orientation.down){
-      body.velocity = new Vector2(0f, 0f);
-      player_orientation = orientation.down;
-      transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
-      player_animator.Play("Swap");
-    }
-    if((Input.GetButtonDown("Controller " + player_number + " X Button") || Input.GetKey(KeyCode.A)) && player_orientation != orientation.left){
-      body.velocity = new Vector2(0f, 0f);
-      player_orientation = orientation.left;
-      transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, 0f, -90f);
-      player_animator.Play("Swap");
-    }
-    if((Input.GetButtonDown("Controller " + player_number + " B Button") || Input.GetKey(KeyCode.D)) && player_orientation != orientation.right){
-      body.velocity = new Vector2(0f, 0f);
-      player_orientation = orientation.right;
-      transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, 0f, 90f);
-      player_animator.Play("Swap");
-    }
+        // swap gravity orientation
+        if (!poisoned)
+        {
+            if ((Input.GetButtonDown("Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up)
+            {
+                body.velocity = new Vector2(0f, 0f);
+                player_orientation = orientation.up;
+                transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, 180f);
+                player_animator.Play("Swap");
+            }
+            if ((Input.GetButtonDown("Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S)) && player_orientation != orientation.down)
+            {
+                body.velocity = new Vector2(0f, 0f);
+                player_orientation = orientation.down;
+                transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
+                player_animator.Play("Swap");
+            }
+            if ((Input.GetButtonDown("Controller " + player_number + " X Button") || Input.GetKey(KeyCode.A)) && player_orientation != orientation.left)
+            {
+                body.velocity = new Vector2(0f, 0f);
+                player_orientation = orientation.left;
+                transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, 0f, -90f);
+                player_animator.Play("Swap");
+            }
+            if ((Input.GetButtonDown("Controller " + player_number + " B Button") || Input.GetKey(KeyCode.D)) && player_orientation != orientation.right)
+            {
+                body.velocity = new Vector2(0f, 0f);
+                player_orientation = orientation.right;
+                transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, 0f, 90f);
+                player_animator.Play("Swap");
+            }
+        }
 
-    // attack
-    if(Input.GetAxis("Controller " + player_number + " Right Trigger") >= 0.9 || Input.GetKey(KeyCode.Space)){
-      Attack();
-    }
+        if (!dead)
+        {
+            // attack
+            if (Input.GetAxis("Controller " + player_number + " Right Trigger") >= 0.9 || Input.GetKey(KeyCode.Space))
+            {
+                Attack();
+            }
 
-    // shoot
-    if((Input.GetAxis("Controller " + player_number + " Right Bumper") >= 0.9 || Input.GetKey(KeyCode.LeftShift)) && Time.time > nextFire && numBullets > 0){
-      Shoot();
-    }
+            // shoot
+            if ((Input.GetAxis("Controller " + player_number + " Right Bumper") >= 0.9 || Input.GetKey(KeyCode.LeftShift)) && Time.time > nextFire && numBullets > 0)
+            {
+                Shoot();
+            }
 
-    // block
-    if(Input.GetAxis("Controller " + player_number + " Left Trigger") >= 0.9 || Input.GetKey(KeyCode.Q)){
-      Block();
-    }
+            // block
+            if (Input.GetAxis("Controller " + player_number + " Left Trigger") >= 0.9 || Input.GetKey(KeyCode.Q))
+            {
+                Block();
+            }
+        }
+        else
+        {
+            if ((Input.GetAxis("Controller " + player_number + " Right Bumper") >= 0.9 || Input.GetKey(KeyCode.LeftShift)) && Time.time > nextFire && numBullets > 0)
+            {
+                Poison();
+            }
+        }
 
     // super slash for shits and gigs
     if(Input.GetButtonDown("Controller " + player_number + " Left Bumper") || Input.GetKey(KeyCode.F)){
@@ -238,7 +261,22 @@ public class player : MonoBehaviour {
       StartCoroutine(Blink());
     }
 
-  }
+        //If has been attacked by Ghost
+        if (poisoned)
+        {
+            thrust = poisonJump;
+            speed = poisonSpeed;
+            if ((Input.GetKeyDown(KeyCode.LeftShift) || Input.GetButtonDown("Controller " + player_number + " A Button")) && !dead)
+                curButtonTaps++;
+            if ((!dead && curButtonTaps == poisonButtonTaps) || (dead && Time.time - poisonStart > poisonLength))
+            {
+                poisoned = false;
+                thrust = jump_speed;
+                speed = run_speed;
+                curButtonTaps = 0;
+            }
+        }
+    }
 
   void FixedUpdate(){
 
@@ -444,6 +482,12 @@ public class player : MonoBehaviour {
       grounded += 1;
       player_animator.SetBool("grounded", true);
     }
+    else if(other.tag == "Player" && other.name != this.gameObject.name)
+        {
+            print(this.gameObject.name + " touching " + other.name);
+            playerContact = true;
+            playerInContact = (player)other.GetComponent(typeof(player));
+        }
   }
 
   void OnCollisionExit2D(Collision2D coll){
@@ -459,7 +503,13 @@ public class player : MonoBehaviour {
         }
       }
     }
-  }
+    else if (coll.gameObject.tag == "Player" && coll.gameObject.name != this.gameObject.name)
+        {
+            print(this.gameObject.name + "no longer touching " + coll.gameObject.name);
+            playerContact = false;
+            playerInContact = null;
+        }
+    }
 
   void OnTriggerEnter2D(Collider2D col){
     if (col.tag == "slash" && !respawn){
@@ -476,14 +526,58 @@ public class player : MonoBehaviour {
   bool respawn = false, respawning = false;
   void KillPlayer(){
         lives--;
+        if(lives == 0)
+            dead = true;
+        poisoned = false;
     player_animator.Play("Death");
     body.velocity = new Vector2(0f, 0f);
     player_orientation = orientation.down;
     StartCoroutine(Wait());
   }
 
-  public Vector3 offscreen = new Vector3(-1000, -1000, -1000);
-  
+    float dragSpeed = 3;
+    float poisonSpeed = 0.75f, poisonJump = 8f, poisonStart, poisonLength = 10;   //Poisoning Effects
+    public int poisonButtonTaps = 10, curButtonTaps;
+    public bool poisoned;
+    public bool playerContact = false;
+    player playerInContact = null;
+
+    void Poison()
+    {
+        print("poison");
+        if (playerContact && !playerInContact.dead) //Need multiple player movements to test contact
+        {
+            //Affect other player
+            playerInContact.poisoned = true;
+            playerInContact.curButtonTaps = 0;
+            //Affect this player
+            poisoned = true;
+            poisonStart = Time.time;
+        }
+        //(Ghost poisoning effect) 
+        // ghost sticks to player
+        //mash button to remove (ghost player decides)
+        //after remove slow down ghost
+        //If Dragging true  -- No jumping 
+        //Check if in contact with other player
+        //Set other players move to false
+        //Allow other player to resist?
+        //Make other player a parent of this 
+        //Slow speed of this player (drag Speed)
+        //Sound effect?
+        //Allow this for a time before putting things back
+        //Drag Start
+        //Drag Length
+
+        //If Dragging False
+        //Set players move to true
+        //Institute drag delay till next 
+
+        //Possible reach dead body comes back to life
+    }
+
+
+    public Vector3 offscreen = new Vector3(-1000, -1000, -1000);  
   IEnumerator Wait(){
     yield return new WaitForSeconds(0.75f);
     transform.position = offscreen;
