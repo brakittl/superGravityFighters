@@ -45,6 +45,8 @@ public class player : MonoBehaviour {
   float fireRate = 1.5f, nextFire = 0f;
   string lastDirection = "right";
 
+    public int lives = 10;
+
   void Start(){
     player_animator = GetComponent<Animator>();
     body = gameObject.GetComponent<Rigidbody2D>();
@@ -462,11 +464,18 @@ public class player : MonoBehaviour {
   void OnTriggerEnter2D(Collider2D col){
     if (col.tag == "slash" && !respawn){
       KillPlayer();
-    }
+            Destroy(col.gameObject);
+        }
+    else if(col.tag == "bullet" && !respawn && col.gameObject != bulletGO)
+        {
+            KillPlayer();
+            Destroy(col.gameObject);
+        }
   }
 
   bool respawn = false, respawning = false;
   void KillPlayer(){
+        lives--;
     player_animator.Play("Death");
     body.velocity = new Vector2(0f, 0f);
     player_orientation = orientation.down;
