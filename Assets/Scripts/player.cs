@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class player : MonoBehaviour {
 
@@ -23,9 +25,8 @@ public class player : MonoBehaviour {
   public GameObject up_slash;
   public GameObject down_slash;
 
-  public float speed, run_speed;
-  public float thrust, jump_speed;
-  public float acceleration;
+  public float speed, thrust, acceleration;
+  float run_speed, jump_speed;
   public int grounded;
 
   bool move_left = false;
@@ -48,7 +49,13 @@ public class player : MonoBehaviour {
     public int lives = 3;
     public bool dead = false;
 
-  void Start(){
+    //Statics to tracks
+    public int gravitySwapCount = 0, totalPoisoned = 0,
+        numBulletShots = 0, numBulletHits = 0, 
+        numSwordSwipes = 0, numSwordHits = 0;
+    public List<String> playersKilled;
+
+    void Start(){
     player_animator = GetComponent<Animator>();
     body = gameObject.GetComponent<Rigidbody2D>();
     grounded = 0;
@@ -78,6 +85,8 @@ public class player : MonoBehaviour {
             if ((Input.GetButtonDown("Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up)
             {
                 body.velocity = new Vector2(0f, 0f);
+                if (player_orientation != orientation.up)
+                    gravitySwapCount++;
                 player_orientation = orientation.up;
                 transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, 180f);
                 player_animator.Play("Swap");
@@ -85,6 +94,8 @@ public class player : MonoBehaviour {
             if ((Input.GetButtonDown("Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S)) && player_orientation != orientation.down)
             {
                 body.velocity = new Vector2(0f, 0f);
+                if (player_orientation != orientation.down)
+                    gravitySwapCount++;
                 player_orientation = orientation.down;
                 transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
                 player_animator.Play("Swap");
@@ -92,6 +103,8 @@ public class player : MonoBehaviour {
             if ((Input.GetButtonDown("Controller " + player_number + " X Button") || Input.GetKey(KeyCode.A)) && player_orientation != orientation.left)
             {
                 body.velocity = new Vector2(0f, 0f);
+                if (player_orientation != orientation.left)
+                    gravitySwapCount++;
                 player_orientation = orientation.left;
                 transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, 0f, -90f);
                 player_animator.Play("Swap");
@@ -99,6 +112,8 @@ public class player : MonoBehaviour {
             if ((Input.GetButtonDown("Controller " + player_number + " B Button") || Input.GetKey(KeyCode.D)) && player_orientation != orientation.right)
             {
                 body.velocity = new Vector2(0f, 0f);
+                if (player_orientation != orientation.right)
+                    gravitySwapCount++;
                 player_orientation = orientation.right;
                 transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, 0f, 90f);
                 player_animator.Play("Swap");
@@ -357,7 +372,7 @@ public class player : MonoBehaviour {
    void Attack(){
 
       if(!player_animator.GetBool("attack") && !respawn){
-
+            numSwordSwipes++;
         player_animator.SetBool("attack", true);
 
         if(!player_animator.GetBool("grounded")){
@@ -395,6 +410,7 @@ public class player : MonoBehaviour {
 
       sound.PlayOneShot(gunshot);
       nextFire = Time.time + fireRate;
+        numBulletShots++;
 
       Vector3 pos = transform.position, rot = transform.rotation.eulerAngles;
       rot.x = 0;
@@ -484,7 +500,6 @@ public class player : MonoBehaviour {
     }
     else if(other.tag == "Player" && other.name != this.gameObject.name)
         {
-            print(this.gameObject.name + " touching " + other.name);
             playerContact = true;
             playerInContact = (player)other.GetComponent(typeof(player));
         }
@@ -512,22 +527,55 @@ public class player : MonoBehaviour {
     }
 
   void OnTriggerEnter2D(Collider2D col){
-    if (col.tag == "slash" && !respawn){
-      KillPlayer();
-            Destroy(col.gameObject);
+    if (col.tag == "slash" && !respawn)
+        {
+            FindKiller(col.gameObject, false);
+            KillPlayer();
+            slash.GetComponent<BoxCollider2D>().enabled = false;
+            side_slash.GetComponent<BoxCollider2D>().enabled = false;
+            up_slash.GetComponent<BoxCollider2D>().enabled = false;
+            down_slash.GetComponent<BoxCollider2D>().enabled = false;
         }
     else if(col.tag == "bullet" && !respawn && col.gameObject != bulletGO)
         {
+            FindKiller(col.gameObject, true);
             KillPlayer();
             Destroy(col.gameObject);
         }
   }
 
-  bool respawn = false, respawning = false;
+    public void FindKiller(GameObject collideObject, bool bulletOrSword)
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject p in players)
+        {
+            if (p.gameObject == this.gameObject) continue;
+            player other = (player)p.GetComponent(typeof(player));
+
+            if (bulletOrSword && other.bulletGO.gameObject == collideObject.gameObject)
+            {
+                other.playersKilled.Add(this.gameObject.name);
+                other.numBulletHits++;
+            }
+       
+            else if (!bulletOrSword && other.slash.gameObject == collideObject.gameObject)
+            {
+                other.playersKilled.Add(this.gameObject.name);
+                other.numSwordHits++;
+            }
+        }
+    }
+
+    bool respawn = false, respawning = false;
   void KillPlayer(){
+
+        slash.GetComponent<BoxCollider2D>().enabled = false;
+        side_slash.GetComponent<BoxCollider2D>().enabled = false;
+        up_slash.GetComponent<BoxCollider2D>().enabled = false;
+        down_slash.GetComponent<BoxCollider2D>().enabled = false;
+
         lives--;
-        if(lives == 0)
-            dead = true;
+        if(lives == 0) dead = true;
         poisoned = false;
     player_animator.Play("Death");
     body.velocity = new Vector2(0f, 0f);
@@ -538,16 +586,15 @@ public class player : MonoBehaviour {
     float dragSpeed = 3;
     float poisonSpeed = 0.75f, poisonJump = 8f, poisonStart, poisonLength = 10;   //Poisoning Effects
     public int poisonButtonTaps = 10, curButtonTaps;
-    public bool poisoned;
-    public bool playerContact = false;
+    public bool poisoned = false;
+    bool playerContact = false;
     player playerInContact = null;
-
     void Poison()
     {
-        print("poison");
         if (playerContact && !playerInContact.dead) //Need multiple player movements to test contact
         {
             //Affect other player
+            if (!poisoned) totalPoisoned++;
             playerInContact.poisoned = true;
             playerInContact.curButtonTaps = 0;
             //Affect this player
@@ -577,7 +624,7 @@ public class player : MonoBehaviour {
     }
 
 
-    public Vector3 offscreen = new Vector3(-1000, -1000, -1000);  
+    Vector3 offscreen = new Vector3(-1000, -1000, -1000);  
   IEnumerator Wait(){
     yield return new WaitForSeconds(0.75f);
     transform.position = offscreen;
