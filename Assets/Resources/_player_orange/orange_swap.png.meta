@@ -1,16 +1,16 @@
 fileFormatVersion: 2
-guid: 87b4d7d43b6ca410d8b9f70dd9020553
-timeCreated: 1458619431
+guid: 3fd21a44c14114f8680d2886777f6efc
+timeCreated: 1458839681
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: yellow_swap_0
-    21300002: yellow_swap_1
-    21300004: yellow_swap_2
-    21300006: yellow_swap_3
-    21300008: yellow_swap_4
-    21300010: yellow_swap_5
-    21300012: yellow_swap_6
+    21300000: orange_swap_0
+    21300002: orange_swap_1
+    21300004: orange_swap_2
+    21300006: orange_swap_3
+    21300008: orange_swap_4
+    21300010: orange_swap_5
+    21300012: orange_swap_6
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -57,7 +57,7 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: yellow_swap_0
+    - name: orange_swap_0
       rect:
         serializedVersion: 2
         x: 0
@@ -74,7 +74,7 @@ TextureImporter:
         - {x: -9, y: -21.5}
         - {x: 15, y: -21.5}
         - {x: 15, y: 17.5}
-    - name: yellow_swap_1
+    - name: orange_swap_1
       rect:
         serializedVersion: 2
         x: 0
@@ -94,7 +94,7 @@ TextureImporter:
         - {x: 16, y: -21.5}
         - {x: 19, y: -10.5}
         - {x: 19, y: -2.5}
-    - name: yellow_swap_2
+    - name: orange_swap_2
       rect:
         serializedVersion: 2
         x: 0
@@ -114,7 +114,7 @@ TextureImporter:
         - {x: 21, y: -13.5}
         - {x: 21, y: 5.5}
         - {x: 17, y: 17.5}
-    - name: yellow_swap_3
+    - name: orange_swap_3
       rect:
         serializedVersion: 2
         x: 0
@@ -139,7 +139,7 @@ TextureImporter:
         - {x: 21, y: -1.5}
         - {x: 21, y: 9.5}
         - {x: 13, y: 19.5}
-    - name: yellow_swap_4
+    - name: orange_swap_4
       rect:
         serializedVersion: 2
         x: 0
@@ -161,7 +161,7 @@ TextureImporter:
         - {x: 6, y: -15.5}
         - {x: 10, y: -7.5}
         - {x: 20, y: -0.5}
-    - name: yellow_swap_5
+    - name: orange_swap_5
       rect:
         serializedVersion: 2
         x: 0
@@ -180,7 +180,7 @@ TextureImporter:
         - {x: 19, y: -4.5}
         - {x: 19, y: 17.5}
         - {x: 15, y: 21.5}
-    - name: yellow_swap_6
+    - name: orange_swap_6
       rect:
         serializedVersion: 2
         x: 0

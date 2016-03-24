@@ -1,30 +1,30 @@
 fileFormatVersion: 2
-guid: f4ccf725fc596424aa8d83456564095c
-timeCreated: 1458619340
+guid: 8f36bfbd8f4f84daabc0dfd160209d6e
+timeCreated: 1458839549
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: yellow_idle_0
-    21300002: yellow_idle_1
-    21300004: yellow_idle_2
-    21300006: yellow_idle_3
-    21300008: yellow_idle_4
-    21300010: yellow_idle_5
-    21300012: yellow_idle_6
-    21300014: yellow_idle_7
-    21300016: yellow_idle_8
-    21300018: yellow_idle_9
-    21300020: yellow_idle_10
-    21300022: yellow_idle_11
-    21300024: yellow_idle_12
-    21300026: yellow_idle_13
-    21300028: yellow_idle_14
-    21300030: yellow_idle_15
-    21300032: yellow_idle_16
-    21300034: yellow_idle_17
-    21300036: yellow_idle_18
-    21300038: yellow_idle_19
-    21300040: yellow_idle_20
+    21300000: orange_idle_0
+    21300002: orange_idle_1
+    21300004: orange_idle_2
+    21300006: orange_idle_3
+    21300008: orange_idle_4
+    21300010: orange_idle_5
+    21300012: orange_idle_6
+    21300014: orange_idle_7
+    21300016: orange_idle_8
+    21300018: orange_idle_9
+    21300020: orange_idle_10
+    21300022: orange_idle_11
+    21300024: orange_idle_12
+    21300026: orange_idle_13
+    21300028: orange_idle_14
+    21300030: orange_idle_15
+    21300032: orange_idle_16
+    21300034: orange_idle_17
+    21300036: orange_idle_18
+    21300038: orange_idle_19
+    21300040: orange_idle_20
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -71,7 +71,7 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: yellow_idle_0
+    - name: orange_idle_0
       rect:
         serializedVersion: 2
         x: 0
@@ -89,7 +89,7 @@ TextureImporter:
         - {x: 7, y: -21.5}
         - {x: 7, y: 4.5}
         - {x: -4, y: 11.5}
-    - name: yellow_idle_1
+    - name: orange_idle_1
       rect:
         serializedVersion: 2
         x: 0
@@ -107,7 +107,7 @@ TextureImporter:
         - {x: 7, y: -21.5}
         - {x: 7, y: 0.5}
         - {x: 3, y: 10.5}
-    - name: yellow_idle_2
+    - name: orange_idle_2
       rect:
         serializedVersion: 2
         x: 0
@@ -125,7 +125,7 @@ TextureImporter:
         - {x: 7, y: -21.5}
         - {x: 7, y: 5.5}
         - {x: -1, y: 10.5}
-    - name: yellow_idle_3
+    - name: orange_idle_3
       rect:
         serializedVersion: 2
         x: 0
@@ -143,7 +143,7 @@ TextureImporter:
         - {x: 7, y: -21.5}
         - {x: 7, y: 5.5}
         - {x: -1, y: 10.5}
-    - name: yellow_idle_4
+    - name: orange_idle_4
       rect:
         serializedVersion: 2
         x: 0
@@ -161,7 +161,7 @@ TextureImporter:
         - {x: 7, y: -21.5}
         - {x: 7, y: 4.5}
         - {x: 1, y: 11.5}
-    - name: yellow_idle_5
+    - name: orange_idle_5
       rect:
         serializedVersion: 2
         x: 0
@@ -179,7 +179,7 @@ TextureImporter:
         - {x: 7, y: -21.5}
         - {x: 7, y: 7.5}
         - {x: 6, y: 11.5}
-    - name: yellow_idle_6
+    - name: orange_idle_6
       rect:
         serializedVersion: 2
         x: 0
@@ -197,7 +197,7 @@ TextureImporter:
         - {x: 7, y: -20.5}
         - {x: 7, y: 5.5}
         - {x: -2, y: 12.5}
-    - name: yellow_idle_7
+    - name: orange_idle_7
       rect:
         serializedVersion: 2
         x: 0
@@ -216,7 +216,7 @@ TextureImporter:
         - {x: 6, y: -21.5}
         - {x: 6, y: -20.5}
         - {x: 7, y: -17.5}
-    - name: yellow_idle_8
+    - name: orange_idle_8
       rect:
         serializedVersion: 2
         x: 0
@@ -233,7 +233,7 @@ TextureImporter:
         - {x: 7, y: -21.5}
         - {x: 7, y: 7.5}
         - {x: -1, y: 13.5}
-    - name: yellow_idle_9
+    - name: orange_idle_9
       rect:
         serializedVersion: 2
         x: 0
@@ -251,7 +251,7 @@ TextureImporter:
         - {x: 7, y: -21.5}
         - {x: 7, y: 3.5}
         - {x: -3, y: 13.5}
-    - name: yellow_idle_10
+    - name: orange_idle_10
       rect:
         serializedVersion: 2
         x: 0
@@ -269,7 +269,7 @@ TextureImporter:
         - {x: 7, y: -21.5}
         - {x: 7, y: 7.5}
         - {x: 3, y: 12.5}
-    - name: yellow_idle_11
+    - name: orange_idle_11
       rect:
         serializedVersion: 2
         x: 0
@@ -287,7 +287,7 @@ TextureImporter:
         - {x: 7, y: -21.5}
         - {x: 7, y: 8.5}
         - {x: -1, y: 11.5}
-    - name: yellow_idle_12
+    - name: orange_idle_12
       rect:
         serializedVersion: 2
         x: 0
@@ -305,7 +305,7 @@ TextureImporter:
         - {x: 7, y: -21.5}
         - {x: 7, y: 2.5}
         - {x: -3, y: 10.5}
-    - name: yellow_idle_13
+    - name: orange_idle_13
       rect:
         serializedVersion: 2
         x: 0
@@ -327,7 +327,7 @@ TextureImporter:
         - {x: 7, y: -21.5}
         - {x: 7, y: 5.5}
         - {x: -1, y: 10.5}
-    - name: yellow_idle_14
+    - name: orange_idle_14
       rect:
         serializedVersion: 2
         x: 0
@@ -345,7 +345,7 @@ TextureImporter:
         - {x: 7, y: -21.5}
         - {x: 7, y: 6.5}
         - {x: 0, y: 11.5}
-    - name: yellow_idle_15
+    - name: orange_idle_15
       rect:
         serializedVersion: 2
         x: 0
@@ -364,7 +364,7 @@ TextureImporter:
         - {x: 7, y: -21.5}
         - {x: 7, y: 9.5}
         - {x: 0, y: 11.5}
-    - name: yellow_idle_16
+    - name: orange_idle_16
       rect:
         serializedVersion: 2
         x: 0
@@ -384,7 +384,7 @@ TextureImporter:
         - {x: 7, y: -21.5}
         - {x: 7, y: 4.5}
         - {x: -3, y: 12.5}
-    - name: yellow_idle_17
+    - name: orange_idle_17
       rect:
         serializedVersion: 2
         x: 0
@@ -403,7 +403,7 @@ TextureImporter:
         - {x: 7, y: -21.5}
         - {x: 7, y: 6.5}
         - {x: -2, y: 13.5}
-    - name: yellow_idle_18
+    - name: orange_idle_18
       rect:
         serializedVersion: 2
         x: 0
@@ -421,7 +421,7 @@ TextureImporter:
         - {x: 7, y: -21.5}
         - {x: 7, y: 5.5}
         - {x: -2, y: 13.5}
-    - name: yellow_idle_19
+    - name: orange_idle_19
       rect:
         serializedVersion: 2
         x: 0
@@ -439,7 +439,7 @@ TextureImporter:
         - {x: 7, y: -21.5}
         - {x: 7, y: 9.5}
         - {x: -1, y: 13.5}
-    - name: yellow_idle_20
+    - name: orange_idle_20
       rect:
         serializedVersion: 2
         x: 0

@@ -1,14 +1,14 @@
 fileFormatVersion: 2
-guid: d8f47832f85a94aad8eed5e337a1aad1
-timeCreated: 1458619382
+guid: 53711b737d4b841f6aaf9a909eb4d1dc
+timeCreated: 1458839754
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: yellow_shield_0
-    21300002: yellow_shield_1
-    21300004: yellow_shield_2
-    21300006: yellow_shield_3
-    21300008: yellow_shield_4
+    21300000: orange_shield_0
+    21300002: orange_shield_1
+    21300004: orange_shield_2
+    21300006: orange_shield_3
+    21300008: orange_shield_4
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -55,7 +55,7 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: yellow_shield_0
+    - name: orange_shield_0
       rect:
         serializedVersion: 2
         x: 0
@@ -74,7 +74,7 @@ TextureImporter:
         - {x: 24, y: -21}
         - {x: 24, y: 8}
         - {x: 17, y: 20}
-    - name: yellow_shield_1
+    - name: orange_shield_1
       rect:
         serializedVersion: 2
         x: 0
@@ -92,7 +92,7 @@ TextureImporter:
         - {x: 25, y: -18}
         - {x: 25, y: 11}
         - {x: 12, y: 22}
-    - name: yellow_shield_2
+    - name: orange_shield_2
       rect:
         serializedVersion: 2
         x: 0
@@ -114,7 +114,7 @@ TextureImporter:
         - {x: -5, y: 18}
         - {x: 12, y: 12}
         - {x: 12, y: -18}
-    - name: yellow_shield_3
+    - name: orange_shield_3
       rect:
         serializedVersion: 2
         x: 0
@@ -137,7 +137,7 @@ TextureImporter:
         - {x: 13, y: 18}
         - {x: 13, y: -18}
         - {x: -4, y: -21}
-    - name: yellow_shield_4
+    - name: orange_shield_4
       rect:
         serializedVersion: 2
         x: 0

@@ -1,23 +1,23 @@
 fileFormatVersion: 2
-guid: 84ff57a5b31ab4b7087d87604715cefe
-timeCreated: 1458619463
+guid: d3c92a6acabdd464882b1de0ca214747
+timeCreated: 1458837808
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: yellow_up_attack_0
-    21300002: yellow_up_attack_1
-    21300004: yellow_up_attack_2
-    21300006: yellow_up_attack_3
-    21300008: yellow_up_attack_4
-    21300010: yellow_up_attack_5
-    21300012: yellow_up_attack_6
-    21300014: yellow_up_attack_7
-    21300016: yellow_up_attack_8
-    21300018: yellow_up_attack_9
-    21300020: yellow_up_attack_10
-    21300022: yellow_up_attack_11
-    21300024: yellow_up_attack_12
-    21300026: yellow_up_attack_13
+    21300000: orange_up_attack_0
+    21300002: orange_up_attack_1
+    21300004: orange_up_attack_2
+    21300006: orange_up_attack_3
+    21300008: orange_up_attack_4
+    21300010: orange_up_attack_5
+    21300012: orange_up_attack_6
+    21300014: orange_up_attack_7
+    21300016: orange_up_attack_8
+    21300018: orange_up_attack_9
+    21300020: orange_up_attack_10
+    21300022: orange_up_attack_11
+    21300024: orange_up_attack_12
+    21300026: orange_up_attack_13
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -64,7 +64,7 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: yellow_up_attack_0
+    - name: orange_up_attack_0
       rect:
         serializedVersion: 2
         x: 0
@@ -86,7 +86,7 @@ TextureImporter:
         - {x: 16, y: -15.5}
         - {x: 16, y: -8.5}
         - {x: 15, y: 1.5}
-    - name: yellow_up_attack_1
+    - name: orange_up_attack_1
       rect:
         serializedVersion: 2
         x: 0
@@ -106,7 +106,7 @@ TextureImporter:
         - {x: 19, y: -11.5}
         - {x: 19, y: 12.5}
         - {x: 12, y: 20.5}
-    - name: yellow_up_attack_2
+    - name: orange_up_attack_2
       rect:
         serializedVersion: 2
         x: 0
@@ -123,7 +123,7 @@ TextureImporter:
         - {x: -5, y: -21.5}
         - {x: 16, y: -21.5}
         - {x: 16, y: 15.5}
-    - name: yellow_up_attack_3
+    - name: orange_up_attack_3
       rect:
         serializedVersion: 2
         x: 0
@@ -145,7 +145,7 @@ TextureImporter:
         - {x: 15, y: -21.5}
         - {x: 24, y: -11.5}
         - {x: 24, y: 14.5}
-    - name: yellow_up_attack_4
+    - name: orange_up_attack_4
       rect:
         serializedVersion: 2
         x: 0
@@ -169,7 +169,7 @@ TextureImporter:
         - {x: 6, y: -20.5}
         - {x: 18, y: -7.5}
         - {x: 23, y: -1.5}
-    - name: yellow_up_attack_5
+    - name: orange_up_attack_5
       rect:
         serializedVersion: 2
         x: 0
@@ -188,7 +188,7 @@ TextureImporter:
         - {x: 15, y: -12.5}
         - {x: 15, y: 17.5}
         - {x: 9, y: 20.5}
-    - name: yellow_up_attack_6
+    - name: orange_up_attack_6
       rect:
         serializedVersion: 2
         x: 0
@@ -207,7 +207,7 @@ TextureImporter:
         - {x: 20, y: -8.5}
         - {x: 20, y: -2.5}
         - {x: 19, y: 2.5}
-    - name: yellow_up_attack_7
+    - name: orange_up_attack_7
       rect:
         serializedVersion: 2
         x: 0
@@ -226,7 +226,7 @@ TextureImporter:
         - {x: 20, y: -13.5}
         - {x: 20, y: -2.5}
         - {x: 1, y: 17.5}
-    - name: yellow_up_attack_8
+    - name: orange_up_attack_8
       rect:
         serializedVersion: 2
         x: 0
@@ -246,7 +246,7 @@ TextureImporter:
         - {x: 18, y: -21.5}
         - {x: 20, y: -16.5}
         - {x: 20, y: 11.5}
-    - name: yellow_up_attack_9
+    - name: orange_up_attack_9
       rect:
         serializedVersion: 2
         x: 0
@@ -267,7 +267,7 @@ TextureImporter:
         - {x: 25, y: -7.5}
         - {x: 25, y: 11.5}
         - {x: 18, y: 18.5}
-    - name: yellow_up_attack_10
+    - name: orange_up_attack_10
       rect:
         serializedVersion: 2
         x: 0
@@ -292,7 +292,7 @@ TextureImporter:
         - {x: 22, y: -1.5}
         - {x: 22, y: 9.5}
         - {x: 14, y: 19.5}
-    - name: yellow_up_attack_11
+    - name: orange_up_attack_11
       rect:
         serializedVersion: 2
         x: 0
@@ -314,7 +314,7 @@ TextureImporter:
         - {x: 21, y: -0.5}
         - {x: 21, y: 11.5}
         - {x: 20, y: 12.5}
-    - name: yellow_up_attack_12
+    - name: orange_up_attack_12
       rect:
         serializedVersion: 2
         x: 0
@@ -333,7 +333,7 @@ TextureImporter:
         - {x: 20, y: -4.5}
         - {x: 20, y: 17.5}
         - {x: 16, y: 21.5}
-    - name: yellow_up_attack_13
+    - name: orange_up_attack_13
       rect:
         serializedVersion: 2
         x: 0

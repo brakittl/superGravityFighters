@@ -1,9 +1,18 @@
 fileFormatVersion: 2
 guid: 996afe4cbd59f405c9d83ef3eb39d5be
-timeCreated: 1458616955
+timeCreated: 1458839406
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: blue_bullet_0
+    21300002: blue_bullet_1
+    21300004: blue_bullet_2
+    21300006: blue_bullet_3
+    21300008: blue_bullet_4
+    21300010: blue_bullet_6
+    21300012: blue_bullet_7
+    21300014: blue_bullet_8
+    21300016: blue_bullet_9
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -49,7 +58,106 @@ TextureImporter:
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
-    sprites: []
+    sprites:
+    - name: blue_bullet_0
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 13
+        width: 21
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: blue_bullet_1
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 12
+        width: 24
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: blue_bullet_2
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 14
+        width: 28
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: blue_bullet_3
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 14
+        width: 24
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: blue_bullet_4
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 13
+        width: 24
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: blue_bullet_6
+      rect:
+        serializedVersion: 2
+        x: 149
+        y: 14
+        width: 29
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: blue_bullet_7
+      rect:
+        serializedVersion: 2
+        x: 182
+        y: 15
+        width: 32
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: blue_bullet_8
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 14
+        width: 24
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: blue_bullet_9
+      rect:
+        serializedVersion: 2
+        x: 246
+        y: 13
+        width: 21
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
     outline: []
   spritePackingTag: 
   userData: 

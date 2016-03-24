@@ -1,14 +1,14 @@
 fileFormatVersion: 2
-guid: 1e4fd0c2cc52044918ced1d7afb58084
-timeCreated: 1458619409
+guid: 21eb28060203f493fb55c4f6b1246749
+timeCreated: 1458839472
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: yellow_slash_0
-    21300002: yellow_slash_1
-    21300004: yellow_slash_2
-    21300006: yellow_slash_3
-    21300008: yellow_slash_4
+    21300000: orange_slash_0
+    21300002: orange_slash_1
+    21300004: orange_slash_2
+    21300006: orange_slash_3
+    21300008: orange_slash_4
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -55,7 +55,7 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: yellow_slash_0
+    - name: orange_slash_0
       rect:
         serializedVersion: 2
         x: 1
@@ -66,7 +66,7 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-    - name: yellow_slash_1
+    - name: orange_slash_1
       rect:
         serializedVersion: 2
         x: 34
@@ -77,7 +77,7 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-    - name: yellow_slash_2
+    - name: orange_slash_2
       rect:
         serializedVersion: 2
         x: 76
@@ -88,7 +88,7 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-    - name: yellow_slash_3
+    - name: orange_slash_3
       rect:
         serializedVersion: 2
         x: 98
@@ -99,7 +99,7 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-    - name: yellow_slash_4
+    - name: orange_slash_4
       rect:
         serializedVersion: 2
         x: 115

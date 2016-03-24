@@ -1,21 +1,23 @@
 fileFormatVersion: 2
-guid: 063555ba7e6cd489fb7af75e006732de
-timeCreated: 1458619322
+guid: cb3b6bd861cf44715bf3157a365222ab
+timeCreated: 1458837816
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: yellow_down_attack_0
-    21300002: yellow_down_attack_1
-    21300004: yellow_down_attack_2
-    21300006: yellow_down_attack_3
-    21300008: yellow_down_attack_4
-    21300010: yellow_down_attack_5
-    21300012: yellow_down_attack_6
-    21300014: yellow_down_attack_7
-    21300016: yellow_down_attack_8
-    21300018: yellow_down_attack_9
-    21300020: yellow_down_attack_10
-    21300022: yellow_down_attack_11
+    21300000: orange_side_attack_0
+    21300002: orange_side_attack_1
+    21300004: orange_side_attack_2
+    21300006: orange_side_attack_3
+    21300008: orange_side_attack_4
+    21300010: orange_side_attack_5
+    21300012: orange_side_attack_6
+    21300014: orange_side_attack_7
+    21300016: orange_side_attack_8
+    21300018: orange_side_attack_9
+    21300020: orange_side_attack_10
+    21300022: orange_side_attack_11
+    21300024: orange_side_attack_12
+    21300026: orange_side_attack_13
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -62,7 +64,7 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: yellow_down_attack_0
+    - name: orange_side_attack_0
       rect:
         serializedVersion: 2
         x: 0
@@ -84,7 +86,7 @@ TextureImporter:
         - {x: 15, y: -15.5}
         - {x: 15, y: -8.5}
         - {x: 14, y: 1.5}
-    - name: yellow_down_attack_1
+    - name: orange_side_attack_1
       rect:
         serializedVersion: 2
         x: 0
@@ -104,7 +106,7 @@ TextureImporter:
         - {x: 18, y: -11.5}
         - {x: 18, y: 12.5}
         - {x: 11, y: 20.5}
-    - name: yellow_down_attack_2
+    - name: orange_side_attack_2
       rect:
         serializedVersion: 2
         x: 0
@@ -124,7 +126,7 @@ TextureImporter:
         - {x: 22, y: -16.5}
         - {x: 22, y: 14.5}
         - {x: 1, y: 20.5}
-    - name: yellow_down_attack_3
+    - name: orange_side_attack_3
       rect:
         serializedVersion: 2
         x: 0
@@ -135,15 +137,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: 19, y: 9.5}
-        - {x: 2, y: 20.5}
-        - {x: -15, y: 20.5}
-        - {x: -23, y: 12.5}
-        - {x: -23, y: 5.5}
-        - {x: -13, y: -21.5}
-        - {x: 21, y: -21.5}
-        - {x: 21, y: -3.5}
-    - name: yellow_down_attack_4
+      - - {x: -1, y: 13.5}
+        - {x: -20, y: 13.5}
+        - {x: -21, y: 11.5}
+        - {x: -21, y: -13.5}
+        - {x: -7, y: -21.5}
+        - {x: 19, y: -21.5}
+        - {x: 19, y: -4.5}
+        - {x: 17, y: 6.5}
+    - name: orange_side_attack_4
       rect:
         serializedVersion: 2
         x: 0
@@ -154,15 +156,14 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -13, y: 20.5}
-        - {x: -17, y: 19.5}
-        - {x: -17, y: -13.5}
-        - {x: -7, y: -21.5}
-        - {x: 2, y: -21.5}
-        - {x: 13, y: 1.5}
-        - {x: 13, y: 6.5}
-        - {x: 11, y: 20.5}
-    - name: yellow_down_attack_5
+      - - {x: -21, y: 14.5}
+        - {x: -25, y: 2.5}
+        - {x: -25, y: -5.5}
+        - {x: -12, y: -21.5}
+        - {x: 21, y: -21.5}
+        - {x: 21, y: 13.5}
+        - {x: 20, y: 14.5}
+    - name: orange_side_attack_5
       rect:
         serializedVersion: 2
         x: 0
@@ -173,13 +174,14 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -24, y: 13.5}
-        - {x: -24, y: -21.5}
-        - {x: 17, y: -21.5}
-        - {x: 20, y: -18.5}
-        - {x: 20, y: 7.5}
-        - {x: 13, y: 13.5}
-    - name: yellow_down_attack_6
+      - - {x: -25, y: -7.5}
+        - {x: -13, y: -19.5}
+        - {x: -8, y: -21.5}
+        - {x: 21, y: -21.5}
+        - {x: 21, y: 19.5}
+        - {x: -24, y: 19.5}
+        - {x: -25, y: 18.5}
+    - name: orange_side_attack_6
       rect:
         serializedVersion: 2
         x: 0
@@ -190,13 +192,14 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -18, y: 17.5}
-        - {x: -25, y: 11.5}
-        - {x: -25, y: -0.5}
-        - {x: -16, y: -21.5}
-        - {x: 17, y: -21.5}
-        - {x: 17, y: 17.5}
-    - name: yellow_down_attack_7
+      - - {x: -2, y: 21.5}
+        - {x: -24, y: 21.5}
+        - {x: -24, y: -21.5}
+        - {x: 7, y: -21.5}
+        - {x: 20, y: -8.5}
+        - {x: 20, y: -1.5}
+        - {x: 17, y: 7.5}
+    - name: orange_side_attack_7
       rect:
         serializedVersion: 2
         x: 0
@@ -207,17 +210,18 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -9, y: 18.5}
-        - {x: -11, y: 17.5}
-        - {x: -25, y: 7.5}
-        - {x: -25, y: 3.5}
-        - {x: -7, y: -21.5}
-        - {x: 10, y: -21.5}
-        - {x: 13, y: -20.5}
-        - {x: 22, y: -7.5}
-        - {x: 22, y: 11.5}
-        - {x: 15, y: 18.5}
-    - name: yellow_down_attack_8
+      - - {x: 18, y: -15.5}
+        - {x: 20, y: -14.5}
+        - {x: 20, y: 12.5}
+        - {x: 9, y: 18.5}
+        - {x: -13, y: 18.5}
+        - {x: -22, y: 2.5}
+        - {x: -22, y: -21.5}
+        - {x: 8, y: -21.5}
+        - {x: 8, y: -17.5}
+        - {x: 7, y: -13.5}
+        - {x: 10, y: -14.5}
+    - name: orange_side_attack_8
       rect:
         serializedVersion: 2
         x: 0
@@ -228,20 +232,16 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: 11, y: 19.5}
-        - {x: -2, y: 19.5}
-        - {x: -3, y: 16.5}
-        - {x: -3, y: 12.5}
-        - {x: -8, y: 17.5}
-        - {x: -13, y: 19.5}
-        - {x: -17, y: 19.5}
-        - {x: -22, y: 15.5}
-        - {x: -8, y: -21.5}
-        - {x: 6, y: -21.5}
-        - {x: 8, y: -19.5}
-        - {x: 19, y: -0.5}
-        - {x: 19, y: 9.5}
-    - name: yellow_down_attack_9
+      - - {x: 16, y: 14.5}
+        - {x: 0, y: 17.5}
+        - {x: -11, y: 17.5}
+        - {x: -23, y: 11.5}
+        - {x: -23, y: -0.5}
+        - {x: -12, y: -21.5}
+        - {x: 17, y: -21.5}
+        - {x: 19, y: -16.5}
+        - {x: 19, y: 11.5}
+    - name: orange_side_attack_9
       rect:
         serializedVersion: 2
         x: 0
@@ -252,16 +252,17 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -15, y: 21.5}
-        - {x: -21, y: 8.5}
-        - {x: -21, y: -1.5}
-        - {x: -13, y: -21.5}
-        - {x: 2, y: -21.5}
-        - {x: 9, y: -18.5}
-        - {x: 18, y: -6.5}
-        - {x: 18, y: 15.5}
-        - {x: 11, y: 21.5}
-    - name: yellow_down_attack_10
+      - - {x: -7, y: 18.5}
+        - {x: -9, y: 17.5}
+        - {x: -23, y: 7.5}
+        - {x: -23, y: 3.5}
+        - {x: -5, y: -21.5}
+        - {x: 12, y: -21.5}
+        - {x: 15, y: -20.5}
+        - {x: 24, y: -7.5}
+        - {x: 24, y: 11.5}
+        - {x: 17, y: 18.5}
+    - name: orange_side_attack_10
       rect:
         serializedVersion: 2
         x: 0
@@ -272,15 +273,21 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: 17, y: 16.5}
-        - {x: 13, y: 21.5}
-        - {x: -17, y: 21.5}
-        - {x: -22, y: 20.5}
-        - {x: -22, y: -21.5}
-        - {x: 0, y: -21.5}
-        - {x: 7, y: -7.5}
-        - {x: 17, y: -0.5}
-    - name: yellow_down_attack_11
+      - - {x: 0, y: 19.5}
+        - {x: -1, y: 16.5}
+        - {x: -1, y: 12.5}
+        - {x: -6, y: 17.5}
+        - {x: -11, y: 19.5}
+        - {x: -15, y: 19.5}
+        - {x: -20, y: 16.5}
+        - {x: -20, y: 14.5}
+        - {x: -7, y: -21.5}
+        - {x: 9, y: -21.5}
+        - {x: 12, y: -20.5}
+        - {x: 21, y: -1.5}
+        - {x: 21, y: 9.5}
+        - {x: 13, y: 19.5}
+    - name: orange_side_attack_11
       rect:
         serializedVersion: 2
         x: 0
@@ -291,16 +298,58 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -12, y: 21.5}
-        - {x: -21, y: 14.5}
-        - {x: -21, y: 2.5}
+      - - {x: 20, y: 15.5}
+        - {x: 13, y: 21.5}
+        - {x: -12, y: 21.5}
+        - {x: -18, y: 10.5}
+        - {x: -19, y: 7.5}
         - {x: -19, y: 1.5}
-        - {x: -13, y: -21.5}
-        - {x: 2, y: -21.5}
-        - {x: 9, y: -18.5}
-        - {x: 18, y: -3.5}
-        - {x: 18, y: 12.5}
-        - {x: 9, y: 21.5}
+        - {x: -10, y: -21.5}
+        - {x: 1, y: -21.5}
+        - {x: 6, y: -15.5}
+        - {x: 10, y: -7.5}
+        - {x: 20, y: -0.5}
+    - name: orange_side_attack_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 43
+        width: 70
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -12, y: 21.5}
+        - {x: -20, y: 10.5}
+        - {x: -20, y: -4.5}
+        - {x: -10, y: -21.5}
+        - {x: 6, y: -21.5}
+        - {x: 19, y: -4.5}
+        - {x: 19, y: 17.5}
+        - {x: 15, y: 21.5}
+    - name: orange_side_attack_13
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 70
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 9, y: 21.5}
+        - {x: -7, y: 21.5}
+        - {x: -19, y: 14.5}
+        - {x: -19, y: 2.5}
+        - {x: -17, y: 1.5}
+        - {x: -11, y: -21.5}
+        - {x: 4, y: -21.5}
+        - {x: 11, y: -18.5}
+        - {x: 20, y: -0.5}
+        - {x: 20, y: 10.5}
+        - {x: 19, y: 12.5}
     outline: []
   spritePackingTag: 
   userData: 

@@ -1,26 +1,26 @@
 fileFormatVersion: 2
-guid: e13babadd18194bf5b109a89f432b89d
-timeCreated: 1458619358
+guid: 7468d677a25a04fa8aa84695fdbce504
+timeCreated: 1458839651
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: yellow_jump_0
-    21300002: yellow_jump_1
-    21300004: yellow_jump_2
-    21300006: yellow_jump_3
-    21300008: yellow_jump_4
-    21300010: yellow_jump_5
-    21300012: yellow_jump_6
-    21300014: yellow_jump_7
-    21300016: yellow_jump_8
-    21300018: yellow_jump_9
-    21300020: yellow_jump_10
-    21300022: yellow_jump_11
-    21300024: yellow_jump_12
-    21300026: yellow_jump_13
-    21300028: yellow_jump_14
-    21300030: yellow_jump_15
-    21300032: yellow_jump_16
+    21300000: orange_jump_0
+    21300002: orange_jump_1
+    21300004: orange_jump_2
+    21300006: orange_jump_3
+    21300008: orange_jump_4
+    21300010: orange_jump_5
+    21300012: orange_jump_6
+    21300014: orange_jump_7
+    21300016: orange_jump_8
+    21300018: orange_jump_9
+    21300020: orange_jump_10
+    21300022: orange_jump_11
+    21300024: orange_jump_12
+    21300026: orange_jump_13
+    21300028: orange_jump_14
+    21300030: orange_jump_15
+    21300032: orange_jump_16
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -67,7 +67,7 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: yellow_jump_0
+    - name: orange_jump_0
       rect:
         serializedVersion: 2
         x: 0
@@ -87,7 +87,7 @@ TextureImporter:
         - {x: 13, y: -21.5}
         - {x: 13, y: -20.5}
         - {x: 19, y: -14.5}
-    - name: yellow_jump_1
+    - name: orange_jump_1
       rect:
         serializedVersion: 2
         x: 0
@@ -106,7 +106,7 @@ TextureImporter:
         - {x: 17, y: -19.5}
         - {x: 17, y: 3.5}
         - {x: 14, y: 11.5}
-    - name: yellow_jump_2
+    - name: orange_jump_2
       rect:
         serializedVersion: 2
         x: 0
@@ -125,7 +125,7 @@ TextureImporter:
         - {x: 19, y: -15.5}
         - {x: 19, y: 12.5}
         - {x: 16, y: 15.5}
-    - name: yellow_jump_3
+    - name: orange_jump_3
       rect:
         serializedVersion: 2
         x: 0
@@ -145,7 +145,7 @@ TextureImporter:
         - {x: 15, y: -5.5}
         - {x: 18, y: 2.5}
         - {x: 18, y: 8.5}
-    - name: yellow_jump_4
+    - name: orange_jump_4
       rect:
         serializedVersion: 2
         x: 0
@@ -165,7 +165,7 @@ TextureImporter:
         - {x: 18, y: -4.5}
         - {x: 18, y: 15.5}
         - {x: 16, y: 20.5}
-    - name: yellow_jump_5
+    - name: orange_jump_5
       rect:
         serializedVersion: 2
         x: 0
@@ -185,7 +185,7 @@ TextureImporter:
         - {x: 18, y: -9.5}
         - {x: 18, y: 11.5}
         - {x: 13, y: 17.5}
-    - name: yellow_jump_6
+    - name: orange_jump_6
       rect:
         serializedVersion: 2
         x: 0
@@ -206,7 +206,7 @@ TextureImporter:
         - {x: 19, y: 7.5}
         - {x: 19, y: 12.5}
         - {x: 18, y: 14.5}
-    - name: yellow_jump_7
+    - name: orange_jump_7
       rect:
         serializedVersion: 2
         x: 0
@@ -229,7 +229,7 @@ TextureImporter:
         - {x: 12, y: -8.5}
         - {x: 11, y: -4.5}
         - {x: 19, y: 6.5}
-    - name: yellow_jump_8
+    - name: orange_jump_8
       rect:
         serializedVersion: 2
         x: 0
@@ -249,7 +249,7 @@ TextureImporter:
         - {x: 23, y: -6.5}
         - {x: 23, y: 8.5}
         - {x: 16, y: 16.5}
-    - name: yellow_jump_9
+    - name: orange_jump_9
       rect:
         serializedVersion: 2
         x: 0
@@ -270,7 +270,7 @@ TextureImporter:
         - {x: 23, y: -7.5}
         - {x: 23, y: 11.5}
         - {x: 16, y: 18.5}
-    - name: yellow_jump_10
+    - name: orange_jump_10
       rect:
         serializedVersion: 2
         x: 0
@@ -294,7 +294,7 @@ TextureImporter:
         - {x: 9, y: -19.5}
         - {x: 20, y: -0.5}
         - {x: 20, y: 9.5}
-    - name: yellow_jump_11
+    - name: orange_jump_11
       rect:
         serializedVersion: 2
         x: 0
@@ -316,7 +316,7 @@ TextureImporter:
         - {x: 5, y: -15.5}
         - {x: 9, y: -7.5}
         - {x: 19, y: -0.5}
-    - name: yellow_jump_12
+    - name: orange_jump_12
       rect:
         serializedVersion: 2
         x: 0
@@ -336,7 +336,7 @@ TextureImporter:
         - {x: 4, y: -21.5}
         - {x: 18, y: -5.5}
         - {x: 18, y: 14.5}
-    - name: yellow_jump_13
+    - name: orange_jump_13
       rect:
         serializedVersion: 2
         x: 0
@@ -358,7 +358,7 @@ TextureImporter:
         - {x: 19, y: -0.5}
         - {x: 19, y: 10.5}
         - {x: 18, y: 12.5}
-    - name: yellow_jump_14
+    - name: orange_jump_14
       rect:
         serializedVersion: 2
         x: 0
@@ -377,7 +377,7 @@ TextureImporter:
         - {x: 16, y: -5.5}
         - {x: 16, y: 6.5}
         - {x: -2, y: 16.5}
-    - name: yellow_jump_15
+    - name: orange_jump_15
       rect:
         serializedVersion: 2
         x: 0
@@ -396,7 +396,7 @@ TextureImporter:
         - {x: 19, y: -19.5}
         - {x: 19, y: 3.5}
         - {x: 18, y: 7.5}
-    - name: yellow_jump_16
+    - name: orange_jump_16
       rect:
         serializedVersion: 2
         x: 0

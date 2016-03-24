@@ -1,17 +1,17 @@
 fileFormatVersion: 2
-guid: 4891c8fff4f884e0691c9773cd219f8e
-timeCreated: 1458619371
+guid: fba4f741811844deea219b213e32b1d5
+timeCreated: 1458839792
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: yellow_run_0
-    21300002: yellow_run_1
-    21300004: yellow_run_2
-    21300006: yellow_run_3
-    21300008: yellow_run_4
-    21300010: yellow_run_5
-    21300012: yellow_run_6
-    21300014: yellow_run_7
+    21300000: orange_run_0
+    21300002: orange_run_1
+    21300004: orange_run_2
+    21300006: orange_run_3
+    21300008: orange_run_4
+    21300010: orange_run_5
+    21300012: orange_run_6
+    21300014: orange_run_7
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -58,7 +58,7 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: yellow_run_0
+    - name: orange_run_0
       rect:
         serializedVersion: 2
         x: 0
@@ -79,7 +79,7 @@ TextureImporter:
         - {x: 22, y: -9.5}
         - {x: 22, y: 2.5}
         - {x: 14, y: 9.5}
-    - name: yellow_run_1
+    - name: orange_run_1
       rect:
         serializedVersion: 2
         x: 0
@@ -99,7 +99,7 @@ TextureImporter:
         - {x: 19, y: -19.5}
         - {x: 22, y: -12.5}
         - {x: 22, y: 1.5}
-    - name: yellow_run_2
+    - name: orange_run_2
       rect:
         serializedVersion: 2
         x: 0
@@ -117,7 +117,7 @@ TextureImporter:
         - {x: 22, y: -21.5}
         - {x: 22, y: 0.5}
         - {x: 10, y: 11.5}
-    - name: yellow_run_3
+    - name: orange_run_3
       rect:
         serializedVersion: 2
         x: 0
@@ -138,7 +138,7 @@ TextureImporter:
         - {x: 23, y: -14.5}
         - {x: 23, y: -7.5}
         - {x: 19, y: 1.5}
-    - name: yellow_run_4
+    - name: orange_run_4
       rect:
         serializedVersion: 2
         x: 0
@@ -156,7 +156,7 @@ TextureImporter:
         - {x: 23, y: -13.5}
         - {x: 23, y: -0.5}
         - {x: 19, y: 10.5}
-    - name: yellow_run_5
+    - name: orange_run_5
       rect:
         serializedVersion: 2
         x: 0
@@ -175,7 +175,7 @@ TextureImporter:
         - {x: 24, y: -16.5}
         - {x: 24, y: -4.5}
         - {x: 14, y: 11.5}
-    - name: yellow_run_6
+    - name: orange_run_6
       rect:
         serializedVersion: 2
         x: 0
@@ -195,7 +195,7 @@ TextureImporter:
         - {x: 13, y: 11.5}
         - {x: -4, y: 11.5}
         - {x: -12, y: 6.5}
-    - name: yellow_run_7
+    - name: orange_run_7
       rect:
         serializedVersion: 2
         x: 0

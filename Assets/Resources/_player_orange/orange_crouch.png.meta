@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: fdda97ea35a654734a38e2e4e9055c95
-timeCreated: 1458619306
+guid: 4d10189a4df25479185f947601b94e9c
+timeCreated: 1458839584
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: yellow_crouch_0
-    21300002: yellow_crouch_1
+    21300000: orange_crouch_0
+    21300002: orange_crouch_1
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -52,7 +52,7 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: yellow_crouch_0
+    - name: orange_crouch_0
       rect:
         serializedVersion: 2
         x: 0
@@ -70,7 +70,7 @@ TextureImporter:
         - {x: 19, y: -14.5}
         - {x: 19, y: -5.5}
         - {x: 15, y: 7.5}
-    - name: yellow_crouch_1
+    - name: orange_crouch_1
       rect:
         serializedVersion: 2
         x: 0
