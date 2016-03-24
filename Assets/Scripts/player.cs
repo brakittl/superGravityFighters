@@ -407,7 +407,6 @@ public class player : MonoBehaviour {
     }
     
     void Shoot(){
-
       sound.PlayOneShot(gunshot);
       nextFire = Time.time + fireRate;
         numBulletShots++;
@@ -448,7 +447,7 @@ public class player : MonoBehaviour {
          (lastDirection == "left" && player_orientation == orientation.up) ||
          (lastDirection == "down" && player_orientation == orientation.right) ||
          (lastDirection == "up" && player_orientation == orientation.left)){
-        pos.x = transform.position.x + 0.15f;
+        pos.x = transform.position.x + 0.19f;
         bulletGO = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
         bulletGO.GetComponent<Rigidbody2D>().velocity = Vector3.right * shotVelocity;
       }
@@ -456,7 +455,7 @@ public class player : MonoBehaviour {
               (lastDirection == "right" && player_orientation == orientation.up) ||
               (lastDirection == "up" && player_orientation == orientation.right) ||
               (lastDirection == "down" && player_orientation == orientation.left)){
-        pos.x = transform.position.x - 0.15f;
+        pos.x = transform.position.x - 0.19f;
         bulletGO = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
         bulletGO.GetComponent<Rigidbody2D>().velocity = Vector3.left * shotVelocity;
       }
@@ -464,7 +463,7 @@ public class player : MonoBehaviour {
               (lastDirection == "down" && player_orientation == orientation.up) ||
               (lastDirection == "right" && player_orientation == orientation.right) ||
               (lastDirection == "left" && player_orientation == orientation.left)){
-        pos.y = transform.position.y + 0.15f;
+        pos.y = transform.position.y + 0.19f;
         bulletGO = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
         bulletGO.GetComponent<Rigidbody2D>().velocity = Vector3.up * shotVelocity;
       }
@@ -472,7 +471,7 @@ public class player : MonoBehaviour {
               (lastDirection == "up" && player_orientation == orientation.up) ||
               (lastDirection == "left" && player_orientation == orientation.right) ||
               (lastDirection == "right" && player_orientation == orientation.left)){
-        pos.y = transform.position.y - 0.15f;
+        pos.y = transform.position.y - 0.19f;
         bulletGO = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
         bulletGO.GetComponent<Rigidbody2D>().velocity = Vector3.down * shotVelocity;
       }
@@ -536,12 +535,12 @@ public class player : MonoBehaviour {
             up_slash.GetComponent<BoxCollider2D>().enabled = false;
             down_slash.GetComponent<BoxCollider2D>().enabled = false;
         }
-    else if(col.tag == "bullet" && !respawn && col.gameObject != bulletGO)
+    /*else if(col.tag == "bullet" && !respawn)// && col.gameObject != bulletGO) //Commented out means kill with own bullet
         {
             FindKiller(col.gameObject, true);
             KillPlayer();
             Destroy(col.gameObject);
-        }
+        }*/
   }
 
     public void FindKiller(GameObject collideObject, bool bulletOrSword)
@@ -552,22 +551,28 @@ public class player : MonoBehaviour {
             if (p.gameObject == this.gameObject) continue;
             player other = (player)p.GetComponent(typeof(player));
 
-            if (bulletOrSword && other.bulletGO.gameObject == collideObject.gameObject)
+            if (other.bulletGO != null)
             {
-                other.playersKilled.Add(this.gameObject.name);
-                other.numBulletHits++;
+                if (bulletOrSword && other.bulletGO == collideObject.gameObject)
+                {
+                    other.playersKilled.Add(this.gameObject.name);
+                    other.numBulletHits++;
+                }
             }
-       
-            else if (!bulletOrSword && other.slash.gameObject == collideObject.gameObject)
+
+            else if (other.slash.gameObject != null)
             {
-                other.playersKilled.Add(this.gameObject.name);
-                other.numSwordHits++;
+                if (!bulletOrSword && other.slash.gameObject == collideObject.gameObject)
+                {
+                    other.playersKilled.Add(this.gameObject.name);
+                    other.numSwordHits++;
+                }
             }
         }
     }
 
     bool respawn = false, respawning = false;
-  void KillPlayer(){
+  public void KillPlayer(){
         respawn = true;
         slash.GetComponent<BoxCollider2D>().enabled = false;
         side_slash.GetComponent<BoxCollider2D>().enabled = false;

@@ -19,12 +19,20 @@ public class Bullet : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.tag == "swipe")
-        {
-            GetComponent<Rigidbody>().velocity = -GetComponent<Rigidbody>().velocity * reflectMultiplier;
-        }
+        print(col.name);
+        if (col.tag == "slash")
+            GetComponent<Rigidbody2D>().velocity = -GetComponent<Rigidbody2D>().velocity * reflectMultiplier;
+
         else if (col.tag == "ground" || col.tag == "bullet")
+            Destroy(this.gameObject);
+        else if (col.tag == "shield")
+            GetComponent<Rigidbody2D>().velocity = -GetComponent<Rigidbody2D>().velocity * reflectMultiplier;
+        else if (col.tag == "Player")
         {
+            GameObject g = GameObject.Find(col.name);
+            player other = g.GetComponent<player>();
+            other.FindKiller(this.gameObject, true);
+            other.KillPlayer();
             Destroy(this.gameObject);
         }
     }

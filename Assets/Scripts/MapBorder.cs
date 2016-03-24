@@ -5,7 +5,7 @@ public class MapBorder : MonoBehaviour {
 
 	// Use this for initialization
 	void OnTriggerExit2D(Collider2D other) {
-		if (other.tag == "Player")
+		if (other.tag == "Player" || other.tag == "bullet")
 		{
 			if ((other.transform.position.y > (GetComponent<BoxCollider2D>().transform.position.y + (GetComponent<BoxCollider2D>().size.y / 2))))
 			{
