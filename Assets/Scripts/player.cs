@@ -514,7 +514,6 @@ public class player : MonoBehaviour {
         player_animator.SetBool("grounded", false);
         if(!player_animator.GetBool("jump")){
           player_animator.Play("Falling");
-          print("yo");
         }
       }
     }
