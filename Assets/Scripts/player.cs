@@ -514,7 +514,6 @@ public class player : MonoBehaviour {
         player_animator.SetBool("grounded", false);
         if(!player_animator.GetBool("jump")){
           player_animator.Play("Falling");
-          print("yo");
         }
       }
     }
@@ -568,7 +567,7 @@ public class player : MonoBehaviour {
 
     bool respawn = false, respawning = false;
   void KillPlayer(){
-
+        respawn = true;
         slash.GetComponent<BoxCollider2D>().enabled = false;
         side_slash.GetComponent<BoxCollider2D>().enabled = false;
         up_slash.GetComponent<BoxCollider2D>().enabled = false;
@@ -632,7 +631,7 @@ public class player : MonoBehaviour {
     //transform.position = Level.S.findRespawn();
     transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
     transform.position = Level.S.respawnPoints[UnityEngine.Random.Range(0, Level.S.respawnPoints.Length)];
-    respawn = true;
+    //respawn = true;
     respawning = true;
   }
 
