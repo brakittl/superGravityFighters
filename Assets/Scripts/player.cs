@@ -19,6 +19,7 @@ public class player : MonoBehaviour {
   public Animator up_slash_animator;
   public Animator down_slash_animator;
   public Animator shield_animator;
+    public Animator poison_animator;
   
   public GameObject slash;
   public GameObject side_slash;
@@ -39,6 +40,7 @@ public class player : MonoBehaviour {
   AudioSource sound;
   public AudioClip gunshot;
   public GameObject bullet;
+    float bulletCreationDist = 0.25f;
 
   GameObject bulletGO;
 
@@ -56,15 +58,15 @@ public class player : MonoBehaviour {
     public List<String> playersKilled;
 
     void Start(){
-    player_animator = GetComponent<Animator>();
-    body = gameObject.GetComponent<Rigidbody2D>();
-    grounded = 0;
-    player_orientation = orientation.down;
-    body.gravityScale = 0;    
-    slash.GetComponent<BoxCollider2D>().enabled = false;
-    side_slash.GetComponent<BoxCollider2D>().enabled = false;
-    up_slash.GetComponent<BoxCollider2D>().enabled = false;
-    down_slash.GetComponent<BoxCollider2D>().enabled = false;
+        player_animator = GetComponent<Animator>();
+        body = gameObject.GetComponent<Rigidbody2D>();
+        grounded = 0;
+        player_orientation = orientation.down;
+        body.gravityScale = 0;    
+        slash.GetComponent<BoxCollider2D>().enabled = false;
+        side_slash.GetComponent<BoxCollider2D>().enabled = false;
+        up_slash.GetComponent<BoxCollider2D>().enabled = false;
+        down_slash.GetComponent<BoxCollider2D>().enabled = false;
 
         sound = GetComponent<AudioSource>();
         jump_speed = thrust;
@@ -124,29 +126,19 @@ public class player : MonoBehaviour {
         {
             // attack
             if (Input.GetAxis("Controller " + player_number + " Right Trigger") >= 0.9 || Input.GetKey(KeyCode.Space))
-            {
                 Attack();
-            }
 
             // shoot
             if ((Input.GetAxis("Controller " + player_number + " Right Bumper") >= 0.9 || Input.GetKey(KeyCode.LeftShift)) && Time.time > nextFire && numBullets > 0)
-            {
                 Shoot();
-            }
 
             // block
             if (Input.GetAxis("Controller " + player_number + " Left Trigger") >= 0.9 || Input.GetKey(KeyCode.Q))
-            {
                 Block();
-            }
         }
         else
-        {
             if ((Input.GetAxis("Controller " + player_number + " Right Bumper") >= 0.9 || Input.GetKey(KeyCode.LeftShift)) && Time.time > nextFire && numBullets > 0)
-            {
                 Poison();
-            }
-        }
 
     // super slash for shits and gigs
     if(Input.GetButtonDown("Controller " + player_number + " Left Bumper") || Input.GetKey(KeyCode.F)){
@@ -447,7 +439,7 @@ public class player : MonoBehaviour {
          (lastDirection == "left" && player_orientation == orientation.up) ||
          (lastDirection == "down" && player_orientation == orientation.right) ||
          (lastDirection == "up" && player_orientation == orientation.left)){
-        pos.x = transform.position.x + 0.19f;
+        pos.x = transform.position.x + bulletCreationDist;
         bulletGO = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
         bulletGO.GetComponent<Rigidbody2D>().velocity = Vector3.right * shotVelocity;
       }
@@ -455,7 +447,7 @@ public class player : MonoBehaviour {
               (lastDirection == "right" && player_orientation == orientation.up) ||
               (lastDirection == "up" && player_orientation == orientation.right) ||
               (lastDirection == "down" && player_orientation == orientation.left)){
-        pos.x = transform.position.x - 0.19f;
+        pos.x = transform.position.x - bulletCreationDist;
         bulletGO = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
         bulletGO.GetComponent<Rigidbody2D>().velocity = Vector3.left * shotVelocity;
       }
@@ -463,7 +455,7 @@ public class player : MonoBehaviour {
               (lastDirection == "down" && player_orientation == orientation.up) ||
               (lastDirection == "right" && player_orientation == orientation.right) ||
               (lastDirection == "left" && player_orientation == orientation.left)){
-        pos.y = transform.position.y + 0.19f;
+        pos.y = transform.position.y + bulletCreationDist;
         bulletGO = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
         bulletGO.GetComponent<Rigidbody2D>().velocity = Vector3.up * shotVelocity;
       }
@@ -471,7 +463,7 @@ public class player : MonoBehaviour {
               (lastDirection == "up" && player_orientation == orientation.up) ||
               (lastDirection == "left" && player_orientation == orientation.right) ||
               (lastDirection == "right" && player_orientation == orientation.left)){
-        pos.y = transform.position.y - 0.19f;
+        pos.y = transform.position.y - bulletCreationDist;
         bulletGO = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
         bulletGO.GetComponent<Rigidbody2D>().velocity = Vector3.down * shotVelocity;
       }
@@ -586,6 +578,7 @@ public class player : MonoBehaviour {
     player_orientation = orientation.down;
     StartCoroutine(Wait());
   }
+
 
     float dragSpeed = 3;
     float poisonSpeed = 0.75f, poisonJump = 8f, poisonStart, poisonLength = 10;   //Poisoning Effects
