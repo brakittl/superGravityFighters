@@ -16,13 +16,14 @@ public class Bullet : MonoBehaviour{
         }
         else if (col.tag == "shield")
         {
+            print("shield");
            GetComponent<Rigidbody2D>().velocity = -GetComponent<Rigidbody2D>().velocity * reflectMultiplier;
         }
         else if (col.tag == "Player")
         {
             GameObject g = GameObject.Find(col.name);
             player other = g.GetComponent<player>();
-            if (!other.dead)
+            if (!other.dead && !other.respawn)
             {
                 other.FindKiller(this.gameObject, true);
                 other.KillPlayer();

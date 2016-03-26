@@ -29,6 +29,7 @@ public class player : MonoBehaviour {
   public GameObject side_slash;
   public GameObject up_slash;
   public GameObject down_slash;
+    public GameObject shield;
 
   // movement information
   Rigidbody2D body;
@@ -47,7 +48,7 @@ public class player : MonoBehaviour {
 
   // sounds
   AudioSource sound;
-  public AudioClip gunshot;
+  public AudioClip gunshot, block;
 
   // bullet information
   public GameObject bullet;
@@ -57,7 +58,7 @@ public class player : MonoBehaviour {
   string lastDirection = "right";
 
   // respawns
-  bool respawn = false, respawning = false;
+  public bool respawn = false, respawning = false;
   Vector3 offscreen = new Vector3(-1000, -1000, -1000);  
 
   // poison
@@ -82,6 +83,7 @@ public class player : MonoBehaviour {
     side_slash.GetComponent<BoxCollider2D>().enabled = false;
     up_slash.GetComponent<BoxCollider2D>().enabled = false;
     down_slash.GetComponent<BoxCollider2D>().enabled = false;
+        shield.GetComponent<CircleCollider2D>().enabled = false;
     sound = GetComponent<AudioSource>();
     jump_speed = thrust;
     run_speed = speed;
@@ -276,8 +278,13 @@ public class player : MonoBehaviour {
       StartCoroutine(Blink());
     }
 
-    // if has been attacked by Ghost
-    if(poisoned){
+        if (!player_animator.GetBool("block"))
+        {
+            shield.GetComponent<CircleCollider2D>().enabled = false;
+        }
+
+        // if has been attacked by Ghost
+        if (poisoned){
 
       // reduce jump and speed
       thrust = poisonJump;
@@ -437,6 +444,7 @@ public class player : MonoBehaviour {
       sound.PlayOneShot(gunshot);
       nextFire = Time.time + fireRate;
         numBulletShots++;
+        numBullets--;
 
       Vector3 pos = transform.position, rot = transform.rotation.eulerAngles;
       rot.x = 0;
@@ -507,7 +515,8 @@ public class player : MonoBehaviour {
     player_animator.Play("Block");
     player_animator.SetBool("block", true);
     shield_animator.Play("Shield");
-  }
+        shield.GetComponent<CircleCollider2D>().enabled = true;
+    }
 
   void Jump(){
     player_animator.Play("Jump");
@@ -530,28 +539,23 @@ public class player : MonoBehaviour {
         }
     }
 
-    public void FindKiller(GameObject collideObject, bool bulletOrSword){
+    public void FindKiller(GameObject collideObject, bool bulletAttack){
     
     GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
     foreach(GameObject p in players){
-      if(p.gameObject == this.gameObject){
+      if(p.gameObject == this.gameObject)
         continue;
-      }
 
       player other = (player)p.GetComponent(typeof(player));
-
-      if(other.bullet_instance != null){
-        if(bulletOrSword && other.bullet_instance == collideObject.gameObject){
+      if(bulletAttack && other.bullet_instance == collideObject)
+      {
           other.playersKilled.Add(this.gameObject.name);
           other.numBulletHits++;
-        }
       }
 
-      else if(other.slash.gameObject != null){
-        if(!bulletOrSword && other.slash.gameObject == collideObject.gameObject){
+      else if(!bulletAttack && other.slash.gameObject == collideObject.gameObject){
           other.playersKilled.Add(this.gameObject.name);
           other.numSwordHits++;
-        }
       }
     }
   }
@@ -562,7 +566,8 @@ public class player : MonoBehaviour {
     side_slash.GetComponent<BoxCollider2D>().enabled = false;
     up_slash.GetComponent<BoxCollider2D>().enabled = false;
     down_slash.GetComponent<BoxCollider2D>().enabled = false;
-    lives--;
+    //lives--;
+    Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
     if(lives == 0){
       dead = true;
     }
@@ -577,9 +582,9 @@ public class player : MonoBehaviour {
     yield return new WaitForSeconds(0.75f);
     transform.position = offscreen;
     yield return new WaitForSeconds(2f);
-    //transform.position = Level.S.findRespawn();
+    transform.position = Level.S.findRespawn();
     transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
-    transform.position = Level.S.respawnPoints[UnityEngine.Random.Range(0, Level.S.respawnPoints.Length)];
+    //transform.position = Level.S.respawnPoints[UnityEngine.Random.Range(0, Level.S.respawnPoints.Length)];
     //respawn = true;
     respawning = true;
   }
@@ -644,6 +649,11 @@ public class player : MonoBehaviour {
 
   void OnTriggerEnter2D(Collider2D col){
     if(col.tag == "slash" && !respawn && !dead){
+            if (player_animator.GetBool("block"))
+            {
+                sound.PlayOneShot(block);
+                return;
+            }
       FindKiller(col.gameObject, false);
       KillPlayer();
       slash.GetComponent<BoxCollider2D>().enabled = false;
