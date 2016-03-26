@@ -49,8 +49,6 @@ public class player : MonoBehaviour {
   AudioSource sound;
   public AudioClip gunshot;
 
-  GameObject bulletGO;
-
   // bullet information
   public GameObject bullet;
   GameObject bullet_instance;
@@ -470,47 +468,12 @@ public class player : MonoBehaviour {
         rot.z = 0;
       }
 
-
-      // bullet initiation
-      if((lastDirection == "right" && player_orientation == orientation.down) || 
-         (lastDirection == "left" && player_orientation == orientation.up) ||
-         (lastDirection == "down" && player_orientation == orientation.right) ||
-         (lastDirection == "up" && player_orientation == orientation.left)){
-        pos.x = transform.position.x + bulletCreationDist;
-        bulletGO = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
-        bulletGO.GetComponent<Rigidbody2D>().velocity = Vector3.right * shotVelocity;
-      }
-      else if((lastDirection == "left" && player_orientation == orientation.down) || 
-              (lastDirection == "right" && player_orientation == orientation.up) ||
-              (lastDirection == "up" && player_orientation == orientation.right) ||
-              (lastDirection == "down" && player_orientation == orientation.left)){
-        pos.x = transform.position.x - bulletCreationDist;
-        bulletGO = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
-        bulletGO.GetComponent<Rigidbody2D>().velocity = Vector3.left * shotVelocity;
-      }
-      else if((lastDirection == "up" && player_orientation == orientation.down) ||
-              (lastDirection == "down" && player_orientation == orientation.up) ||
-              (lastDirection == "right" && player_orientation == orientation.right) ||
-              (lastDirection == "left" && player_orientation == orientation.left)){
-        pos.y = transform.position.y + bulletCreationDist;
-        bulletGO = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
-        bulletGO.GetComponent<Rigidbody2D>().velocity = Vector3.up * shotVelocity;
-      }
-      else if((lastDirection == "down" && player_orientation == orientation.down) || 
-              (lastDirection == "up" && player_orientation == orientation.up) ||
-              (lastDirection == "left" && player_orientation == orientation.right) ||
-              (lastDirection == "right" && player_orientation == orientation.left)){
-        pos.y = transform.position.y - bulletCreationDist;
-        bulletGO = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
-        bulletGO.GetComponent<Rigidbody2D>().velocity = Vector3.down * shotVelocity;
-      }
-
     // bullet initiation
     if((lastDirection == "right" && player_orientation == orientation.down) || 
        (lastDirection == "left" && player_orientation == orientation.up) ||
        (lastDirection == "down" && player_orientation == orientation.right) ||
        (lastDirection == "up" && player_orientation == orientation.left)){
-      pos.x = transform.position.x + 0.19f;
+            pos.x = transform.position.x + bulletCreationDist;
       bullet_instance = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
       bullet_instance.GetComponent<Rigidbody2D>().velocity = Vector3.right * shotVelocity;
     }
@@ -518,7 +481,7 @@ public class player : MonoBehaviour {
             (lastDirection == "right" && player_orientation == orientation.up) ||
             (lastDirection == "up" && player_orientation == orientation.right) ||
             (lastDirection == "down" && player_orientation == orientation.left)){
-      pos.x = transform.position.x - 0.19f;
+      pos.x = transform.position.x - bulletCreationDist;
       bullet_instance = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
       bullet_instance.GetComponent<Rigidbody2D>().velocity = Vector3.left * shotVelocity;
     }
@@ -526,7 +489,7 @@ public class player : MonoBehaviour {
             (lastDirection == "down" && player_orientation == orientation.up) ||
             (lastDirection == "right" && player_orientation == orientation.right) ||
             (lastDirection == "left" && player_orientation == orientation.left)){
-      pos.y = transform.position.y + 0.19f;
+      pos.y = transform.position.y + bulletCreationDist;
       bullet_instance = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
       bullet_instance.GetComponent<Rigidbody2D>().velocity = Vector3.up * shotVelocity;
     }
@@ -534,7 +497,7 @@ public class player : MonoBehaviour {
             (lastDirection == "up" && player_orientation == orientation.up) ||
             (lastDirection == "left" && player_orientation == orientation.right) ||
             (lastDirection == "right" && player_orientation == orientation.left)){
-      pos.y = transform.position.y - 0.19f;
+      pos.y = transform.position.y - bulletCreationDist;
       bullet_instance = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
       bullet_instance.GetComponent<Rigidbody2D>().velocity = Vector3.down * shotVelocity;
     }
@@ -674,25 +637,19 @@ public class player : MonoBehaviour {
       }
     }
     else if(coll.gameObject.tag == "Player" && coll.gameObject.name != this.gameObject.name){
-      print(this.gameObject.name + "no longer touching " + coll.gameObject.name);
       playerContact = false;
       playerInContact = null;
     }
   }
 
   void OnTriggerEnter2D(Collider2D col){
-    if(col.tag == "slash" && !respawn){
+    if(col.tag == "slash" && !respawn && !dead){
       FindKiller(col.gameObject, false);
       KillPlayer();
       slash.GetComponent<BoxCollider2D>().enabled = false;
       side_slash.GetComponent<BoxCollider2D>().enabled = false;
       up_slash.GetComponent<BoxCollider2D>().enabled = false;
       down_slash.GetComponent<BoxCollider2D>().enabled = false;
-    }
-    else if(col.tag == "bullet" && !respawn){// && col.gameObject != bullet_instance) //Commented out means kill with own bullet{
-      FindKiller(col.gameObject, true);
-      KillPlayer();
-      Destroy(col.gameObject);
     }
   }
 
