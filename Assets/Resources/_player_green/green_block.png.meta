@@ -1,9 +1,15 @@
 fileFormatVersion: 2
 guid: f192044a4ab054fb6af638282dd8fc0f
-timeCreated: 1458616956
+timeCreated: 1458838491
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: green_block_0
+    21300002: green_block_1
+    21300004: green_block_2
+    21300006: green_block_3
+    21300008: green_block_4
+    21300010: green_block_5
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -49,7 +55,117 @@ TextureImporter:
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
-    sprites: []
+    sprites:
+    - name: green_block_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 215
+        width: 70
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -20, y: 11.5}
+        - {x: -24, y: 9.5}
+        - {x: -24, y: -14.5}
+        - {x: -22, y: -21.5}
+        - {x: 12, y: -21.5}
+        - {x: 12, y: 5.5}
+        - {x: 0, y: 11.5}
+    - name: green_block_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 172
+        width: 70
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -5, y: 12.5}
+        - {x: -26, y: 12.5}
+        - {x: -28, y: 6.5}
+        - {x: -28, y: -18.5}
+        - {x: -24, y: -21.5}
+        - {x: 7, y: -21.5}
+        - {x: 7, y: -9.5}
+        - {x: 6, y: 0.5}
+    - name: green_block_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 129
+        width: 70
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 7, y: 3.5}
+        - {x: -1, y: 10.5}
+        - {x: -27, y: 10.5}
+        - {x: -27, y: -17.5}
+        - {x: -25, y: -21.5}
+        - {x: 7, y: -21.5}
+    - name: green_block_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 86
+        width: 70
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -6, y: 12.5}
+        - {x: -25, y: 12.5}
+        - {x: -30, y: 5.5}
+        - {x: -30, y: -19.5}
+        - {x: -26, y: -21.5}
+        - {x: 7, y: -21.5}
+        - {x: 7, y: -4.5}
+        - {x: 6, y: 2.5}
+    - name: green_block_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 43
+        width: 70
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -5, y: 12.5}
+        - {x: -26, y: 12.5}
+        - {x: -28, y: 6.5}
+        - {x: -28, y: -18.5}
+        - {x: -24, y: -21.5}
+        - {x: 7, y: -21.5}
+        - {x: 7, y: -9.5}
+        - {x: 6, y: 0.5}
+    - name: green_block_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 70
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -20, y: 11.5}
+        - {x: -24, y: 9.5}
+        - {x: -24, y: -14.5}
+        - {x: -22, y: -21.5}
+        - {x: 12, y: -21.5}
+        - {x: 12, y: 5.5}
+        - {x: 0, y: 11.5}
     outline: []
   spritePackingTag: 
   userData: 
