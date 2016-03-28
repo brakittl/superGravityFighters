@@ -427,8 +427,8 @@ public class player : MonoBehaviour {
 			print("Hey, why isn't the orientation set?");
 			break;
 		}
-		print(bc_offset_x);
-		print(bc_offset_y);
+		//print(bc_offset_x);
+		//print(bc_offset_y);
 
 		float length_ray_updw = (player_height / 2) + (player_height * 0.08F);
 
@@ -443,16 +443,16 @@ public class player : MonoBehaviour {
 		//print(hit.collider);
 		if (player_orientation == orientation.up || player_orientation == orientation.down)
 		{ 
-			Debug.DrawRay(new Vector2(transform.position.x + (player_length / 4) + bc_offset_x, transform.position.y + bc_offset_y), below, Color.green);
-			Debug.DrawRay(new Vector2(transform.position.x - (player_length / 4) + bc_offset_x, transform.position.y + bc_offset_y), below, Color.green);
+			//Debug.DrawRay(new Vector2(transform.position.x + (player_length / 4) + bc_offset_x, transform.position.y + bc_offset_y), below, Color.green);
+			//Debug.DrawRay(new Vector2(transform.position.x - (player_length / 4) + bc_offset_x, transform.position.y + bc_offset_y), below, Color.green);
 			return(!Physics2D.Raycast(new Vector3(transform.position.x + (player_length / 4) + bc_offset_x, transform.position.y + bc_offset_y),below,length_ray_updw,ignoreplayer_layerMask) && 
 				!Physics2D.Raycast(new Vector3(transform.position.x - (player_length / 4) + bc_offset_x, transform.position.y + bc_offset_y),below,length_ray_updw, ignoreplayer_layerMask));
 	
 		}
 		else 
 		{
-			Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x, transform.position.y + (player_length / 4) + bc_offset_y), below, Color.green);
-			Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x, transform.position.y  - (player_length / 4) + bc_offset_y), below, Color.green);
+			//Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x, transform.position.y + (player_length / 4) + bc_offset_y), below, Color.green);
+			//Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x, transform.position.y  - (player_length / 4) + bc_offset_y), below, Color.green);
 			return(!Physics2D.Raycast(new Vector3(transform.position.x + bc_offset_x, transform.position.y + (player_length / 4) + bc_offset_y),below,length_ray_updw,ignoreplayer_layerMask) && 
 				!Physics2D.Raycast(new Vector3(transform.position.x + bc_offset_x, transform.position.y - (player_length / 4) + bc_offset_y),below,length_ray_updw, ignoreplayer_layerMask));
 	
