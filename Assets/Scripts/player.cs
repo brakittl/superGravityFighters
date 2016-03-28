@@ -438,7 +438,7 @@ public class player : MonoBehaviour {
 		//print(ignoreplayer_layerMask);
 		ignoreplayer_layerMask = ~ignoreplayer_layerMask;
 
-		//RaycastHit2D hit = Physics2D.Raycast(new Vector3(transform.position.x + (player_length / 4), transform.position.y),below,length_ray_updw,ignoreplayer_layerMask);
+		//RaycastHit2D hit = Physics2D.Raycast(new Vector3(transform.position.x + (player_length / 4) + bc_offset_x, transform.position.y + bc_offset_y),below,length_ray_updw,ignoreplayer_layerMask);
 		//print(Physics2D.Raycast(new Vector3(transform.position.x + (player_length / 2), transform.position.y),below,length_ray_updw,ignoreplayer_layerMask));
 		//print(hit.collider);
 		if (player_orientation == orientation.up || player_orientation == orientation.down)
