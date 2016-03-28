@@ -73,6 +73,8 @@ public class player : MonoBehaviour {
 	numBulletHits = 0, numSwordSwipes = 0, numSwordHits = 0;
 	public List<String> playersKilled;
 
+	float delay = 0;
+
 	void Start(){
 		player_animator = GetComponent<Animator>();
 		body = gameObject.GetComponent<Rigidbody2D>();
@@ -310,8 +312,13 @@ public class player : MonoBehaviour {
 			// grounded
 		if(!checkGround())
 		{
-				grounded = 1;
-				player_animator.SetBool("grounded", true);
+			if (grounded == 0)
+			{
+				//Need a little delay to have the player land completely
+				delay = 0.05F;
+			}
+			grounded = 1;
+			player_animator.SetBool("grounded", true);
 		}
 		else 
 		{
@@ -342,34 +349,114 @@ public class player : MonoBehaviour {
 		// =========================================================================
 
 		// apply jump
-		if(move_up && grounded == 1){
+		if(move_up && grounded == 1 && (delay < 0)){
 			Jump();
+		}
+		else
+		{
+			delay -= Time.deltaTime;
 		}
 	}
 
 	bool checkGround() 
 	{
 		
+		float bc_offset_x = GetComponent<BoxCollider2D>().offset.x;
+		float bc_offset_y = GetComponent<BoxCollider2D>().offset.y;
+
 
 
 		float player_length = GetComponent<BoxCollider2D>().size.x;
 		float player_height = GetComponent<BoxCollider2D>().size.y;
 
-		float length_ray_updw = (player_height / 2) + (player_height * 0.05F);
+
+		//Due to the box collider's position being off (due to rotation and offset), also need to "rotate" the ray
+		//Ex. when player turns right, the bc's y looks like it is rotated to y, effectively transforming the position by -2*offset.x (to -offset.x)
+		//		However, this transformation isn't shown anywhere (offset is still the old one, +offset.x)
+		switch (player_orientation)
+		{
+		case orientation.down:
+			if (transform.rotation.y == 0)
+			{
+				bc_offset_x = GetComponent<BoxCollider2D>().offset.x;
+				bc_offset_y = GetComponent<BoxCollider2D>().offset.y;
+			}
+			else 
+			{
+				bc_offset_x = -GetComponent<BoxCollider2D>().offset.x;
+				bc_offset_y = GetComponent<BoxCollider2D>().offset.y;
+			}
+			break;
+		case orientation.up:
+			if (transform.rotation.y == 0)
+			{
+				bc_offset_x = -GetComponent<BoxCollider2D>().offset.x;
+				bc_offset_y = -GetComponent<BoxCollider2D>().offset.y;
+			}
+			else 
+			{
+				bc_offset_x = GetComponent<BoxCollider2D>().offset.x;
+				bc_offset_y = -GetComponent<BoxCollider2D>().offset.y;
+			}
+			break;
+		case orientation.left:
+			if (transform.rotation.y == 0)
+			{
+				bc_offset_x = GetComponent<BoxCollider2D>().offset.x;
+				bc_offset_y = -GetComponent<BoxCollider2D>().offset.y;
+			}
+			else 
+			{
+				bc_offset_x = GetComponent<BoxCollider2D>().offset.x;
+				bc_offset_y = GetComponent<BoxCollider2D>().offset.y;
+			}
+			break;
+		case orientation.right:
+			if (transform.rotation.y == 0)
+			{
+				bc_offset_x = -GetComponent<BoxCollider2D>().offset.x;
+				bc_offset_y = GetComponent<BoxCollider2D>().offset.y;
+			}
+			else 
+			{
+				bc_offset_x = -GetComponent<BoxCollider2D>().offset.x;
+				bc_offset_y = -GetComponent<BoxCollider2D>().offset.y;
+			}
+			break;
+		default:
+			print("Hey, why isn't the orientation set?");
+			break;
+		}
+		print(bc_offset_x);
+		print(bc_offset_y);
+
+		float length_ray_updw = (player_height / 2) + (player_height * 0.08F);
 
 		Vector2 below = transform.TransformDirection(new Vector2(0F, -length_ray_updw));
 
 		LayerMask ignoreplayer_layerMask = ~(LayerMask.NameToLayer("Player") | LayerMask.NameToLayer("Border"));
-		print(ignoreplayer_layerMask);
+		//print(ignoreplayer_layerMask);
 		ignoreplayer_layerMask = ~ignoreplayer_layerMask;
-		Debug.DrawRay(new Vector2(transform.position.x + (player_length / 4) + GetComponent<BoxCollider2D>().offset.x, transform.position.y + GetComponent<BoxCollider2D>().offset.y), below, Color.green);
-		Debug.DrawRay(new Vector2(transform.position.x - (player_length / 4) + GetComponent<BoxCollider2D>().offset.x, transform.position.y + GetComponent<BoxCollider2D>().offset.y), below, Color.green);
-		RaycastHit2D hit = Physics2D.Raycast(new Vector3(transform.position.x + (player_length / 4), transform.position.y),below,length_ray_updw,ignoreplayer_layerMask);
-		//print(Physics2D.Raycast(new Vector3(transform.position.x + (player_length / 2), transform.position.y),below,length_ray_updw,ignoreplayer_layerMask));
-		print(hit.collider);
 
-		return(!Physics2D.Raycast(new Vector3(transform.position.x + (player_length / 4) + GetComponent<BoxCollider2D>().offset.x, transform.position.y + GetComponent<BoxCollider2D>().offset.y),below,length_ray_updw,ignoreplayer_layerMask) && 
-			!Physics2D.Raycast(new Vector3(transform.position.x - (player_length / 4) + GetComponent<BoxCollider2D>().offset.x, transform.position.y + GetComponent<BoxCollider2D>().offset.y),below,length_ray_updw, ignoreplayer_layerMask));
+		//RaycastHit2D hit = Physics2D.Raycast(new Vector3(transform.position.x + (player_length / 4), transform.position.y),below,length_ray_updw,ignoreplayer_layerMask);
+		//print(Physics2D.Raycast(new Vector3(transform.position.x + (player_length / 2), transform.position.y),below,length_ray_updw,ignoreplayer_layerMask));
+		//print(hit.collider);
+		if (player_orientation == orientation.up || player_orientation == orientation.down)
+		{ 
+			Debug.DrawRay(new Vector2(transform.position.x + (player_length / 4) + bc_offset_x, transform.position.y + bc_offset_y), below, Color.green);
+			Debug.DrawRay(new Vector2(transform.position.x - (player_length / 4) + bc_offset_x, transform.position.y + bc_offset_y), below, Color.green);
+			return(!Physics2D.Raycast(new Vector3(transform.position.x + (player_length / 4) + bc_offset_x, transform.position.y + bc_offset_y),below,length_ray_updw,ignoreplayer_layerMask) && 
+				!Physics2D.Raycast(new Vector3(transform.position.x - (player_length / 4) + bc_offset_x, transform.position.y + bc_offset_y),below,length_ray_updw, ignoreplayer_layerMask));
+	
+		}
+		else 
+		{
+			Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x, transform.position.y + (player_length / 4) + bc_offset_y), below, Color.green);
+			Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x, transform.position.y  - (player_length / 4) + bc_offset_y), below, Color.green);
+			return(!Physics2D.Raycast(new Vector3(transform.position.x + bc_offset_x, transform.position.y + (player_length / 4) + bc_offset_y),below,length_ray_updw,ignoreplayer_layerMask) && 
+				!Physics2D.Raycast(new Vector3(transform.position.x + bc_offset_x, transform.position.y - (player_length / 4) + bc_offset_y),below,length_ray_updw, ignoreplayer_layerMask));
+	
+		}
 	}
 
 
