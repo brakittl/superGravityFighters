@@ -32,6 +32,7 @@ public class player : MonoBehaviour{
 	public GameObject down_slash;
 	public GameObject shield;
   public GameObject poisonGO;
+    public GameObject halo;
 
 	// movement information
 	Rigidbody2D body;
@@ -187,8 +188,12 @@ public class player : MonoBehaviour{
 		else{
             GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.5f); //Ghost Body
             // poison
-            if ((Input.GetAxis("Controller " + player_number + " Right Bumper") >= 0.9 || Input.GetKey(KeyCode.LeftShift)) && Time.time > poisonTime){
-				Poison();
+            //if ((Input.GetAxis("Controller " + player_number + " Right Bumper") >= 0.9 || Input.GetKey(KeyCode.LeftShift)) && Time.time > poisonTime){
+			//	Poison();
+			//}
+            if((Input.GetAxis("Controller " + player_number + " Right Trigger") >= 0.9 || Input.GetKey(KeyCode.LeftShift)) && Time.time > poisonTime)
+            {
+				Attack();
 			}
 		}
 
@@ -843,7 +848,8 @@ public class player : MonoBehaviour{
 		lives--;
 		Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
 		if(lives == 0){
-			dead = true;
+            halo.SetActive(true);
+            dead = true;
 		}
 		poisoned = false;
 		player_animator.Play("Death");
@@ -878,7 +884,6 @@ public class player : MonoBehaviour{
 
 	void OnCollisionEnter2D(Collision2D coll){
 		GameObject other = coll.gameObject;
-
 		if(other.tag == "Player" && other.name != this.gameObject.name){
 			playerContact = true;
 			playerInContact = (player)other.GetComponent(typeof(player));
@@ -916,6 +921,11 @@ public class player : MonoBehaviour{
 			up_slash.GetComponent<BoxCollider2D>().enabled = false;
 			down_slash.GetComponent<BoxCollider2D>().enabled = false;
 		}
+
+        if(col.tag == "Player")
+        {
+            print("player");
+        }
     }
 
 }
