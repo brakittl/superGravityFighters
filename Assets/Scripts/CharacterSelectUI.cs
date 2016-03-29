@@ -67,7 +67,7 @@ public class CharacterSelectUI : MonoBehaviour {
           }
         }
 
-        SceneManager.LoadScene("_mahraan");
+        SceneManager.LoadScene("_BK");
       }
     }    
   }
