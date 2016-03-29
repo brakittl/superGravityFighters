@@ -55,7 +55,8 @@ public class player : MonoBehaviour{
 	public GameObject bullet;
 	GameObject bullet_instance;
 	public float shotVelocity = 5f, numBullets = 1;
-	float fireRate = 1.5f, nextFire = 0f, bulletCreationDist = 0.25f;
+    public float fireRate = 1f;
+	float nextFire = 0f, bulletCreationDist = 0.25f;
 	string lastDirection = "right";
 
 	// respawns
@@ -74,7 +75,11 @@ public class player : MonoBehaviour{
 	numBulletHits = 0, numSwordSwipes = 0, numSwordHits = 0;
 	public List<String> playersKilled;
 
-	float delay = 0;
+    //blocking
+    bool swipeBlock = true;
+    float swipeBlockStart = 0f, swipeBlockTime = 0.25f;
+
+    float delay = 0;
 
 	void Start(){
 		player_animator = GetComponent<Animator>();
@@ -129,7 +134,8 @@ public class player : MonoBehaviour{
 		// if alive, allow attack, shoot, and block action
 		if(!dead){
 			// attack
-			if(Input.GetAxis("Controller " + player_number + " Right Trigger") >= 0.9 || Input.GetKey(KeyCode.Space)){
+			if((Input.GetAxis("Controller " + player_number + " Right Trigger") >= 0.9 || Input.GetKey(KeyCode.Space)) && Time.time > nextFire)
+            {
 				Attack();
 			}
 			// shoot
@@ -137,7 +143,7 @@ public class player : MonoBehaviour{
 				Shoot();
 			}
 			// block
-			if(Input.GetAxis("Controller " + player_number + " Left Trigger") >= 0.9 || Input.GetKey(KeyCode.Q)){
+			if((Input.GetAxis("Controller " + player_number + " Left Trigger") >= 0.9 || Input.GetKey(KeyCode.Q)) && Time.time > nextFire){
 				Block();
 			}
 			// super slash for shits and gigs
@@ -626,7 +632,8 @@ public class player : MonoBehaviour{
 		if(!player_animator.GetBool("attack") && !respawn && !player_animator.GetBool("crouched")){
 
 			numSwordSwipes++; // statistics count
-			player_animator.SetBool("attack", true);
+            nextFire = Time.time + fireRate;
+            player_animator.SetBool("attack", true);
 
 			if(!player_animator.GetBool("grounded")){
 				if(move_left || move_right){
@@ -739,8 +746,10 @@ public class player : MonoBehaviour{
 		}
 	}
 
-	void Block(){
-		player_animator.Play("Block");
+	void Block()
+    {
+        nextFire = Time.time + fireRate;
+        player_animator.Play("Block");
 		player_animator.SetBool("block", true);
 		shield_animator.Play("Shield");
 		shield.GetComponent<CircleCollider2D>().enabled = true;
@@ -855,9 +864,7 @@ public class player : MonoBehaviour{
 			playerInContact = null;
 		}
 	}
-
-    bool swipeBlock = true;
-    float swipeBlockStart = 0f, swipeBlockTime = 0.25f;
+    
 	void OnTriggerEnter2D(Collider2D col){
         if(col.tag == "slash" && !respawn && !dead)
         {
