@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
+using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -10,6 +11,7 @@ public class player : MonoBehaviour{
 	public string player_color;
 	public int lives = 3;
 	public bool dead = false;
+  public GameObject[] hearts;
 
 	// orientation
 	public enum orientation{up, down, left, right};
@@ -29,7 +31,7 @@ public class player : MonoBehaviour{
 	public GameObject up_slash;
 	public GameObject down_slash;
 	public GameObject shield;
-    public GameObject poisonGO;
+  public GameObject poisonGO;
 
 	// movement information
 	Rigidbody2D body;
@@ -55,7 +57,7 @@ public class player : MonoBehaviour{
 	public GameObject bullet;
 	GameObject bullet_instance;
 	public float shotVelocity = 5f, numBullets = 1;
-    public float fireRate = 1f;
+  public float fireRate = 1f;
 	float nextFire = 0f, bulletCreationDist = 0.25f;
 	string lastDirection = "right";
 
@@ -75,11 +77,23 @@ public class player : MonoBehaviour{
 	numBulletHits = 0, numSwordSwipes = 0, numSwordHits = 0;
 	public List<String> playersKilled;
 
-    //blocking
-    bool swipeBlock = true;
-    float swipeBlockStart = 0f, swipeBlockTime = 0.25f;
+  // blocking
+  bool swipeBlock = true;
+  float swipeBlockStart = 0f, swipeBlockTime = 0.25f;
+  float delay = 0;
 
-    float delay = 0;
+  // hearts/skulls
+  public Sprite[] hearts_skulls;
+
+  // get sprite by name
+  public Sprite get_sprite_by_name(Sprite[]sprites, string sprite_name){
+    for(int i = 0; i < sprites.Length; i++){
+      if(sprites[i].name.Equals(sprite_name)){
+        return sprites[i];
+      }
+    }
+    return null;
+  }
 
 	void Start(){
 		player_animator = GetComponent<Animator>();
@@ -95,9 +109,27 @@ public class player : MonoBehaviour{
 		sound = GetComponent<AudioSource>();
 		jump_speed = thrust;
 		run_speed = speed;
+    hearts_skulls = Resources.LoadAll<Sprite>("hearts_skulls");
+    hearts = new GameObject[10];
+    for(int i = 0; i < 10; ++i){
+      string heart_string = "ui/p" + player_number.ToString() + "/" + player_number.ToString() + "_" + (i + 1).ToString();
+      GameObject current_heart = GameObject.Find(heart_string);
+      current_heart.GetComponent<Image>().sprite = get_sprite_by_name(hearts_skulls, player_color.ToLower() + "_heart");
+      hearts[i] = current_heart;
+    }
 	}
 
 	void Update(){
+
+    // ==[show hearts]==========================================================
+    // =========================================================================
+
+    for(int i = 1; i <= lives; ++i){
+      hearts[i - 1].SetActive(true);
+    }
+    for(int i = lives + 1; i <= 10; ++i){
+      hearts[i - 1].SetActive(false);
+    }
 
 		// ==[gravity swap]=========================================================
 		// =========================================================================
