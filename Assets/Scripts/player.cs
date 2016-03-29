@@ -115,7 +115,7 @@ public class player : MonoBehaviour{
       string heart_string = "ui/p" + player_number.ToString() + "/" + player_number.ToString() + "_" + (i + 1).ToString();
       GameObject current_heart = GameObject.Find(heart_string);
       //current_heart.GetComponent<Image>().sprite = get_sprite_by_name(hearts_skulls, player_color.ToLower() + "_heart");
-     // hearts[i] = current_heart;
+      // hearts[i] = current_heart;
     }
 	}
 
@@ -490,9 +490,8 @@ public class player : MonoBehaviour{
 
 		float length_ray_leftright = (player_length * 1.1F);
 
-		Vector2 left = transform.TransformDirection(new Vector2(length_ray_leftright, 0));
-		Vector2 right = transform.TransformDirection(new Vector2(-length_ray_leftright, 0));
-
+		// Vector2 left = transform.TransformDirection(new Vector2(length_ray_leftright, 0));
+		// Vector2 right = transform.TransformDirection(new Vector2(-length_ray_leftright, 0));
 
 		LayerMask ignoreplayer_layerMask = ~(LayerMask.NameToLayer("Player") | LayerMask.NameToLayer("Border"));
 		//print(ignoreplayer_layerMask);
@@ -783,10 +782,9 @@ public class player : MonoBehaviour{
 		}
 	}
 
-	void Block()
-    {
-        nextFire = Time.time + fireRate;
-        player_animator.Play("Block");
+	void Block(){
+    nextFire = Time.time + fireRate;
+    player_animator.Play("Block");
 		player_animator.SetBool("block", true);
 		shield_animator.Play("Shield");
 		shield.GetComponent<CircleCollider2D>().enabled = true;
@@ -853,7 +851,7 @@ public class player : MonoBehaviour{
 	}
 
 	IEnumerator Wait(){
-		yield return new WaitForSeconds(0.f5f);
+		yield return new WaitForSeconds(0.35f);
 		transform.position = offscreen;
 		yield return new WaitForSeconds(2f);
 		transform.position = Level.S.findRespawn();
