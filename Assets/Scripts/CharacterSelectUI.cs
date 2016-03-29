@@ -6,6 +6,11 @@ using UnityEngine.SceneManagement;
 public class CharacterSelectUI : MonoBehaviour {
   GameObject ready;
 
+  public List<string> playerPrefabNames = new List<string>()
+  {
+    "black_player", "blue_player", "green_player", "orange_player", "purple_player", "red_player", "yellow_player"
+  };
+
   public Dictionary<string, int> selectedCharacter = new Dictionary<string, int>()
   {
     {"P1", -2},
@@ -50,12 +55,19 @@ public class CharacterSelectUI : MonoBehaviour {
       || Input.GetButtonDown("Controller 3 Start Button")
       || Input.GetButtonDown("Controller 4 Start Button"))
       {
-        PlayerPrefs.SetInt("P1", selectedCharacter["P1"]);
-        PlayerPrefs.SetInt("P2", selectedCharacter["P2"]);
-        PlayerPrefs.SetInt("P3", selectedCharacter["P3"]);
-        PlayerPrefs.SetInt("P4", selectedCharacter["P4"]);
+        for (int i = 1; i <= 4; i++)
+        {
+          if (selectedCharacter["P"+i] >= 0)
+          {
+            PlayerPrefs.SetString("P" + i, playerPrefabNames[selectedCharacter["P" + i]]);
+          }
+          else
+          {
+            PlayerPrefs.SetString("P" + i, "none");
+          }
+        }
 
-        SceneManager.LoadScene("2");
+        SceneManager.LoadScene("_mahraan");
       }
     }    
   }
@@ -72,7 +84,7 @@ public class CharacterSelectUI : MonoBehaviour {
       if (selectedCharacter["P" + i] >= 0) readyCount++;
     }
 
-    if (readyCount > 0)
+    if (readyCount > 1)
     {
       return true;
     }
