@@ -11,10 +11,10 @@ public class Level : MonoBehaviour {
 
     S = this;
 
-    // PlayerPrefs.SetString("P1", "orange_player");
-    // PlayerPrefs.SetString("P2", "none");
-    // PlayerPrefs.SetString("P3", "red_player");
-    // PlayerPrefs.SetString("P4", "none");
+     //PlayerPrefs.SetString("P1", "orange_player");
+     //PlayerPrefs.SetString("P2", "none");
+     //PlayerPrefs.SetString("P3", "red_player");
+     //PlayerPrefs.SetString("P4", "none");
 
     Vector3 rot = new Vector3(0, 0, 0);
 
@@ -61,7 +61,6 @@ public class Level : MonoBehaviour {
         if((Mathf.Abs(Vector3.Distance(point, player.transform.position)) < closestPlayerDist) || (closestP == null)){
           closestPlayerDist = Mathf.Abs(Vector3.Distance(point, player.transform.position));
           closestP = player;
-          print("closest player to respawn point " + point.ToString() + " is " + closestP.name);
         }
       }
 
