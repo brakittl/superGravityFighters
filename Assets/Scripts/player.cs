@@ -241,6 +241,20 @@ public class player : MonoBehaviour{
 			}
 		}
 
+    // ==[resets]===============================================================
+    // =========================================================================
+
+    if(!move_left && !move_right){
+      player_animator.SetBool("run", false);
+    }
+
+    if(!player_animator.GetBool("attack")){
+      slash.GetComponent<BoxCollider2D>().enabled = false;
+      side_slash.GetComponent<BoxCollider2D>().enabled = false;
+      up_slash.GetComponent<BoxCollider2D>().enabled = false;
+      down_slash.GetComponent<BoxCollider2D>().enabled = false;
+    }
+
 		// ==[movement]=============================================================
 		// =========================================================================
 
@@ -256,20 +270,6 @@ public class player : MonoBehaviour{
 		player_animator.SetBool("crouched", false);
 		if(move_down){
 			Crouch();
-		}
-
-		// ==[resets]===============================================================
-		// =========================================================================
-
-		if(!Input.anyKey){
-			player_animator.SetBool("run", false);
-		}
-
-		if(!player_animator.GetBool("attack")){
-			slash.GetComponent<BoxCollider2D>().enabled = false;
-			side_slash.GetComponent<BoxCollider2D>().enabled = false;
-			up_slash.GetComponent<BoxCollider2D>().enabled = false;
-			down_slash.GetComponent<BoxCollider2D>().enabled = false;
 		}
 
 		// ==[respawn and death]====================================================
