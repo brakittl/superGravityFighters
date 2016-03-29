@@ -55,7 +55,8 @@ public class player : MonoBehaviour{
 	public GameObject bullet;
 	GameObject bullet_instance;
 	public float shotVelocity = 5f, numBullets = 1;
-	float fireRate = 1.5f, nextFire = 0f, bulletCreationDist = 0.25f;
+    public float fireRate = 1f;
+	float nextFire = 0f, bulletCreationDist = 0.25f;
 	string lastDirection = "right";
 
 	// respawns
@@ -74,7 +75,11 @@ public class player : MonoBehaviour{
 	numBulletHits = 0, numSwordSwipes = 0, numSwordHits = 0;
 	public List<String> playersKilled;
 
-	float delay = 0;
+    //blocking
+    bool swipeBlock = true;
+    float swipeBlockStart = 0f, swipeBlockTime = 0.25f;
+
+    float delay = 0;
 
 	void Start(){
 		player_animator = GetComponent<Animator>();
@@ -129,7 +134,8 @@ public class player : MonoBehaviour{
 		// if alive, allow attack, shoot, and block action
 		if(!dead){
 			// attack
-			if(Input.GetAxis("Controller " + player_number + " Right Trigger") >= 0.9 || Input.GetKey(KeyCode.Space)){
+			if((Input.GetAxis("Controller " + player_number + " Right Trigger") >= 0.9 || Input.GetKey(KeyCode.Space)) && Time.time > nextFire)
+            {
 				Attack();
 			}
 			// shoot
@@ -137,7 +143,7 @@ public class player : MonoBehaviour{
 				Shoot();
 			}
 			// block
-			if(Input.GetAxis("Controller " + player_number + " Left Trigger") >= 0.9 || Input.GetKey(KeyCode.Q)){
+			if((Input.GetAxis("Controller " + player_number + " Left Trigger") >= 0.9 || Input.GetKey(KeyCode.Q)) && Time.time > nextFire){
 				Block();
 			}
 			// super slash for shits and gigs
@@ -244,13 +250,14 @@ public class player : MonoBehaviour{
     // ==[resets]===============================================================
     // =========================================================================
 
-    if (!move_left && !move_right)
-    {
+    if(!move_left && !move_right){
+      player_animator.SetBool("run", false);
+    }
+    else if(player_animator.GetBool("jump")){
       player_animator.SetBool("run", false);
     }
 
-    if (!player_animator.GetBool("attack"))
-    {
+    if (!player_animator.GetBool("attack")){
       slash.GetComponent<BoxCollider2D>().enabled = false;
       side_slash.GetComponent<BoxCollider2D>().enabled = false;
       up_slash.GetComponent<BoxCollider2D>().enabled = false;
@@ -261,10 +268,10 @@ public class player : MonoBehaviour{
     // =========================================================================
 
     // apply movement
-    if (move_right){
+    if(move_right && !player_animator.GetBool("landing")){
 			Run(true);
 		}
-		if(move_left){
+		if(move_left && !player_animator.GetBool("landing")){
 			Run(false);
 		}
 
@@ -307,6 +314,12 @@ public class player : MonoBehaviour{
 				curButtonTaps = 0;
 			}
 		}
+
+        if (!swipeBlock && Time.time - swipeBlockStart > swipeBlockTime)
+        {
+            swipeBlock = true;
+            body.velocity = new Vector2(0f, 0f);
+        }
 	}
 
 	void FixedUpdate(){
@@ -323,7 +336,7 @@ public class player : MonoBehaviour{
 		else{
 			grounded = 0;
 			player_animator.SetBool("grounded", false);
-			if(!player_animator.GetBool("jump")){
+			if(!player_animator.GetBool("jump") && player_animator.GetBool("run")){
 				player_animator.Play("Falling");
 			}
 		}
@@ -365,6 +378,112 @@ public class player : MonoBehaviour{
 			delay -= Time.deltaTime;
 		}
 	}
+
+	bool checkSides() 
+	{
+
+		float bc_offset_x = GetComponent<BoxCollider2D>().offset.x;
+		float bc_offset_y = GetComponent<BoxCollider2D>().offset.y;
+
+
+
+		float player_length = GetComponent<BoxCollider2D>().size.x;
+		float player_height = GetComponent<BoxCollider2D>().size.y;
+
+
+		//Due to the box collider's position being off (due to rotation and offset), also need to "rotate" the ray
+		//Ex. when player turns right, the bc's y looks like it is rotated to y, effectively transforming the position by -2*offset.x (to -offset.x)
+		//		However, this transformation isn't shown anywhere (offset is still the old one, +offset.x)
+		switch (player_orientation)
+		{
+		case orientation.down:
+			if (transform.rotation.y == 0)
+			{
+				bc_offset_x = GetComponent<BoxCollider2D>().offset.x;
+				bc_offset_y = GetComponent<BoxCollider2D>().offset.y;
+			}
+			else 
+			{
+				bc_offset_x = -GetComponent<BoxCollider2D>().offset.x;
+				bc_offset_y = GetComponent<BoxCollider2D>().offset.y;
+			}
+			break;
+		case orientation.up:
+			if (transform.rotation.y == 0)
+			{
+				bc_offset_x = -GetComponent<BoxCollider2D>().offset.x;
+				bc_offset_y = -GetComponent<BoxCollider2D>().offset.y;
+			}
+			else 
+			{
+				bc_offset_x = GetComponent<BoxCollider2D>().offset.x;
+				bc_offset_y = -GetComponent<BoxCollider2D>().offset.y;
+			}
+			break;
+		case orientation.left:
+			if (transform.rotation.y == 0)
+			{
+				bc_offset_x = GetComponent<BoxCollider2D>().offset.x;
+				bc_offset_y = -GetComponent<BoxCollider2D>().offset.y;
+			}
+			else 
+			{
+				bc_offset_x = GetComponent<BoxCollider2D>().offset.x;
+				bc_offset_y = GetComponent<BoxCollider2D>().offset.y;
+			}
+			break;
+		case orientation.right:
+			if (transform.rotation.y == 0)
+			{
+				bc_offset_x = -GetComponent<BoxCollider2D>().offset.x;
+				bc_offset_y = GetComponent<BoxCollider2D>().offset.y;
+			}
+			else 
+			{
+				bc_offset_x = -GetComponent<BoxCollider2D>().offset.x;
+				bc_offset_y = -GetComponent<BoxCollider2D>().offset.y;
+			}
+			break;
+		default:
+			print("Hey, why isn't the orientation set?");
+			break;
+		}
+		//print(bc_offset_x);
+		//print(bc_offset_y);
+
+		float length_ray_leftright = (player_length * .5F);
+
+		Vector2 left = transform.TransformDirection(new Vector2(length_ray_leftright, 0));
+		Vector2 right = transform.TransformDirection(new Vector2(-length_ray_leftright, 0));
+
+
+		LayerMask ignoreplayer_layerMask = ~(LayerMask.NameToLayer("Player") | LayerMask.NameToLayer("Border"));
+		//print(ignoreplayer_layerMask);
+		ignoreplayer_layerMask = ~ignoreplayer_layerMask;
+
+		//RaycastHit2D hit = Physics2D.Raycast(new Vector3(transform.position.x + (player_length / 4) + bc_offset_x, transform.position.y + bc_offset_y),below,length_ray_updw,ignoreplayer_layerMask);
+		//print(Physics2D.Raycast(new Vector3(transform.position.x + (player_length / 2), transform.position.y),below,length_ray_updw,ignoreplayer_layerMask));
+		//print(hit.collider);
+		if (player_orientation == orientation.up || player_orientation == orientation.down)
+		{  
+			//Debug.DrawRay(new Vector2(transform.position.x - bc_offset_x, transform.position.y + bc_offset_y  + (player_length / 2)), left, Color.green);
+			//Debug.DrawRay(new Vector2(transform.position.x - bc_offset_x, transform.position.y + bc_offset_y  - (player_length / 2)), left, Color.green);
+			return(!Physics2D.Raycast(new Vector3(transform.position.x - bc_offset_x, transform.position.y + bc_offset_y  + (player_length / 2)),left,length_ray_leftright,ignoreplayer_layerMask) && 
+				!Physics2D.Raycast(new Vector3(transform.position.x - bc_offset_x, transform.position.y + bc_offset_y  - (player_length / 2)),left,length_ray_leftright, ignoreplayer_layerMask));
+
+		}
+		else 
+		{
+			length_ray_leftright = (player_length * 1F);
+			left = transform.TransformDirection(new Vector2(length_ray_leftright, 0));
+			//Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x  + (player_length / 2), transform.position.y + bc_offset_y), left, Color.green);
+			//Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x  - (player_length / 2), transform.position.y + bc_offset_y), left, Color.green);
+			return(!Physics2D.Raycast(new Vector3(transform.position.x + bc_offset_x  + (player_length / 2), transform.position.y + bc_offset_y),left,length_ray_leftright,ignoreplayer_layerMask) && 
+				!Physics2D.Raycast(new Vector3(transform.position.x + bc_offset_x  - (player_length / 2), transform.position.y + bc_offset_y),left,length_ray_leftright, ignoreplayer_layerMask));
+
+		}
+	}
+
 
 	bool checkGround(){
 		
@@ -435,16 +554,16 @@ public class player : MonoBehaviour{
 		//print(Physics2D.Raycast(new Vector3(transform.position.x + (player_length / 2), transform.position.y),below,length_ray_updw,ignoreplayer_layerMask));
 		//print(hit.collider);
 		if(player_orientation == orientation.up || player_orientation == orientation.down){ 
-			//Debug.DrawRay(new Vector2(transform.position.x + (player_length / 4) + bc_offset_x, transform.position.y + bc_offset_y), below, Color.green);
-			//Debug.DrawRay(new Vector2(transform.position.x - (player_length / 4) + bc_offset_x, transform.position.y + bc_offset_y), below, Color.green);
-			return(!Physics2D.Raycast(new Vector3(transform.position.x + (player_length / 4) + bc_offset_x, transform.position.y + bc_offset_y),below,length_ray_updw,ignoreplayer_layerMask) && 
-				!Physics2D.Raycast(new Vector3(transform.position.x - (player_length / 4) + bc_offset_x, transform.position.y + bc_offset_y),below,length_ray_updw, ignoreplayer_layerMask));
+			//Debug.DrawRay(new Vector2(transform.position.x + (player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y), below, Color.green);
+			//Debug.DrawRay(new Vector2(transform.position.x - (player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y), below, Color.green);
+			return(!Physics2D.Raycast(new Vector3(transform.position.x + (player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y),below,length_ray_updw,ignoreplayer_layerMask) && 
+				!Physics2D.Raycast(new Vector3(transform.position.x - (player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y),below,length_ray_updw, ignoreplayer_layerMask));
 		}
 		else{
-			//Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x, transform.position.y + (player_length / 4) + bc_offset_y), below, Color.green);
-			//Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x, transform.position.y  - (player_length / 4) + bc_offset_y), below, Color.green);
-			return(!Physics2D.Raycast(new Vector3(transform.position.x + bc_offset_x, transform.position.y + (player_length / 4) + bc_offset_y),below,length_ray_updw,ignoreplayer_layerMask) && 
-				!Physics2D.Raycast(new Vector3(transform.position.x + bc_offset_x, transform.position.y - (player_length / 4) + bc_offset_y),below,length_ray_updw, ignoreplayer_layerMask));
+			//Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x, transform.position.y + (player_length / 2) + bc_offset_y), below, Color.green);
+			//Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x, transform.position.y  - (player_length / 2) + bc_offset_y), below, Color.green);
+			return(!Physics2D.Raycast(new Vector3(transform.position.x + bc_offset_x, transform.position.y + (player_length / 2) + bc_offset_y),below,length_ray_updw,ignoreplayer_layerMask) && 
+				!Physics2D.Raycast(new Vector3(transform.position.x + bc_offset_x, transform.position.y - (player_length / 2) + bc_offset_y),below,length_ray_updw, ignoreplayer_layerMask));
 		}
 	}
 
@@ -497,7 +616,7 @@ public class player : MonoBehaviour{
 
 			}
 
-			if(!player_animator.GetBool("crouched")){
+			if(!player_animator.GetBool("crouched") && checkSides()){
 				transform.localPosition += transform.right * speed * Time.deltaTime;
 			}
 
@@ -513,7 +632,8 @@ public class player : MonoBehaviour{
 		if(!player_animator.GetBool("attack") && !respawn && !player_animator.GetBool("crouched")){
 
 			numSwordSwipes++; // statistics count
-			player_animator.SetBool("attack", true);
+            nextFire = Time.time + fireRate;
+            player_animator.SetBool("attack", true);
 
 			if(!player_animator.GetBool("grounded")){
 				if(move_left || move_right){
@@ -626,8 +746,10 @@ public class player : MonoBehaviour{
 		}
 	}
 
-	void Block(){
-		player_animator.Play("Block");
+	void Block()
+    {
+        nextFire = Time.time + fireRate;
+        player_animator.Play("Block");
 		player_animator.SetBool("block", true);
 		shield_animator.Play("Shield");
 		shield.GetComponent<CircleCollider2D>().enabled = true;
@@ -662,7 +784,7 @@ public class player : MonoBehaviour{
 				continue;
 
 			player other = (player)p.GetComponent(typeof(player));
-			if(bulletAttack && other.bullet_instance == collideObject){
+			if(bulletAttack && other.bullet_instance.gameObject == collideObject.gameObject){
 				other.playersKilled.Add(this.gameObject.name);
 				other.numBulletHits++;
 			}
@@ -742,11 +864,22 @@ public class player : MonoBehaviour{
 			playerInContact = null;
 		}
 	}
-
+    
 	void OnTriggerEnter2D(Collider2D col){
-		if(col.tag == "slash" && !respawn && !dead){
-			if(player_animator.GetBool("block")){
-				sound.PlayOneShot(block);
+        if(col.tag == "slash" && !respawn && !dead)
+        {
+            if (player_animator.GetBool("block") || player_animator.GetBool("attack"))
+            {
+                if (swipeBlock)
+                {
+                    //If attack one players back while they are attacking
+                    //pushes both players backwards same direction
+                    //kills player in front
+                    swipeBlockStart = Time.time;
+                    sound.PlayOneShot(block);
+                    body.AddForce(transform.right * -1 * 0.1f, ForceMode2D.Impulse);
+                }
+                swipeBlock = false;
 				return;
 			}
 			FindKiller(col.gameObject, false);
@@ -756,6 +889,6 @@ public class player : MonoBehaviour{
 			up_slash.GetComponent<BoxCollider2D>().enabled = false;
 			down_slash.GetComponent<BoxCollider2D>().enabled = false;
 		}
-	}
+    }
 
 }

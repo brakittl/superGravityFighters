@@ -16,7 +16,6 @@ public class Bullet : MonoBehaviour{
         }
         else if (col.tag == "shield")
         {
-            print("shield");
            GetComponent<Rigidbody2D>().velocity = -GetComponent<Rigidbody2D>().velocity * reflectMultiplier;
         }
         else if (col.tag == "Player")
