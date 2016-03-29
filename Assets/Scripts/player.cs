@@ -307,6 +307,12 @@ public class player : MonoBehaviour{
 				curButtonTaps = 0;
 			}
 		}
+
+        if (!swipeBlock && Time.time - swipeBlockStart > swipeBlockTime)
+        {
+            swipeBlock = true;
+            body.velocity = new Vector2(0f, 0f);
+        }
 	}
 
 	void FixedUpdate(){
@@ -662,7 +668,7 @@ public class player : MonoBehaviour{
 				continue;
 
 			player other = (player)p.GetComponent(typeof(player));
-			if(bulletAttack && other.bullet_instance == collideObject){
+			if(bulletAttack && other.bullet_instance.gameObject == collideObject.gameObject){
 				other.playersKilled.Add(this.gameObject.name);
 				other.numBulletHits++;
 			}
@@ -743,10 +749,23 @@ public class player : MonoBehaviour{
 		}
 	}
 
+    bool swipeBlock = true;
+    float swipeBlockStart = 0f, swipeBlockTime = 0.25f;
 	void OnTriggerEnter2D(Collider2D col){
-		if(col.tag == "slash" && !respawn && !dead){
-			if(player_animator.GetBool("block")){
-				sound.PlayOneShot(block);
+        if(col.tag == "slash" && !respawn && !dead)
+        {
+            if (player_animator.GetBool("block") || player_animator.GetBool("attack"))
+            {
+                if (swipeBlock)
+                {
+                    //If attack one players back while they are attacking
+                    //pushes both players backwards same direction
+                    //kills player in front
+                    swipeBlockStart = Time.time;
+                    sound.PlayOneShot(block);
+                    body.AddForce(transform.right * -1 * 0.1f, ForceMode2D.Impulse);
+                }
+                swipeBlock = false;
 				return;
 			}
 			FindKiller(col.gameObject, false);
@@ -756,6 +775,6 @@ public class player : MonoBehaviour{
 			up_slash.GetComponent<BoxCollider2D>().enabled = false;
 			down_slash.GetComponent<BoxCollider2D>().enabled = false;
 		}
-	}
+    }
 
 }
