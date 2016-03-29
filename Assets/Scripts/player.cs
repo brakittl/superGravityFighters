@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
+using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -10,6 +11,7 @@ public class player : MonoBehaviour{
 	public string player_color;
 	public int lives = 3;
 	public bool dead = false;
+  public GameObject[] hearts;
 
 	// orientation
 	public enum orientation{up, down, left, right};
@@ -22,7 +24,6 @@ public class player : MonoBehaviour{
 	public Animator up_slash_animator;
 	public Animator down_slash_animator;
 	public Animator shield_animator;
-	public Animator poison_animator;
 
 	// slashes
 	public GameObject slash;
@@ -30,6 +31,7 @@ public class player : MonoBehaviour{
 	public GameObject up_slash;
 	public GameObject down_slash;
 	public GameObject shield;
+  public GameObject poisonGO;
 
 	// movement information
 	Rigidbody2D body;
@@ -55,7 +57,7 @@ public class player : MonoBehaviour{
 	public GameObject bullet;
 	GameObject bullet_instance;
 	public float shotVelocity = 5f, numBullets = 1;
-    public float fireRate = 1f;
+  public float fireRate = 1f;
 	float nextFire = 0f, bulletCreationDist = 0.25f;
 	string lastDirection = "right";
 
@@ -64,7 +66,7 @@ public class player : MonoBehaviour{
 	Vector3 offscreen = new Vector3(-1000, -1000, -1000);  
 
 	// poison
-	float poisonSpeed = 0.75f, poisonJump = 8f, poisonStart, poisonLength = 10;
+	float poisonSpeed = 0.75f, poisonJump = 8f, poisonTime, poisonRate = 10;
 	public int poisonButtonTaps = 10, curButtonTaps;
 	public bool poisoned = false;
 	bool playerContact = false;
@@ -75,11 +77,23 @@ public class player : MonoBehaviour{
 	numBulletHits = 0, numSwordSwipes = 0, numSwordHits = 0;
 	public List<String> playersKilled;
 
-    //blocking
-    bool swipeBlock = true;
-    float swipeBlockStart = 0f, swipeBlockTime = 0.25f;
+  // blocking
+  bool swipeBlock = true;
+  float swipeBlockStart = 0f, swipeBlockTime = 0.25f;
+  float delay = 0;
 
-    float delay = 0;
+  // hearts/skulls
+  public Sprite[] hearts_skulls;
+
+  // get sprite by name
+  public Sprite get_sprite_by_name(Sprite[]sprites, string sprite_name){
+    for(int i = 0; i < sprites.Length; i++){
+      if(sprites[i].name.Equals(sprite_name)){
+        return sprites[i];
+      }
+    }
+    return null;
+  }
 
 	void Start(){
 		player_animator = GetComponent<Animator>();
@@ -95,9 +109,27 @@ public class player : MonoBehaviour{
 		sound = GetComponent<AudioSource>();
 		jump_speed = thrust;
 		run_speed = speed;
+    hearts_skulls = Resources.LoadAll<Sprite>("hearts_skulls");
+    hearts = new GameObject[10];
+    for(int i = 0; i < 10; ++i){
+      string heart_string = "ui/p" + player_number.ToString() + "/" + player_number.ToString() + "_" + (i + 1).ToString();
+      GameObject current_heart = GameObject.Find(heart_string);
+      current_heart.GetComponent<Image>().sprite = get_sprite_by_name(hearts_skulls, player_color.ToLower() + "_heart");
+      hearts[i] = current_heart;
+    }
 	}
 
 	void Update(){
+
+    // ==[show hearts]==========================================================
+    // =========================================================================
+
+    for(int i = 1; i <= lives; ++i){
+      hearts[i - 1].SetActive(true);
+    }
+    for(int i = lives + 1; i <= 10; ++i){
+      hearts[i - 1].SetActive(false);
+    }
 
 		// ==[gravity swap]=========================================================
 		// =========================================================================
@@ -153,8 +185,9 @@ public class player : MonoBehaviour{
 		}
 		// if dead, allow poison action
 		else{
-			// poison
-			if((Input.GetAxis("Controller " + player_number + " Right Bumper") >= 0.9 || Input.GetKey(KeyCode.LeftShift)) && Time.time > nextFire && numBullets > 0){
+            GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.5f); //Ghost Body
+            // poison
+            if ((Input.GetAxis("Controller " + player_number + " Right Bumper") >= 0.9 || Input.GetKey(KeyCode.LeftShift)) && Time.time > poisonTime){
 				Poison();
 			}
 		}
@@ -304,14 +337,18 @@ public class player : MonoBehaviour{
 			// remove poison with A button tap
 			if((Input.GetKeyDown(KeyCode.LeftShift) || Input.GetButtonDown("Controller " + player_number + " A Button")) && !dead){
 				curButtonTaps++;
+                poisonGO.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, (1 - 0.1f * curButtonTaps));
+                //50% transperency good for ghost
+                //Transperency drop
 			}
 
 			// remove poison after 10 taps or time limit
-			if((!dead && curButtonTaps == poisonButtonTaps) || (dead && Time.time - poisonStart > poisonLength)){
+			if(!dead && curButtonTaps == poisonButtonTaps){
 				poisoned = false;
 				thrust = jump_speed;
 				speed = run_speed;
 				curButtonTaps = 0;
+                poisonGO.SetActive(false);
 			}
 		}
 
@@ -451,7 +488,7 @@ public class player : MonoBehaviour{
 		//print(bc_offset_x);
 		//print(bc_offset_y);
 
-		float length_ray_leftright = (player_length * .5F);
+		float length_ray_leftright = (player_length * 1.1F);
 
 		Vector2 left = transform.TransformDirection(new Vector2(length_ray_leftright, 0));
 		Vector2 right = transform.TransformDirection(new Vector2(-length_ray_leftright, 0));
@@ -474,7 +511,7 @@ public class player : MonoBehaviour{
 		}
 		else 
 		{
-			length_ray_leftright = (player_length * 1F);
+			length_ray_leftright = (player_length * 1.7F);
 			left = transform.TransformDirection(new Vector2(length_ray_leftright, 0));
 			//Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x  + (player_length / 2), transform.position.y + bc_offset_y), left, Color.green);
 			//Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x  - (player_length / 2), transform.position.y + bc_offset_y), left, Color.green);
@@ -765,14 +802,15 @@ public class player : MonoBehaviour{
 	void Poison(){
 		if(playerContact && !playerInContact.dead){
 			// affect other player
-			if(!poisoned){
-        totalPoisoned++;
-      }
+			if(!playerInContact.poisoned){
+                totalPoisoned++;
+            }
 			playerInContact.poisoned = true;
 			playerInContact.curButtonTaps = 0;
-			// affect this player
-			poisoned = true;
-			poisonStart = Time.time;
+            playerInContact.poisonGO.SetActive(true);
+            playerInContact.poisonGO.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
+            // affect this player
+            poisonTime = Time.time + poisonRate;
 		}
 	}
 
@@ -784,12 +822,12 @@ public class player : MonoBehaviour{
 				continue;
 
 			player other = (player)p.GetComponent(typeof(player));
-			if(bulletAttack && other.bullet_instance.gameObject == collideObject.gameObject){
+			if(bulletAttack && other.bullet_instance == collideObject){
 				other.playersKilled.Add(this.gameObject.name);
 				other.numBulletHits++;
 			}
 
-			else if(!bulletAttack && other.slash.gameObject == collideObject.gameObject){
+			else if(!bulletAttack && other.slash == collideObject){
 				other.playersKilled.Add(this.gameObject.name);
 				other.numSwordHits++;
 			}
@@ -802,7 +840,7 @@ public class player : MonoBehaviour{
 		side_slash.GetComponent<BoxCollider2D>().enabled = false;
 		up_slash.GetComponent<BoxCollider2D>().enabled = false;
 		down_slash.GetComponent<BoxCollider2D>().enabled = false;
-		//lives--;
+		lives--;
 		Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
 		if(lives == 0){
 			dead = true;
@@ -820,33 +858,22 @@ public class player : MonoBehaviour{
 		yield return new WaitForSeconds(2f);
 		transform.position = Level.S.findRespawn();
 		transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
-		//transform.position = Level.S.respawnPoints[UnityEngine.Random.Range(0, Level.S.respawnPoints.Length)];
-		//respawn = true;
+        body.velocity = new Vector2(0f, 0f);
+        //transform.position = Level.S.respawnPoints[UnityEngine.Random.Range(0, Level.S.respawnPoints.Length)];
+        //respawn = true;
+        player_orientation = orientation.down;
+        player_animator.Play("Appear");
 		respawning = true;
 	}
 
 	IEnumerator Blink(){
 
 		transform.GetComponent<Renderer>().enabled = false;
-		yield return new WaitForSeconds(0.2f);
-		transform.GetComponent<Renderer>().enabled = true;
-		yield return new WaitForSeconds(0.5f);
-
-		transform.GetComponent<Renderer>().enabled = false;
-		yield return new WaitForSeconds(0.2f);
-		transform.GetComponent<Renderer>().enabled = true;
-		yield return new WaitForSeconds(0.5f);
-
-		transform.GetComponent<Renderer>().enabled = false;
-		yield return new WaitForSeconds(0.2f);
-		transform.GetComponent<Renderer>().enabled = true;
-		yield return new WaitForSeconds(0.75f);
-
-		transform.GetComponent<Renderer>().enabled = false;
 		yield return new WaitForSeconds(0.1f);
 		transform.GetComponent<Renderer>().enabled = true;
 		yield return new WaitForSeconds(1f);
 		respawn = false;
+
 	}
 
 	void OnCollisionEnter2D(Collision2D coll){
@@ -882,7 +909,7 @@ public class player : MonoBehaviour{
                 swipeBlock = false;
 				return;
 			}
-			FindKiller(col.gameObject, false);
+			//FindKiller(col.gameObject, false);
 			KillPlayer();
 			slash.GetComponent<BoxCollider2D>().enabled = false;
 			side_slash.GetComponent<BoxCollider2D>().enabled = false;
