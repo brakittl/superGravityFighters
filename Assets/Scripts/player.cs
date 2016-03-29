@@ -22,7 +22,6 @@ public class player : MonoBehaviour{
 	public Animator up_slash_animator;
 	public Animator down_slash_animator;
 	public Animator shield_animator;
-	public Animator poison_animator;
 
 	// slashes
 	public GameObject slash;
@@ -30,6 +29,7 @@ public class player : MonoBehaviour{
 	public GameObject up_slash;
 	public GameObject down_slash;
 	public GameObject shield;
+    public GameObject poisonGO;
 
 	// movement information
 	Rigidbody2D body;
@@ -64,7 +64,7 @@ public class player : MonoBehaviour{
 	Vector3 offscreen = new Vector3(-1000, -1000, -1000);  
 
 	// poison
-	float poisonSpeed = 0.75f, poisonJump = 8f, poisonStart, poisonLength = 10;
+	float poisonSpeed = 0.75f, poisonJump = 8f, poisonTime, poisonRate = 10;
 	public int poisonButtonTaps = 10, curButtonTaps;
 	public bool poisoned = false;
 	bool playerContact = false;
@@ -153,8 +153,9 @@ public class player : MonoBehaviour{
 		}
 		// if dead, allow poison action
 		else{
-			// poison
-			if((Input.GetAxis("Controller " + player_number + " Right Bumper") >= 0.9 || Input.GetKey(KeyCode.LeftShift)) && Time.time > nextFire && numBullets > 0){
+            GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.5f);
+            // poison
+            if ((Input.GetAxis("Controller " + player_number + " Right Bumper") >= 0.9 || Input.GetKey(KeyCode.LeftShift)) && Time.time > poisonTime){
 				Poison();
 			}
 		}
@@ -304,14 +305,18 @@ public class player : MonoBehaviour{
 			// remove poison with A button tap
 			if((Input.GetKeyDown(KeyCode.LeftShift) || Input.GetButtonDown("Controller " + player_number + " A Button")) && !dead){
 				curButtonTaps++;
+                poisonGO.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, (1 - 0.1f * curButtonTaps));
+                //50% transperency good for ghost
+                //Transperency drop
 			}
 
 			// remove poison after 10 taps or time limit
-			if((!dead && curButtonTaps == poisonButtonTaps) || (dead && Time.time - poisonStart > poisonLength)){
+			if(!dead && curButtonTaps == poisonButtonTaps){
 				poisoned = false;
 				thrust = jump_speed;
 				speed = run_speed;
 				curButtonTaps = 0;
+                poisonGO.SetActive(false);
 			}
 		}
 
@@ -765,14 +770,15 @@ public class player : MonoBehaviour{
 	void Poison(){
 		if(playerContact && !playerInContact.dead){
 			// affect other player
-			if(!poisoned){
-        totalPoisoned++;
-      }
+			if(!playerInContact.poisoned){
+                totalPoisoned++;
+            }
 			playerInContact.poisoned = true;
 			playerInContact.curButtonTaps = 0;
-			// affect this player
-			poisoned = true;
-			poisonStart = Time.time;
+            playerInContact.poisonGO.SetActive(true);
+            playerInContact.poisonGO.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
+            // affect this player
+            poisonTime = Time.time + poisonRate;
 		}
 	}
 
@@ -784,7 +790,7 @@ public class player : MonoBehaviour{
 				continue;
 
 			player other = (player)p.GetComponent(typeof(player));
-			if(bulletAttack && other.bullet_instance.gameObject == collideObject.gameObject){
+			if(bulletAttack && other.bullet_instance.gameObject == collideObject){
 				other.playersKilled.Add(this.gameObject.name);
 				other.numBulletHits++;
 			}
@@ -802,7 +808,7 @@ public class player : MonoBehaviour{
 		side_slash.GetComponent<BoxCollider2D>().enabled = false;
 		up_slash.GetComponent<BoxCollider2D>().enabled = false;
 		down_slash.GetComponent<BoxCollider2D>().enabled = false;
-		//lives--;
+		lives--;
 		Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
 		if(lives == 0){
 			dead = true;
