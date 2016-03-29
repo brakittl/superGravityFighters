@@ -114,8 +114,8 @@ public class player : MonoBehaviour{
     for(int i = 0; i < 10; ++i){
       string heart_string = "ui/p" + player_number.ToString() + "/" + player_number.ToString() + "_" + (i + 1).ToString();
       GameObject current_heart = GameObject.Find(heart_string);
-      current_heart.GetComponent<Image>().sprite = get_sprite_by_name(hearts_skulls, player_color.ToLower() + "_heart");
-      hearts[i] = current_heart;
+      //current_heart.GetComponent<Image>().sprite = get_sprite_by_name(hearts_skulls, player_color.ToLower() + "_heart");
+     // hearts[i] = current_heart;
     }
 	}
 
@@ -124,12 +124,12 @@ public class player : MonoBehaviour{
     // ==[show hearts]==========================================================
     // =========================================================================
 
-    for(int i = 1; i <= lives; ++i){
-      hearts[i - 1].SetActive(true);
-    }
-    for(int i = lives + 1; i <= 10; ++i){
-      hearts[i - 1].SetActive(false);
-    }
+    //for(int i = 1; i <= lives; ++i){
+    //  hearts[i - 1].SetActive(true);
+    //}
+    //for(int i = lives + 1; i <= 10; ++i){
+    //  hearts[i - 1].SetActive(false);
+    //}
 
 		// ==[gravity swap]=========================================================
 		// =========================================================================
