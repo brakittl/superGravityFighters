@@ -350,7 +350,11 @@ public class player : MonoBehaviour{
 			speed = poisonSpeed;
 
 			// remove poison with A button tap
-			if((Input.GetKeyDown(KeyCode.LeftShift) || Input.GetButtonDown("Controller " + player_number + " A Button")) && !dead){
+			if((Input.GetKeyDown(KeyCode.LeftShift) || 
+                Input.GetButtonDown("Controller " + player_number + " A Button") ||
+                Input.GetButtonDown("Controller " + player_number + " B Button") || 
+                Input.GetButtonDown("Controller " + player_number + " X Button") || 
+                Input.GetButtonDown("Controller " + player_number + " Y Button")) && !dead){
 				curButtonTaps++;
                 poisonGO.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, (1 - 0.1f * curButtonTaps));
                 //50% transperency good for ghost
