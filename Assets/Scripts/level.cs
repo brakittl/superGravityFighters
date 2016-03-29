@@ -8,7 +8,41 @@ public class Level : MonoBehaviour {
 
   // Use this for initialization
   void Start(){
+
     S = this;
+
+    // PlayerPrefs.SetString("P1", "orange_player");
+    // PlayerPrefs.SetString("P2", "none");
+    // PlayerPrefs.SetString("P3", "red_player");
+    // PlayerPrefs.SetString("P4", "none");
+
+    Vector3 rot = new Vector3(0, 0, 0);
+
+    // p1
+    if(PlayerPrefs.GetString("P1") != "none"){
+      GameObject player1 = Instantiate(Resources.Load("__Prefabs/" + PlayerPrefs.GetString("P1")), returnPosition(0), Quaternion.Euler(rot)) as GameObject;
+      player1.SendMessage("SetPlayerNumber", 1);
+    }
+    // p2
+    if(PlayerPrefs.GetString("P2") != "none"){
+      GameObject player2 = Instantiate(Resources.Load("__Prefabs/" + PlayerPrefs.GetString("P2")), returnPosition(1), Quaternion.Euler(rot)) as GameObject;
+      player2.SendMessage("SetPlayerNumber", 2);
+    }
+    // p3
+    if(PlayerPrefs.GetString("P3") != "none"){
+      GameObject player3 = Instantiate(Resources.Load("__Prefabs/" + PlayerPrefs.GetString("P3")), returnPosition(2), Quaternion.Euler(rot)) as GameObject;
+      player3.SendMessage("SetPlayerNumber", 3);
+    }
+    // p4
+    if(PlayerPrefs.GetString("P4") != "none"){
+      GameObject player4 = Instantiate(Resources.Load("__Prefabs/" + PlayerPrefs.GetString("P4")), returnPosition(3), Quaternion.Euler(rot)) as GameObject;
+      player4.SendMessage("SetPlayerNumber", 4);
+    }
+
+  }
+
+  public Vector3 returnPosition(int i){
+    return respawnPoints[i];
   }
 
   public Vector3 findRespawn(){
