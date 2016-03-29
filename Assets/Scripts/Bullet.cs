@@ -24,7 +24,7 @@ public class Bullet : MonoBehaviour{
             player other = g.GetComponent<player>();
             if (!other.dead && !other.respawn)
             {
-                other.FindKiller(this.gameObject, true);
+                //other.FindKiller(this.gameObject, true);
                 other.KillPlayer();
                 Destroy(this.gameObject);
             }

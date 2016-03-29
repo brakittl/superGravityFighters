@@ -153,7 +153,7 @@ public class player : MonoBehaviour{
 		}
 		// if dead, allow poison action
 		else{
-            GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.5f);
+            GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.5f); //Ghost Body
             // poison
             if ((Input.GetAxis("Controller " + player_number + " Right Bumper") >= 0.9 || Input.GetKey(KeyCode.LeftShift)) && Time.time > poisonTime){
 				Poison();
@@ -790,12 +790,12 @@ public class player : MonoBehaviour{
 				continue;
 
 			player other = (player)p.GetComponent(typeof(player));
-			if(bulletAttack && other.bullet_instance.gameObject == collideObject){
+			if(bulletAttack && other.bullet_instance == collideObject){
 				other.playersKilled.Add(this.gameObject.name);
 				other.numBulletHits++;
 			}
 
-			else if(!bulletAttack && other.slash.gameObject == collideObject.gameObject){
+			else if(!bulletAttack && other.slash == collideObject){
 				other.playersKilled.Add(this.gameObject.name);
 				other.numSwordHits++;
 			}
@@ -826,33 +826,22 @@ public class player : MonoBehaviour{
 		yield return new WaitForSeconds(2f);
 		transform.position = Level.S.findRespawn();
 		transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
-		//transform.position = Level.S.respawnPoints[UnityEngine.Random.Range(0, Level.S.respawnPoints.Length)];
-		//respawn = true;
+        body.velocity = new Vector2(0f, 0f);
+        //transform.position = Level.S.respawnPoints[UnityEngine.Random.Range(0, Level.S.respawnPoints.Length)];
+        //respawn = true;
+        player_orientation = orientation.down;
+        player_animator.Play("Appear");
 		respawning = true;
 	}
 
 	IEnumerator Blink(){
 
 		transform.GetComponent<Renderer>().enabled = false;
-		yield return new WaitForSeconds(0.2f);
-		transform.GetComponent<Renderer>().enabled = true;
-		yield return new WaitForSeconds(0.5f);
-
-		transform.GetComponent<Renderer>().enabled = false;
-		yield return new WaitForSeconds(0.2f);
-		transform.GetComponent<Renderer>().enabled = true;
-		yield return new WaitForSeconds(0.5f);
-
-		transform.GetComponent<Renderer>().enabled = false;
-		yield return new WaitForSeconds(0.2f);
-		transform.GetComponent<Renderer>().enabled = true;
-		yield return new WaitForSeconds(0.75f);
-
-		transform.GetComponent<Renderer>().enabled = false;
 		yield return new WaitForSeconds(0.1f);
 		transform.GetComponent<Renderer>().enabled = true;
 		yield return new WaitForSeconds(1f);
 		respawn = false;
+
 	}
 
 	void OnCollisionEnter2D(Collision2D coll){
@@ -888,7 +877,7 @@ public class player : MonoBehaviour{
                 swipeBlock = false;
 				return;
 			}
-			FindKiller(col.gameObject, false);
+			//FindKiller(col.gameObject, false);
 			KillPlayer();
 			slash.GetComponent<BoxCollider2D>().enabled = false;
 			side_slash.GetComponent<BoxCollider2D>().enabled = false;
