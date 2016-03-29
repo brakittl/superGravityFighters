@@ -909,7 +909,7 @@ public class player : MonoBehaviour{
                 swipeBlock = false;
 				return;
 			}
-			//FindKiller(col.gameObject, false);
+			FindKiller(col.gameObject, false);
 			KillPlayer();
 			slash.GetComponent<BoxCollider2D>().enabled = false;
 			side_slash.GetComponent<BoxCollider2D>().enabled = false;
