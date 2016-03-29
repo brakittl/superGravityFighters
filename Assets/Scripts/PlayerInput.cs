@@ -33,6 +33,7 @@ public class PlayerInput : MonoBehaviour {
     }
     else if (!confirmed)
     {
+      playerObject.transform.position = startPosition;
       if (Input.GetButtonDown("Controller " + player + " Right Bumper"))
       {
         // change to next character

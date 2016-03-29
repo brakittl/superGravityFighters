@@ -240,12 +240,27 @@ public class player : MonoBehaviour{
 				lastDirection = "down";
 			}
 		}
+    // ==[resets]===============================================================
+    // =========================================================================
 
-		// ==[movement]=============================================================
-		// =========================================================================
+    if (!move_left && !move_right)
+    {
+      player_animator.SetBool("run", false);
+    }
 
-		// apply movement
-		if(move_right){
+    if (!player_animator.GetBool("attack"))
+    {
+      slash.GetComponent<BoxCollider2D>().enabled = false;
+      side_slash.GetComponent<BoxCollider2D>().enabled = false;
+      up_slash.GetComponent<BoxCollider2D>().enabled = false;
+      down_slash.GetComponent<BoxCollider2D>().enabled = false;
+    }
+
+    // ==[movement]=============================================================
+    // =========================================================================
+
+    // apply movement
+    if (move_right){
 			Run(true);
 		}
 		if(move_left){
@@ -258,19 +273,7 @@ public class player : MonoBehaviour{
 			Crouch();
 		}
 
-		// ==[resets]===============================================================
-		// =========================================================================
-
-		if(!Input.anyKey){
-			player_animator.SetBool("run", false);
-		}
-
-		if(!player_animator.GetBool("attack")){
-			slash.GetComponent<BoxCollider2D>().enabled = false;
-			side_slash.GetComponent<BoxCollider2D>().enabled = false;
-			up_slash.GetComponent<BoxCollider2D>().enabled = false;
-			down_slash.GetComponent<BoxCollider2D>().enabled = false;
-		}
+		
 
 		// ==[respawn and death]====================================================
 		// =========================================================================
