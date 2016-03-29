@@ -244,13 +244,14 @@ public class player : MonoBehaviour{
     // ==[resets]===============================================================
     // =========================================================================
 
-    if (!move_left && !move_right)
-    {
+    if(!move_left && !move_right){
+      player_animator.SetBool("run", false);
+    }
+    else if(player_animator.GetBool("jump")){
       player_animator.SetBool("run", false);
     }
 
-    if (!player_animator.GetBool("attack"))
-    {
+    if (!player_animator.GetBool("attack")){
       slash.GetComponent<BoxCollider2D>().enabled = false;
       side_slash.GetComponent<BoxCollider2D>().enabled = false;
       up_slash.GetComponent<BoxCollider2D>().enabled = false;
@@ -261,10 +262,10 @@ public class player : MonoBehaviour{
     // =========================================================================
 
     // apply movement
-    if (move_right){
+    if(move_right && !player_animator.GetBool("landing")){
 			Run(true);
 		}
-		if(move_left){
+		if(move_left && !player_animator.GetBool("landing")){
 			Run(false);
 		}
 
@@ -323,7 +324,7 @@ public class player : MonoBehaviour{
 		else{
 			grounded = 0;
 			player_animator.SetBool("grounded", false);
-			if(!player_animator.GetBool("jump")){
+			if(!player_animator.GetBool("jump") && player_animator.GetBool("run")){
 				player_animator.Play("Falling");
 			}
 		}
