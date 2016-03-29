@@ -14,9 +14,14 @@ public class UICursor : MonoBehaviour {
   }
   
   void Update(){
-    if(Input.GetButtonDown("Controller 1 X Button")){
+    if(Input.GetButtonDown("Controller 1 X Button") 
+      || Input.GetButtonDown("Controller 1 A Button") 
+      || Input.GetButtonUp("Controller 1 Start Button")
+      || Input.GetKeyDown(KeyCode.Return)
+      || Input.GetKeyDown(KeyCode.KeypadEnter))
+    {
       if(index == 0){
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene("_scene_Start");
       }
     }
     if(Input.GetKeyDown(KeyCode.DownArrow) || Input.GetAxis("Controller 1 Left Stick Y Axis") >= 0.9f){

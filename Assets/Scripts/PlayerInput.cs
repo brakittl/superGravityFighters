@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class PlayerInput : MonoBehaviour {
   public int player = 1;
   GameObject xbutton, text, leftBumper, rightBumper;
-  GameObject UI;
+  GameObject UI, backTochange;
   public List<GameObject> playerPrefabs;
   int prefabNumber = 0;
   GameObject playerPrefab;
@@ -13,6 +14,7 @@ public class PlayerInput : MonoBehaviour {
   GameObject playerObject, playerStand;
   bool confirmed, joined;
   Color characterColor = new Color(1,1,1,1);
+  bool axisInUse = false;
 
   void Start(){
     if (player > Input.GetJoystickNames().Length)
@@ -21,6 +23,11 @@ public class PlayerInput : MonoBehaviour {
     }
     else
     {
+      backTochange = GameObject.Find("P" + player + " BackToChange");
+      if (backTochange != null)
+      {
+        backTochange.SetActive(false);
+      }
       UI = GameObject.Find("UI");
       leftBumper = GameObject.Find("P" + player + " Left Bumper Image");
       if (leftBumper != null)
@@ -47,6 +54,10 @@ public class PlayerInput : MonoBehaviour {
   }
   
   void Update(){
+    if (System.Math.Abs(Input.GetAxis("Controller " + player + " Left Stick X Axis")) < 0.9f)
+    {
+      axisInUse = false;
+    }
     if (playerObject != null)
     {
       if (UI.GetComponent<CharacterSelectUI>().characterIsSelected("P" + player, prefabNumber))
@@ -69,20 +80,30 @@ public class PlayerInput : MonoBehaviour {
         ShowPlayer(true);
         UI.GetComponent<CharacterSelectUI>().selectedCharacter["P" + player] = -1;
       }
+      else if (Input.GetButtonDown("Controller " + player + " B Button")
+        || Input.GetButtonDown("Controller " + player + " Back Button"))
+      {
+        SceneManager.LoadScene("_scene_Menu");
+      }
     }
     else if (!confirmed)
     {
-      if (Input.GetButtonDown("Controller " + player + " Right Bumper"))
+      if (Input.GetButtonDown("Controller " + player + " Right Bumper")
+        || (!axisInUse && Input.GetAxis("Controller " + player + " Left Stick X Axis") >= 0.95f))
       {
         // change to next character
+        axisInUse = true;
         ChangeCharacter(1);
       }
-      else if (Input.GetButtonDown("Controller " + player + " Left Bumper"))
+      else if (Input.GetButtonDown("Controller " + player + " Left Bumper")
+        || (!axisInUse && Input.GetAxis("Controller " + player + " Left Stick X Axis") <= -0.95f))
       {
         // change to previous character
+        axisInUse = true;
         ChangeCharacter(-1);
       }
-      else if (Input.GetButtonDown("Controller " + player + " Start Button"))
+      else if (Input.GetButtonDown("Controller " + player + " Start Button")
+        || Input.GetButtonDown("Controller " + player + " A Button"))
       {
         // hide character select UI and let player move around
         if (!UI.GetComponent<CharacterSelectUI>().characterIsSelected("P"+player,prefabNumber))
@@ -92,7 +113,8 @@ public class PlayerInput : MonoBehaviour {
           UnlockCharacter(true);
         }
       }
-      else if (Input.GetButtonDown("Controller " + player + " Back Button"))
+      else if (Input.GetButtonDown("Controller " + player + " Back Button") 
+        || Input.GetButtonDown("Controller " + player + " B Button"))
       {
         // return to unjoined UI
         joined = false;
@@ -175,12 +197,14 @@ public class PlayerInput : MonoBehaviour {
   {
     if (value)
     {
+      backTochange.SetActive(true);
       UI.GetComponent<CharacterSelectUI>().selectedCharacter["P" + player] = prefabNumber;
       playerStand.GetComponent<BoxCollider2D>().enabled = false;
       playerObject.GetComponent<player>().player_number = player;
     }
     else
     {
+      backTochange.SetActive(false);
       UI.GetComponent<CharacterSelectUI>().selectedCharacter["P" + player] = -1;
       ShowPlayer(false);
       playerStand.GetComponent<BoxCollider2D>().enabled = true;
