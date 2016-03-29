@@ -456,7 +456,7 @@ public class player : MonoBehaviour{
 		//print(bc_offset_x);
 		//print(bc_offset_y);
 
-		float length_ray_leftright = (player_length * .5F);
+		float length_ray_leftright = (player_length * 1.1F);
 
 		Vector2 left = transform.TransformDirection(new Vector2(length_ray_leftright, 0));
 		Vector2 right = transform.TransformDirection(new Vector2(-length_ray_leftright, 0));
@@ -479,7 +479,7 @@ public class player : MonoBehaviour{
 		}
 		else 
 		{
-			length_ray_leftright = (player_length * 1F);
+			length_ray_leftright = (player_length * 1.7F);
 			left = transform.TransformDirection(new Vector2(length_ray_leftright, 0));
 			//Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x  + (player_length / 2), transform.position.y + bc_offset_y), left, Color.green);
 			//Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x  - (player_length / 2), transform.position.y + bc_offset_y), left, Color.green);
