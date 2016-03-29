@@ -240,6 +240,7 @@ public class player : MonoBehaviour{
 				lastDirection = "down";
 			}
 		}
+
     // ==[resets]===============================================================
     // =========================================================================
 
@@ -255,7 +256,7 @@ public class player : MonoBehaviour{
       up_slash.GetComponent<BoxCollider2D>().enabled = false;
       down_slash.GetComponent<BoxCollider2D>().enabled = false;
     }
-
+    
     // ==[movement]=============================================================
     // =========================================================================
 
@@ -272,9 +273,7 @@ public class player : MonoBehaviour{
 		if(move_down){
 			Crouch();
 		}
-
-		
-
+    
 		// ==[respawn and death]====================================================
 		// =========================================================================
 
