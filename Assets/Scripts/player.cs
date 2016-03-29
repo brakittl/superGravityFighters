@@ -32,6 +32,7 @@ public class player : MonoBehaviour{
 	public GameObject down_slash;
 	public GameObject shield;
   public GameObject poisonGO;
+    public GameObject halo;
 
 	// movement information
 	Rigidbody2D body;
@@ -193,8 +194,12 @@ public class player : MonoBehaviour{
 		else{
             GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.5f); //Ghost Body
             // poison
-            if ((Input.GetAxis("Controller " + player_number + " Right Bumper") >= 0.9 || Input.GetKey(KeyCode.LeftShift)) && Time.time > poisonTime){
-				Poison();
+            //if ((Input.GetAxis("Controller " + player_number + " Right Bumper") >= 0.9 || Input.GetKey(KeyCode.LeftShift)) && Time.time > poisonTime){
+			//	Poison();
+			//}
+            if((Input.GetAxis("Controller " + player_number + " Right Trigger") >= 0.9 || Input.GetKey(KeyCode.LeftShift)) && Time.time > poisonTime)
+            {
+				Attack();
 			}
 		}
 
@@ -804,18 +809,22 @@ public class player : MonoBehaviour{
 	}
 
 	void Poison(){
-		if(playerContact && !playerInContact.dead){
+		//if(playerContact && !playerInContact.dead){
 			// affect other player
-			if(!playerInContact.poisoned){
-                totalPoisoned++;
-            }
-			playerInContact.poisoned = true;
-			playerInContact.curButtonTaps = 0;
-            playerInContact.poisonGO.SetActive(true);
-            playerInContact.poisonGO.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
+			//if(!playerInContact.poisoned){
+            //    totalPoisoned++;
+            //}
+			//playerInContact.poisoned = true;
+			//playerInContact.curButtonTaps = 0;
+            //playerInContact.poisonGO.SetActive(true);
+            //playerInContact.poisonGO.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
+            poisoned = true;
+            curButtonTaps = 0;
+            poisonGO.SetActive(true);
+            poisonGO.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
             // affect this player
-            poisonTime = Time.time + poisonRate;
-		}
+            //poisonTime = Time.time + poisonRate;
+		//}
 	}
 
 	public void FindKiller(GameObject collideObject, bool bulletAttack){
@@ -847,7 +856,8 @@ public class player : MonoBehaviour{
 		lives--;
 		Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
 		if(lives == 0){
-			dead = true;
+            halo.SetActive(true);
+            dead = true;
 		}
 		poisoned = false;
 		player_animator.Play("Death");
@@ -880,7 +890,6 @@ public class player : MonoBehaviour{
 
 	void OnCollisionEnter2D(Collision2D coll){
 		GameObject other = coll.gameObject;
-
 		if(other.tag == "Player" && other.name != this.gameObject.name){
 			playerContact = true;
 			playerInContact = (player)other.GetComponent(typeof(player));
@@ -897,6 +906,18 @@ public class player : MonoBehaviour{
 	void OnTriggerEnter2D(Collider2D col){
         if(col.tag == "slash" && !respawn && !dead)
         {
+            player p = col.transform.parent.GetComponent<player>();
+            if (p.dead)
+            {
+                if (!poisoned)
+                {
+                    p.totalPoisoned++;
+                }
+                Poison();
+                p.poisonTime = Time.time + poisonRate;
+                return;
+            }
+
             if (player_animator.GetBool("block") || player_animator.GetBool("attack"))
             {
                 if (swipeBlock)
