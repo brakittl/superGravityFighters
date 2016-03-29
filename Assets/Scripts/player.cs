@@ -853,16 +853,14 @@ public class player : MonoBehaviour{
 	}
 
 	IEnumerator Wait(){
-		yield return new WaitForSeconds(0.75f);
+		yield return new WaitForSeconds(0.f5f);
 		transform.position = offscreen;
 		yield return new WaitForSeconds(2f);
 		transform.position = Level.S.findRespawn();
 		transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
-        body.velocity = new Vector2(0f, 0f);
-        //transform.position = Level.S.respawnPoints[UnityEngine.Random.Range(0, Level.S.respawnPoints.Length)];
-        //respawn = true;
-        player_orientation = orientation.down;
-        player_animator.Play("Appear");
+      body.velocity = new Vector2(0f, 0f);
+      player_orientation = orientation.down;
+      player_animator.Play("Appear");
 		respawning = true;
 	}
 
@@ -893,29 +891,25 @@ public class player : MonoBehaviour{
 	}
     
 	void OnTriggerEnter2D(Collider2D col){
-        if(col.tag == "slash" && !respawn && !dead)
-        {
-            if (player_animator.GetBool("block") || player_animator.GetBool("attack"))
-            {
-                if (swipeBlock)
-                {
-                    //If attack one players back while they are attacking
-                    //pushes both players backwards same direction
-                    //kills player in front
-                    swipeBlockStart = Time.time;
-                    sound.PlayOneShot(block);
-                    body.AddForce(transform.right * -1 * 0.1f, ForceMode2D.Impulse);
-                }
-                swipeBlock = false;
-				return;
-			}
-			//FindKiller(col.gameObject, false);
+    if(col.tag == "slash" && !respawn && !dead){
+      if(player_animator.GetBool("block") || player_animator.GetBool("attack")){
+        if(swipeBlock){
+          // If attack one players back while they are attacking
+          // pushes both players backwards same direction
+          // kills player in front
+          swipeBlockStart = Time.time;
+          sound.PlayOneShot(block);
+          body.AddForce(transform.right * -1 * 0.1f, ForceMode2D.Impulse);
+        }
+        swipeBlock = false;
+	      return;
+      }
+			// FindKiller(col.gameObject, false);
 			KillPlayer();
 			slash.GetComponent<BoxCollider2D>().enabled = false;
 			side_slash.GetComponent<BoxCollider2D>().enabled = false;
 			up_slash.GetComponent<BoxCollider2D>().enabled = false;
 			down_slash.GetComponent<BoxCollider2D>().enabled = false;
 		}
-    }
-
+  }
 }
