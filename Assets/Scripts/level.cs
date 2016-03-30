@@ -5,7 +5,7 @@ public class Level : MonoBehaviour {
 
   public static Level S;
   public Vector3[] respawnPoints;
-
+    Texture2D black = new Texture2D(1, 1);
   // Use this for initialization
   void Start(){
 
@@ -45,7 +45,39 @@ public class Level : MonoBehaviour {
     return respawnPoints[i];
   }
 
-  public Vector3 findRespawn(){
+    public GameObject blackSquare;
+    GameObject topWall, bottomWall, leftWall, rightWall;
+
+    public void KillPause(Vector3 playerPos)
+    {
+        StartCoroutine(Pause(playerPos));
+    }
+
+    IEnumerator Pause(Vector3 pos)
+    {
+        //yield return new WaitForSeconds(0.05f);
+        Time.timeScale = 0.1f;
+        Vector3 cubePos = pos, rot = transform.rotation.eulerAngles;
+
+        cubePos.y = pos.y - 4.1f;
+        bottomWall = Instantiate(blackSquare, cubePos, transform.rotation) as GameObject;
+        cubePos.y = pos.y + 4.1f;
+        topWall = Instantiate(blackSquare, cubePos, transform.rotation) as GameObject;
+        cubePos.x = pos.x - 4.1f;
+        rot.z = 90;
+        leftWall = Instantiate(blackSquare, cubePos, Quaternion.Euler(rot)) as GameObject;
+        cubePos.x = pos.x + 4.1f;
+        rightWall = Instantiate(blackSquare, cubePos, Quaternion.Euler(rot)) as GameObject;
+
+        yield return new WaitForSeconds(0.025f);
+        Destroy(topWall);
+        Destroy(bottomWall);
+        Destroy(leftWall);
+        Destroy(rightWall);
+        Time.timeScale = 1;
+    }
+
+    public Vector3 findRespawn(){
     
     Vector3 respawnPoint = new Vector3(0, 0, 0);
     float closestPlayerDist = 10000f;

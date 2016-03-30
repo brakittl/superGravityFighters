@@ -176,23 +176,30 @@ public class player : MonoBehaviour{
 
 		// if alive, allow attack, shoot, and block action
 		if(!dead){
-			// attack
-			if((Input.GetAxis("Controller " + player_number + " Right Trigger") >= 0.9 || Input.GetKey(KeyCode.Space)) && Time.time > nextFire)
+            
+            // shoot
+            //if((Input.GetButtonDown("Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.LeftShift)) && Time.time > nextFire && numBullets > 0)
+            if((Input.GetButtonDown("Controller " + player_number + " Right Bumper") &&
+                Input.GetButtonDown("Controller " + player_number + " Left Bumper")) && Time.time > nextFire)
+            {
+            	Shoot();
+            }
+            // attack
+            //if((Input.GetAxis("Controller " + player_number + " Right Trigger") >= 0.9 || Input.GetKey(KeyCode.Space)) && Time.time > nextFire)
+            else if ((Input.GetButtonDown("Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.Space)) && Time.time > nextFire)
             {
 				Attack();
 			}
-			// shoot
-			if((Input.GetAxis("Controller " + player_number + " Right Bumper") >= 0.9 || Input.GetKey(KeyCode.LeftShift)) && Time.time > nextFire && numBullets > 0){
-				Shoot();
-			}
-			// block
-			if((Input.GetAxis("Controller " + player_number + " Left Trigger") >= 0.9 || Input.GetKey(KeyCode.Q)) && Time.time > nextFire){
-				Block();
+            // block
+            //if((Input.GetAxis("Controller " + player_number + " Left Trigger") >= 0.9 || Input.GetKey(KeyCode.Q)) && Time.time > nextFire)
+            else if ((Input.GetButtonDown("Controller " + player_number + " Left Bumper") || Input.GetKey(KeyCode.Q)) && Time.time > nextFire)
+            {
+                Block();
 			}
 			// super slash for shits and gigs
-			if(Input.GetButtonDown("Controller " + player_number + " Left Bumper") || Input.GetKey(KeyCode.F)){
-				SuperSlash();
-			}
+			//if(Input.GetButtonDown("Controller " + player_number + " Left Bumper") || Input.GetKey(KeyCode.F)){
+			//	SuperSlash();
+			//}
 		}
 		// if dead, allow poison action
 		else{
@@ -201,7 +208,7 @@ public class player : MonoBehaviour{
             //if ((Input.GetAxis("Controller " + player_number + " Right Bumper") >= 0.9 || Input.GetKey(KeyCode.LeftShift)) && Time.time > poisonTime){
 			//	Poison();
 			//}
-            if((Input.GetAxis("Controller " + player_number + " Right Trigger") >= 0.9 || Input.GetKey(KeyCode.LeftShift)) && Time.time > poisonTime)
+            if((Input.GetButtonDown("Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.LeftShift)) && Time.time > poisonTime)
             {
 				Attack();
 			}
@@ -867,8 +874,9 @@ public class player : MonoBehaviour{
 		if(lives == 0){
             //halo.SetActive(true);
             dead = true;
-		}
-		poisoned = false;
+        }
+        Level.S.KillPause(transform.position);
+        poisoned = false;
 		player_animator.Play("Death");
 		body.velocity = new Vector2(0f, 0f);
 		player_orientation = orientation.down;
@@ -876,7 +884,7 @@ public class player : MonoBehaviour{
 	}
 
 	IEnumerator Wait(){
-		yield return new WaitForSeconds(0.35f);
+		yield return new WaitForSeconds(0.3f);
 		transform.position = offscreen;
 		yield return new WaitForSeconds(2f);
 		transform.position = Level.S.findRespawn();
