@@ -59,14 +59,14 @@ public class Level : MonoBehaviour {
         Time.timeScale = 0.1f;
         Vector3 cubePos = pos, rot = transform.rotation.eulerAngles;
 
-        cubePos.y = pos.y - 4.1f;
+        cubePos.y = pos.y - 4.3f;
         bottomWall = Instantiate(blackSquare, cubePos, transform.rotation) as GameObject;
-        cubePos.y = pos.y + 4.1f;
+        cubePos.y = pos.y + 4.3f;
         topWall = Instantiate(blackSquare, cubePos, transform.rotation) as GameObject;
-        cubePos.x = pos.x - 4.1f;
+        cubePos.x = pos.x - 4.3f;
         rot.z = 90;
         leftWall = Instantiate(blackSquare, cubePos, Quaternion.Euler(rot)) as GameObject;
-        cubePos.x = pos.x + 4.1f;
+        cubePos.x = pos.x + 4.3f;
         rightWall = Instantiate(blackSquare, cubePos, Quaternion.Euler(rot)) as GameObject;
 
         yield return new WaitForSeconds(0.025f);

@@ -55,7 +55,7 @@ public class player : MonoBehaviour{
 	public AudioClip gunshot, block;
 
 	// bullet information
-	public GameObject bullet;
+	public GameObject bullet, extraBullet;
 	GameObject bullet_instance;
 	public float shotVelocity = 5f, numBullets = 1;
   public float fireRate = 1f;
@@ -885,7 +885,13 @@ public class player : MonoBehaviour{
 
 	IEnumerator Wait(){
 		yield return new WaitForSeconds(0.3f);
+
+        Vector3 pos = transform.position;
+
 		transform.position = offscreen;
+
+        Instantiate(extraBullet, pos, transform.rotation);
+
 		yield return new WaitForSeconds(2f);
 		transform.position = Level.S.findRespawn();
 		transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
@@ -956,5 +962,11 @@ public class player : MonoBehaviour{
 			up_slash.GetComponent<BoxCollider2D>().enabled = false;
 			down_slash.GetComponent<BoxCollider2D>().enabled = false;
 		}
+        else if(col.tag == "extraBullets" && !player_animator.GetBool("attack"))
+        {
+            numBullets++;
+            Destroy(col.gameObject);
+        }
+
   }
 }
