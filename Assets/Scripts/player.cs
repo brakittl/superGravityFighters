@@ -53,9 +53,10 @@ public class player : MonoBehaviour{
 	// sounds
 	AudioSource sound;
 	public AudioClip gunshot, block, death, swordSlash, gravitySwap;
+    float gravVolume = 0.25f;
 
-	// bullet information
-	public GameObject bullet, extraBullet;
+    // bullet information
+    public GameObject bullet, extraBullet;
 	GameObject bullet_instance;
 	public float shotVelocity = 5f, numBullets = 1;
   public float fireRate = 1f;
@@ -140,38 +141,50 @@ public class player : MonoBehaviour{
             hearts[i - 1].SetActive(false);
         }
       }
-    
 
-		// ==[gravity swap]=========================================================
-		// =========================================================================
+        // ==[gravity swap]=========================================================
+        // =========================================================================
 
-		// gravity vectors
-		right = new Vector2(acceleration, 0f);
+        if (Input.GetButtonDown("Controller " + player_number + " Start Button") && !Level.S.pause)
+        {
+            Time.timeScale = 0;
+            Level.S.pause = true;
+        }
+        else if (Input.GetButtonDown("Controller " + player_number + " Start Button") && Level.S.pause)
+        {
+            Time.timeScale = 1;
+            Level.S.pause = false;
+        }
+
+        // ==[gravity swap]=========================================================
+        // =========================================================================
+
+        // gravity vectors
+        right = new Vector2(acceleration, 0f);
 		left = new Vector2(-acceleration, 0f);
 		down = new Vector2(0f, -acceleration);
 		up = new Vector2(0f, acceleration);
-        float volume = 0.25f;
 		// swap gravity orientation
 		if(!poisoned){
 			// up
 			if((Input.GetButtonDown("Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up){
 				Gravity(orientation.up, transform.localEulerAngles.y, 180f);
-                sound.PlayOneShot(gravitySwap, volume);
+                sound.PlayOneShot(gravitySwap, gravVolume);
             }
 			// down
 			if((Input.GetButtonDown("Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S)) && player_orientation != orientation.down){
 				Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
-                sound.PlayOneShot(gravitySwap, volume);
+                sound.PlayOneShot(gravitySwap, gravVolume);
             }
 			// left
 			if((Input.GetButtonDown("Controller " + player_number + " X Button") || Input.GetKey(KeyCode.A)) && player_orientation != orientation.left){
 				Gravity(orientation.left, 0f, -90f);
-                sound.PlayOneShot(gravitySwap, volume);
+                sound.PlayOneShot(gravitySwap, gravVolume);
             }
 			// right
 			if((Input.GetButtonDown("Controller " + player_number + " B Button") || Input.GetKey(KeyCode.D)) && player_orientation != orientation.right){
 				Gravity(orientation.right, 0f, 90f);
-                sound.PlayOneShot(gravitySwap, volume);
+                sound.PlayOneShot(gravitySwap, gravVolume);
             }
 		}
 
@@ -360,7 +373,7 @@ public class player : MonoBehaviour{
 			thrust = poisonJump;
 			speed = poisonSpeed;
 
-			// remove poison with A button tap
+			// remove poison with button tap
 			if((Input.GetKeyDown(KeyCode.LeftShift) || 
                 Input.GetButtonDown("Controller " + player_number + " A Button") ||
                 Input.GetButtonDown("Controller " + player_number + " B Button") || 
@@ -368,11 +381,9 @@ public class player : MonoBehaviour{
                 Input.GetButtonDown("Controller " + player_number + " Y Button")) && !dead){
 				curButtonTaps++;
                 poisonGO.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, (1 - 0.1f * curButtonTaps));
-                //50% transperency good for ghost
-                //Transperency drop
 			}
 
-			// remove poison after 10 taps or time limit
+			// remove poison after 10 taps
 			if(!dead && curButtonTaps == poisonButtonTaps){
 				poisoned = false;
 				thrust = jump_speed;
@@ -835,21 +846,20 @@ public class player : MonoBehaviour{
 	}
 
 	public void FindKiller(GameObject collideObject, bool bulletAttack){
-
 		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
 		foreach(GameObject p in players){
 			if(p.gameObject == this.gameObject)
 				continue;
-
 			player other = (player)p.GetComponent(typeof(player));
 			if(bulletAttack && other.bullet_instance == collideObject){
 				other.playersKilled.Add(this.gameObject.name);
 				other.numBulletHits++;
 			}
 
-			else if(!bulletAttack && other.slash == collideObject){
+			else if(!bulletAttack && (other.slash == collideObject || other.down_slash == collideObject || other.up_slash == collideObject || other.side_slash == collideObject)){
 				other.playersKilled.Add(this.gameObject.name);
-				other.numSwordHits++;
+                print(this.gameObject.name + " " + lives);
+                other.numSwordHits++;
 			}
 		}
 	}
@@ -862,14 +872,18 @@ public class player : MonoBehaviour{
 		side_slash.GetComponent<BoxCollider2D>().enabled = false;
 		up_slash.GetComponent<BoxCollider2D>().enabled = false;
 		down_slash.GetComponent<BoxCollider2D>().enabled = false;
-        //lives--;
-        lives = 0;
+        lives--;
+
+        Level.S.KillPause(transform.position);
+
+        poisoned = false;
+        poisonGO.SetActive(false);
+        thrust = jump_speed;
+        speed = run_speed;
         numBullets = 1;
 		Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
 
-        Level.S.KillPause(transform.position);
-        poisoned = false;
-		player_animator.Play("Death");
+        player_animator.Play("Death");
 		body.velocity = new Vector2(0f, 0f);
 		player_orientation = orientation.down;
 		StartCoroutine(Wait());

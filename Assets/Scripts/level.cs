@@ -47,6 +47,7 @@ public class Level : MonoBehaviour {
 
     public GameObject blackSquare;
     GameObject topWall, bottomWall, leftWall, rightWall;
+    public bool pause = false;
 
     public void KillPause(Vector3 playerPos)
     {
