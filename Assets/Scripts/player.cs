@@ -52,7 +52,7 @@ public class player : MonoBehaviour{
 
 	// sounds
 	AudioSource sound;
-	public AudioClip gunshot, block;
+	public AudioClip gunshot, block, death, swordSlash, gravitySwap;
 
 	// bullet information
 	public GameObject bullet, extraBullet;
@@ -156,19 +156,23 @@ public class player : MonoBehaviour{
 			// up
 			if((Input.GetButtonDown("Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up){
 				Gravity(orientation.up, transform.localEulerAngles.y, 180f);
-			}
+                sound.PlayOneShot(gravitySwap);
+            }
 			// down
 			if((Input.GetButtonDown("Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S)) && player_orientation != orientation.down){
 				Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
-			}
+                sound.PlayOneShot(gravitySwap);
+            }
 			// left
 			if((Input.GetButtonDown("Controller " + player_number + " X Button") || Input.GetKey(KeyCode.A)) && player_orientation != orientation.left){
 				Gravity(orientation.left, 0f, -90f);
-			}
+                sound.PlayOneShot(gravitySwap);
+            }
 			// right
 			if((Input.GetButtonDown("Controller " + player_number + " B Button") || Input.GetKey(KeyCode.D)) && player_orientation != orientation.right){
 				Gravity(orientation.right, 0f, 90f);
-			}
+                sound.PlayOneShot(gravitySwap);
+            }
 		}
 
 		// ==[actions]==============================================================
@@ -693,7 +697,8 @@ public class player : MonoBehaviour{
 
 		if(!player_animator.GetBool("attack") && !respawn && !player_animator.GetBool("crouched")){
 
-			numSwordSwipes++; // statistics count
+            sound.PlayOneShot(swordSlash);
+            numSwordSwipes++; // statistics count
             nextFire = Time.time + fireRate;
             player_animator.SetBool("attack", true);
 
@@ -862,8 +867,10 @@ public class player : MonoBehaviour{
 		}
 	}
 
-	public void KillPlayer(){
-		respawn = true;
+	public void KillPlayer()
+    {
+        sound.PlayOneShot(death);
+        respawn = true;
 		slash.GetComponent<BoxCollider2D>().enabled = false;
 		side_slash.GetComponent<BoxCollider2D>().enabled = false;
 		up_slash.GetComponent<BoxCollider2D>().enabled = false;
