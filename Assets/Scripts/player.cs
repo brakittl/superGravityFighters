@@ -53,7 +53,7 @@ public class player : MonoBehaviour{
 	// sounds
 	AudioSource sound;
 	public AudioClip gunshot, block, death, swordSlash, gravitySwap;
-    float gravVolume = 0.25f;
+    float gravVolume = 0.1f;
 
     // bullet information
     public GameObject bullet, extraBullet;
@@ -76,7 +76,7 @@ public class player : MonoBehaviour{
 
 	// tracking statistics
 	public int gravitySwapCount = 0, totalPoisoned = 0, numBulletShots = 0,
-	numBulletHits = 0, numSwordSwipes = 0, numSwordHits = 0;
+	numBulletHits = 0, numSwordSwipes = 0, numSwordHits = 0, numBlocks = 0;
 	public List<String> playersKilled;
 
   // blocking
@@ -824,8 +824,8 @@ public class player : MonoBehaviour{
 	}
 
 	void Block(){
-    nextFire = Time.time + fireRate;
-    player_animator.Play("Block");
+        nextFire = Time.time + fireRate;
+        player_animator.Play("Block");
 		player_animator.SetBool("block", true);
 		shield_animator.Play("Shield");
 		shield.GetComponent<CircleCollider2D>().enabled = true;
@@ -858,7 +858,6 @@ public class player : MonoBehaviour{
 
 			else if(!bulletAttack && (other.slash == collideObject || other.down_slash == collideObject || other.up_slash == collideObject || other.side_slash == collideObject)){
 				other.playersKilled.Add(this.gameObject.name);
-                print(this.gameObject.name + " " + lives);
                 other.numSwordHits++;
 			}
 		}
@@ -873,7 +872,7 @@ public class player : MonoBehaviour{
 		up_slash.GetComponent<BoxCollider2D>().enabled = false;
 		down_slash.GetComponent<BoxCollider2D>().enabled = false;
         lives--;
-
+        print("killing " + this.name);
         Level.S.KillPause(transform.position);
 
         poisoned = false;
@@ -962,6 +961,7 @@ public class player : MonoBehaviour{
                     swipeBlockStart = Time.time;
                     sound.PlayOneShot(block);
                     body.AddForce(transform.right * -1 * 0.1f, ForceMode2D.Impulse);
+                    numBlocks++;
                 }
                 swipeBlock = false;
 				return;
