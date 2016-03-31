@@ -340,12 +340,6 @@ public class player : MonoBehaviour{
     // =========================================================================
 
     // apply movement
-    if(move_right && !player_animator.GetBool("landing")){
-			Run(true);
-		}
-		if(move_left && !player_animator.GetBool("landing")){
-			Run(false);
-		}
 
 		// crouch
 		player_animator.SetBool("crouched", false);
@@ -401,12 +395,17 @@ public class player : MonoBehaviour{
 	}
 
 	void FixedUpdate(){
-
+		if(move_right && !player_animator.GetBool("landing")){
+			Run(true);
+		}
+		if(move_left && !player_animator.GetBool("landing")){
+			Run(false);
+		}
 		// grounded
 		if(!checkGround()){
 			if(grounded == 0){
 				// need a little delay to have the player land completely
-				delay = 0.05F;
+				delay = 0.08F;
 			}
 			grounded = 1;
 			player_animator.SetBool("grounded", true);
@@ -425,22 +424,22 @@ public class player : MonoBehaviour{
     float speed = body.velocity.magnitude;
 
 		if(player_orientation == orientation.down){
-      if(speed < terminal_velocity){
+			if(speed < terminal_velocity && grounded == 0){
 			  body.AddForce(down);
       }
 		}
 		else if(player_orientation == orientation.up){
-			if(speed < terminal_velocity){
+			if(speed < terminal_velocity && grounded == 0){
         body.AddForce(up);
       }
 		}
 		else if(player_orientation == orientation.left){
-			if(speed < terminal_velocity){
+			if(speed < terminal_velocity && grounded == 0){
         body.AddForce(left);
       }
 		}
 		else if(player_orientation == orientation.right){
-			if(speed < terminal_velocity){
+			if(speed < terminal_velocity && grounded == 0){
         body.AddForce(right);
       }
 		}
@@ -452,7 +451,14 @@ public class player : MonoBehaviour{
 		if(move_up && grounded == 1 && (delay < 0)){
 			Jump();
 		}
-		else{
+		else if (grounded == 1 && (player_orientation == orientation.up || player_orientation == orientation.down))
+		{
+			body.velocity = new Vector2(body.velocity.x, 0);
+			delay -= Time.deltaTime;
+		}
+		else if (grounded == 1 && (player_orientation == orientation.left || player_orientation == orientation.right))
+		{
+			body.velocity = new Vector2(0, body.velocity.y);
 			delay -= Time.deltaTime;
 		}
 	}
@@ -531,8 +537,8 @@ public class player : MonoBehaviour{
 
 		float length_ray_leftright = (player_length * 1.1F);
 
-		// Vector2 left = transform.TransformDirection(new Vector2(length_ray_leftright, 0));
-		// Vector2 right = transform.TransformDirection(new Vector2(-length_ray_leftright, 0));
+		Vector2 left = transform.TransformDirection(new Vector2(length_ray_leftright, 0));
+		Vector2 right = transform.TransformDirection(new Vector2(-length_ray_leftright, 0));
 
 		LayerMask ignoreplayer_layerMask = ~(LayerMask.NameToLayer("Player") | LayerMask.NameToLayer("Border"));
 		//print(ignoreplayer_layerMask);
@@ -618,7 +624,7 @@ public class player : MonoBehaviour{
 			break;
 		}
 
-		float length_ray_updw = (player_height / 2) + (player_height * 0.08F);
+		float length_ray_updw = (player_height / 2) + (player_height * .2F);
 
 		Vector2 below = transform.TransformDirection(new Vector2(0F, -length_ray_updw));
 
