@@ -19,9 +19,6 @@ public class MapBorder : MonoBehaviour {
 			}
 		}
 		if (other.tag == "player_child"){
-			Debug.Log(other.transform.parent.transform.position.y);
-			Debug.Log(other.transform.position.y);
-			Debug.Log(GetComponent<BoxCollider2D>().transform.position.y + (GetComponent<BoxCollider2D>().size.y / 2));
 			if ((other.transform.parent.transform.position.y > (GetComponent<BoxCollider2D>().transform.position.y + (GetComponent<BoxCollider2D>().size.y / 2)))){
 				other.transform.parent.transform.position = new Vector3(other.transform.transform.parent.position.x, ((GetComponent<BoxCollider2D>().offset.y - (GetComponent<BoxCollider2D>().size.y / 2) + 0.1F)), 0);
 			}
