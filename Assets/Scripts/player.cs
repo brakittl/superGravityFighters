@@ -76,8 +76,12 @@ public class player : MonoBehaviour{
 
 	// tracking statistics
 	public int gravitySwapCount = 0, totalPoisoned = 0, numBulletShots = 0,
-	numBulletHits = 0, numSwordSwipes = 0, numSwordHits = 0, numBlocks = 0;
+	numBulletHits = 0, numSwordSwipes = 0, numSwordHits = 0, numBlocks = 0, steps = 0;
+    public float longestLife = 0, shortestLife = 1000000;
+    float lastDeath;
 	public List<String> playersKilled;
+    bool moving = false;
+
 
   // blocking
   bool swipeBlock = true;
@@ -111,14 +115,15 @@ public class player : MonoBehaviour{
 		sound = GetComponent<AudioSource>();
 		jump_speed = thrust;
 		run_speed = speed;
-    hearts_skulls = Resources.LoadAll<Sprite>("hearts_skulls");
-    hearts = new GameObject[10];
-    for(int i = 0; i < 10; ++i){
-      string heart_string = "ui/p" + player_number.ToString() + "/" + player_number.ToString() + "_" + (i + 1).ToString();
-      GameObject current_heart = GameObject.Find(heart_string);
-      current_heart.GetComponent<Image>().sprite = get_sprite_by_name(hearts_skulls, player_color.ToLower() + "_heart");
-      hearts[i] = current_heart;
-    }
+        hearts_skulls = Resources.LoadAll<Sprite>("hearts_skulls");
+        hearts = new GameObject[10];
+        for(int i = 0; i < 10; ++i){
+          string heart_string = "ui/p" + player_number.ToString() + "/" + player_number.ToString() + "_" + (i + 1).ToString();
+          GameObject current_heart = GameObject.Find(heart_string);
+          current_heart.GetComponent<Image>().sprite = get_sprite_by_name(hearts_skulls, player_color.ToLower() + "_heart");
+          hearts[i] = current_heart;
+        }
+        lastDeath = 0;    
 	}
 
   void SetPlayerNumber(int sent_number){
@@ -169,21 +174,25 @@ public class player : MonoBehaviour{
 			// up
 			if((Input.GetButtonDown("Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up){
 				Gravity(orientation.up, transform.localEulerAngles.y, 180f);
+                gravitySwapCount++;
                 sound.PlayOneShot(gravitySwap, gravVolume);
             }
 			// down
 			if((Input.GetButtonDown("Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S)) && player_orientation != orientation.down){
 				Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
+                gravitySwapCount++;
                 sound.PlayOneShot(gravitySwap, gravVolume);
             }
 			// left
 			if((Input.GetButtonDown("Controller " + player_number + " X Button") || Input.GetKey(KeyCode.A)) && player_orientation != orientation.left){
 				Gravity(orientation.left, 0f, -90f);
+                gravitySwapCount++;
                 sound.PlayOneShot(gravitySwap, gravVolume);
             }
 			// right
 			if((Input.GetButtonDown("Controller " + player_number + " B Button") || Input.GetKey(KeyCode.D)) && player_orientation != orientation.right){
 				Gravity(orientation.right, 0f, 90f);
+                gravitySwapCount++;
                 sound.PlayOneShot(gravitySwap, gravVolume);
             }
 		}
@@ -231,8 +240,14 @@ public class player : MonoBehaviour{
 			}
 		}
 
-		// ==[movement bools]=======================================================
-		// =========================================================================
+        // ==[movement bools]=======================================================
+        // =========================================================================
+        if (moving && player_animator.GetBool("grounded"))
+        {
+            steps++;
+            moving = false;
+        }
+
 
 		move_left = false;
 		move_right = false;
@@ -241,6 +256,7 @@ public class player : MonoBehaviour{
 
 		// move right
 		if(Input.GetAxis("Controller " + player_number + " Left Stick X Axis") >= 0.9f || Input.GetKey(KeyCode.RightArrow)){
+            moving = true;
 			if(player_orientation == orientation.up){
 				move_left = true;
 				lastDirection = "left";
@@ -261,6 +277,7 @@ public class player : MonoBehaviour{
 
 		// move left
 		if(Input.GetAxis("Controller " + player_number + " Left Stick X Axis") <= -0.9f || Input.GetKey(KeyCode.LeftArrow)){
+            moving = true;
 			if(player_orientation == orientation.up){
 				move_right = true;
 				lastDirection = "right";
@@ -281,6 +298,7 @@ public class player : MonoBehaviour{
 
 		// move up
 		if(Input.GetAxis("Controller " + player_number + " Left Stick Y Axis") <= -0.9f || Input.GetKey(KeyCode.UpArrow)){
+            moving = true;
 			if(player_orientation == orientation.up){
 				move_down = true;
 				lastDirection = "down";
@@ -301,6 +319,7 @@ public class player : MonoBehaviour{
 
 		// move down
 		if(Input.GetAxis("Controller " + player_number + " Left Stick Y Axis") >= 0.9f || Input.GetKey(KeyCode.DownArrow)){
+            moving = true;
 			if(player_orientation == orientation.up){
 				move_up = true;
 				lastDirection = "up";
@@ -651,7 +670,6 @@ public class player : MonoBehaviour{
 
 	void Gravity(orientation new_orientation, float y_rot, float z_rot){
 		body.velocity = new Vector2(0f, 0f); // set velocity to zero at swap initializaiton
-		gravitySwapCount++; // increment count for statistics
 		player_orientation = new_orientation; // set new orientation
 		transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, y_rot, z_rot); // rotate for new orientation
 		player_animator.Play("Swap"); // play animation
@@ -854,8 +872,6 @@ public class player : MonoBehaviour{
 	public void FindKiller(GameObject collideObject, bool bulletAttack){
 		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
 		foreach(GameObject p in players){
-			if(p.gameObject == this.gameObject)
-				continue;
 			player other = (player)p.GetComponent(typeof(player));
 			if(bulletAttack && other.bullet_instance == collideObject){
 				other.playersKilled.Add(this.gameObject.name);
@@ -878,7 +894,6 @@ public class player : MonoBehaviour{
 		up_slash.GetComponent<BoxCollider2D>().enabled = false;
 		down_slash.GetComponent<BoxCollider2D>().enabled = false;
         lives--;
-        print("killing " + this.name);
         Level.S.KillPause(transform.position);
 
         poisoned = false;
@@ -889,6 +904,12 @@ public class player : MonoBehaviour{
 		Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
 
         player_animator.Play("Death");
+        if (Time.time - lastDeath > longestLife)
+            longestLife = Time.time - lastDeath;
+        if (Time.time - lastDeath < shortestLife)
+            shortestLife = Time.time - lastDeath;
+        lastDeath = Time.time;
+
 		body.velocity = new Vector2(0f, 0f);
 		player_orientation = orientation.down;
 		StartCoroutine(Wait());
