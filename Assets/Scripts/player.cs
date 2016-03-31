@@ -32,7 +32,7 @@ public class player : MonoBehaviour{
 	public GameObject down_slash;
 	public GameObject shield;
   public GameObject poisonGO;
-    //public GameObject halo;
+    public GameObject halo;
 
 	// movement information
 	Rigidbody2D body;
@@ -150,28 +150,28 @@ public class player : MonoBehaviour{
 		left = new Vector2(-acceleration, 0f);
 		down = new Vector2(0f, -acceleration);
 		up = new Vector2(0f, acceleration);
-
+        float volume = 0.25f;
 		// swap gravity orientation
 		if(!poisoned){
 			// up
 			if((Input.GetButtonDown("Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up){
 				Gravity(orientation.up, transform.localEulerAngles.y, 180f);
-                sound.PlayOneShot(gravitySwap);
+                sound.PlayOneShot(gravitySwap, volume);
             }
 			// down
 			if((Input.GetButtonDown("Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S)) && player_orientation != orientation.down){
 				Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
-                sound.PlayOneShot(gravitySwap);
+                sound.PlayOneShot(gravitySwap, volume);
             }
 			// left
 			if((Input.GetButtonDown("Controller " + player_number + " X Button") || Input.GetKey(KeyCode.A)) && player_orientation != orientation.left){
 				Gravity(orientation.left, 0f, -90f);
-                sound.PlayOneShot(gravitySwap);
+                sound.PlayOneShot(gravitySwap, volume);
             }
 			// right
 			if((Input.GetButtonDown("Controller " + player_number + " B Button") || Input.GetKey(KeyCode.D)) && player_orientation != orientation.right){
 				Gravity(orientation.right, 0f, 90f);
-                sound.PlayOneShot(gravitySwap);
+                sound.PlayOneShot(gravitySwap, volume);
             }
 		}
 
@@ -549,8 +549,7 @@ public class player : MonoBehaviour{
 
 		}
 	}
-
-
+    
 	bool checkGround(){
 		
 		float bc_offset_x = GetComponent<BoxCollider2D>().offset.x;
@@ -829,22 +828,10 @@ public class player : MonoBehaviour{
 	}
 
 	void Poison(){
-		//if(playerContact && !playerInContact.dead){
-			// affect other player
-			//if(!playerInContact.poisoned){
-            //    totalPoisoned++;
-            //}
-			//playerInContact.poisoned = true;
-			//playerInContact.curButtonTaps = 0;
-            //playerInContact.poisonGO.SetActive(true);
-            //playerInContact.poisonGO.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
-            poisoned = true;
-            curButtonTaps = 0;
-            poisonGO.SetActive(true);
-            poisonGO.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
-            // affect this player
-            //poisonTime = Time.time + poisonRate;
-		//}
+        poisoned = true;
+        curButtonTaps = 0;
+        poisonGO.SetActive(true);
+        poisonGO.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
 	}
 
 	public void FindKiller(GameObject collideObject, bool bulletAttack){
@@ -875,13 +862,11 @@ public class player : MonoBehaviour{
 		side_slash.GetComponent<BoxCollider2D>().enabled = false;
 		up_slash.GetComponent<BoxCollider2D>().enabled = false;
 		down_slash.GetComponent<BoxCollider2D>().enabled = false;
-		lives--;
+        //lives--;
+        lives = 0;
         numBullets = 1;
 		Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
-		if(lives == 0){
-            //halo.SetActive(true);
-            dead = true;
-        }
+
         Level.S.KillPause(transform.position);
         poisoned = false;
 		player_animator.Play("Death");
@@ -905,7 +890,12 @@ public class player : MonoBehaviour{
       body.velocity = new Vector2(0f, 0f);
       player_orientation = orientation.down;
       player_animator.Play("Appear");
-		respawning = true;
+        if (lives == 0)
+        {
+            halo.SetActive(true);
+            dead = true;
+        }
+        respawning = true;
 	}
 
 	IEnumerator Blink(){
