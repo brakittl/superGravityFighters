@@ -115,15 +115,16 @@ public class player : MonoBehaviour{
 		sound = GetComponent<AudioSource>();
 		jump_speed = thrust;
 		run_speed = speed;
-        hearts_skulls = Resources.LoadAll<Sprite>("hearts_skulls");
-        hearts = new GameObject[10];
-        for(int i = 0; i < 10; ++i){
-          string heart_string = "ui/p" + player_number.ToString() + "/" + player_number.ToString() + "_" + (i + 1).ToString();
-          GameObject current_heart = GameObject.Find(heart_string);
-          current_heart.GetComponent<Image>().sprite = get_sprite_by_name(hearts_skulls, player_color.ToLower() + "_heart");
-          hearts[i] = current_heart;
-        }
-        lastDeath = 0;    
+    hearts_skulls = Resources.LoadAll<Sprite>("hearts_skulls");
+    hearts = new GameObject[10];
+    for(int i = 0; i < 10; ++i){
+      string heart_string = "ui/p" + player_number.ToString() + "/" + player_number.ToString() + "_" + (i + 1).ToString();
+      GameObject current_heart = GameObject.Find(heart_string);
+      if(current_heart != null){
+      	current_heart.GetComponent<Image>().sprite = get_sprite_by_name(hearts_skulls, player_color.ToLower() + "_heart");
+      }
+      hearts[i] = current_heart;
+    }
 	}
 
   void SetPlayerNumber(int sent_number){
