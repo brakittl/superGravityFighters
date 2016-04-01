@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Resources/_menus/character_select_boxes.png.meta
 guid: 0a945f80f3260b143be25221d0b675b1
 timeCreated: 1459541976
+=======
+guid: f701eea1aefc646faad4165f44a5a45c
+timeCreated: 1459541867
+>>>>>>> 2fe96ba483f92d5d678c536dde04686cc85deab6:Assets/Resources/_menus/character_select_boxes.png.meta
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName: {}

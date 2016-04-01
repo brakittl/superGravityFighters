@@ -1,11 +1,6 @@
 fileFormatVersion: 2
-<<<<<<< HEAD:Assets/Resources/_menus/a.png.meta
-guid: fb75997efec1ad64a846472dc264e63a
-timeCreated: 1459541976
-=======
-guid: 885c4e80864954feda40fb1ea228150b
-timeCreated: 1459541867
->>>>>>> 2fe96ba483f92d5d678c536dde04686cc85deab6:Assets/Resources/_menus/a.png.meta
+guid: 848561e927be446e7b76e124231ca8d0
+timeCreated: 1459542978
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName: {}
