@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class EndGame : MonoBehaviour {
   List<string> standing = new List<string>();
@@ -12,7 +13,7 @@ public class EndGame : MonoBehaviour {
 
   public string pathToPlayers = "__Prefabs/_players/";
   public bool testMode;
-  public List<Vector3> positions = new List<Vector3>();
+  public List<Vector3> positions = new List<Vector3>() { new Vector3(-1.69f, 5f, 0f), new Vector3(-0.35f, 5f, 0f), new Vector3(1.03f, 5f, 0f), new Vector3(2.44f, 5f, 0f)};
   public List<string> availableStats = new List<string>();
 
   Dictionary<int, Dictionary<string, int>> statistics = new Dictionary<int, Dictionary<string, int>>();
@@ -152,6 +153,9 @@ public class EndGame : MonoBehaviour {
   // change "press A to confirm" to "Ready"
   void setReady(int standing)
   {
-    //transform.FindChild(standing + "place").FindChild("readyStatus")...
+    Transform placeOb = transform.FindChild(standing + "place");
+    placeOb.FindChild("readyText").GetComponent<Text>().text = "READY!";
+    placeOb.FindChild("readyText").GetComponent<Text>().fontSize = 20;
+    placeOb.FindChild("AButton").GetComponent<Image>().enabled = false;
   }
 }
