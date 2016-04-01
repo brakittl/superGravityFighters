@@ -7,7 +7,10 @@ public class EndGame : MonoBehaviour {
   List<string> standing = new List<string>();
   List<GameObject> playerPrefabs = new List<GameObject>();
   List<player> playerList = new List<player>();
+  int readyCount;
+  List<bool> readyPlayers = new List<bool>() { false, false, false, false };
 
+  public string pathToPlayers = "__Prefabs/_players/";
   public bool testMode;
   public List<Vector3> positions = new List<Vector3>();
   public List<string> availableStats = new List<string>();
@@ -16,6 +19,8 @@ public class EndGame : MonoBehaviour {
 
   // Use this for initialization
   void Start() {
+    readyCount = 0;
+
     if (testMode)
     {
       standing.Add("blue_player");
@@ -45,7 +50,7 @@ public class EndGame : MonoBehaviour {
 
     for (int i = 0; i < standing.Capacity; i++)
     {
-      playerPrefabs.Add(Instantiate(Resources.Load("__Prefabs/" + standing[i], typeof(GameObject))) as GameObject);
+      playerPrefabs.Add(Instantiate(Resources.Load(pathToPlayers + standing[i], typeof(GameObject))) as GameObject);
       playerPrefabs[i].transform.position = positions[i];
       playerList.Add(playerPrefabs[i].GetComponent<player>());
       playerList[i].enabled = false;
@@ -60,11 +65,36 @@ public class EndGame : MonoBehaviour {
 
   // Update is called once per frame
   void Update() {
-    // return to mapselect/mainmenu
-    if (Input.GetButtonDown("Controller 1 Start Button")
-      || Input.GetButtonDown("Controller 2 Start Button")
-      || Input.GetButtonDown("Controller 3 Start Button")
-      || Input.GetButtonDown("Controller 4 Start Button"))
+    // take each player's ready input once
+    if (!readyPlayers[0] && Input.GetButtonDown("Controller 1 A Button"))
+    {
+      readyPlayers[0] = true;
+      readyCount++;
+
+      setReady(0);
+    }
+    if (!readyPlayers[1] && Input.GetButtonDown("Controller 2 A Button"))
+    {
+      readyPlayers[1] = true;
+      readyCount++;
+
+      setReady(1);
+    }
+    if (!readyPlayers[2] && Input.GetButtonDown("Controller 3 A Button"))
+    {
+      readyPlayers[2] = true;
+      readyCount++;
+      setReady(2);
+    }
+    if (!readyPlayers[3] && Input.GetButtonDown("Controller 4 A Button"))
+    {
+      readyPlayers[3] = true;
+      readyCount++;
+      setReady(3);
+    }
+
+    // check if all available players are ready
+    if (readyCount >= standing.Capacity)
     {
       //SceneManager.LoadScene("_scene_MapSelect");
       SceneManager.LoadScene("_scene_Menu");
@@ -117,5 +147,11 @@ public class EndGame : MonoBehaviour {
   void DisplayAwards()
   {
 
+  }
+
+  // change "press A to confirm" to "Ready"
+  void setReady(int standing)
+  {
+    //transform.FindChild(standing + "place").FindChild("readyStatus")...
   }
 }
