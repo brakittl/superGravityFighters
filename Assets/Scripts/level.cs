@@ -2,20 +2,46 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+public enum GameMode {NONE, SURVIVAL, DEATHMATCH, REVERSE_TAG};
+
 public class Level : MonoBehaviour {
 
-  public static Level S;
+  public static Level S; 
+  public GameMode gamemode;// You can use this for selecting the GameMode right from the Map Screen
+  public int rt_point_limit = 100;
+
   public Vector3[] respawnPoints;
     Texture2D black = new Texture2D(1, 1);
   // Use this for initialization
   void Start(){
 
+
     S = this;
+
+		if (gamemode == GameMode.NONE) { 
+			if (PlayerPrefs.GetString("GameMode") == "SURVIVAL") {
+				gamemode = GameMode.SURVIVAL;
+			}
+			else if (PlayerPrefs.GetString("GameMode") == "DEATHMATCH") {
+				gamemode = GameMode.DEATHMATCH;
+			}
+			else if (PlayerPrefs.GetString("GameMode") == "REVERSE_TAG") {
+				gamemode = GameMode.REVERSE_TAG;
+			} 
+			else Debug.LogError("INCORRECT GAMEMODE STRING PASSED IN FROM PLAYERPREFS. CHECK LEVEL SCRIPT");
+		}
+		else {
+			Debug.Log("GAMEMODE ALREADY SET FROM LEVEL SCRIPT. CURRENT GAMEMODE: " + gamemode);
+			Debug.Log("TO LET GAMEMODE BE SET THRU LEVEL SELECT, MAKE SURE LEVEL SCRIPT'S GAMEMODE IS NONE");
+
+		}
 
      //PlayerPrefs.SetString("P1", "orange_player");
      //PlayerPrefs.SetString("P2", "none");
      //PlayerPrefs.SetString("P3", "red_player");
      //PlayerPrefs.SetString("P4", "none");
+
+	PlayerPrefs.SetString("Player Name", "Foobar");
 
     Vector3 rot = new Vector3(0, 0, 0);
 

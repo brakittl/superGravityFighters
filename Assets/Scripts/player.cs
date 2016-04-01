@@ -4,14 +4,21 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+
 public class player : MonoBehaviour{
 
 	// player information
 	public int player_number;
 	public string player_color;
+  public GameObject[] hearts;
+
+	//gamemode specific info: survival 
 	public int lives = 3;
 	public bool dead = false;
-  public GameObject[] hearts;
+
+	//gamemode specific info: rt (reverse tag)
+	public int rt_points = 0;
+	//point limit is in Level script, call with Level.S.rt_point_limit
 
 	// orientation
 	public enum orientation{up, down, left, right};
@@ -203,7 +210,8 @@ public class player : MonoBehaviour{
 
 		// if alive, allow attack, shoot, and block action
 		if(!dead){
-            
+			if (Level.S.gamemode != GameMode.REVERSE_TAG)
+			{
             // shoot
             //if((Input.GetButtonDown("Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.LeftShift)) && Time.time > nextFire && numBullets > 0)
             if((Input.GetButtonDown("Controller " + player_number + " Right Bumper") &&
@@ -227,6 +235,7 @@ public class player : MonoBehaviour{
 			//if(Input.GetButtonDown("Controller " + player_number + " Left Bumper") || Input.GetKey(KeyCode.F)){
 			//	SuperSlash();
 			//}
+			}
 		}
 		// if dead, allow poison action
 		else{
@@ -560,7 +569,7 @@ public class player : MonoBehaviour{
 		Vector2 left = transform.TransformDirection(new Vector2(length_ray_leftright, 0));
 		Vector2 right = transform.TransformDirection(new Vector2(-length_ray_leftright, 0));
 
-		LayerMask ignoreplayer_layerMask = ~(LayerMask.NameToLayer("Player") | LayerMask.NameToLayer("Border"));
+		LayerMask ignoreplayer_layerMask = ~(LayerMask.NameToLayer("Player") | LayerMask.NameToLayer("Border") | LayerMask.NameToLayer("TagBall"));
 		//print(ignoreplayer_layerMask);
 		ignoreplayer_layerMask = ~ignoreplayer_layerMask;
 
@@ -648,7 +657,7 @@ public class player : MonoBehaviour{
 
 		Vector2 below = transform.TransformDirection(new Vector2(0F, -length_ray_updw));
 
-		LayerMask ignoreplayer_layerMask = ~(LayerMask.NameToLayer("Player") | LayerMask.NameToLayer("Border"));
+		LayerMask ignoreplayer_layerMask = ~(LayerMask.NameToLayer("Player") | LayerMask.NameToLayer("Border") | LayerMask.NameToLayer("TagBall"));
 		//print(ignoreplayer_layerMask);
 		ignoreplayer_layerMask = ~ignoreplayer_layerMask;
 
@@ -931,7 +940,7 @@ public class player : MonoBehaviour{
       body.velocity = new Vector2(0f, 0f);
       player_orientation = orientation.down;
       player_animator.Play("Appear");
-        if (lives == 0)
+		if (lives == 0 && (Level.S.gamemode == GameMode.SURVIVAL))
         {
             halo.SetActive(true);
             dead = true;
