@@ -116,7 +116,9 @@ public class player : MonoBehaviour{
     for(int i = 0; i < 10; ++i){
       string heart_string = "ui/p" + player_number.ToString() + "/" + player_number.ToString() + "_" + (i + 1).ToString();
       GameObject current_heart = GameObject.Find(heart_string);
-      current_heart.GetComponent<Image>().sprite = get_sprite_by_name(hearts_skulls, player_color.ToLower() + "_heart");
+      if(current_heart != null){
+      	current_heart.GetComponent<Image>().sprite = get_sprite_by_name(hearts_skulls, player_color.ToLower() + "_heart");
+      }
       hearts[i] = current_heart;
     }
 	}
