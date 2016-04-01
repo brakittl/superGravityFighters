@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Level : MonoBehaviour {
 
@@ -47,11 +48,18 @@ public class Level : MonoBehaviour {
 
     public GameObject blackSquare;
     GameObject topWall, bottomWall, leftWall, rightWall;
-    public bool pause = false;
+    public bool pause = false, running = false;
+    int runAgain = 0;
+    public List<Vector3> positions = new List<Vector3>();
 
     public void KillPause(Vector3 playerPos)
     {
-        StartCoroutine(Pause(playerPos));
+        if (!running)
+        {
+            running = true;
+            StartCoroutine(Pause(playerPos));
+        }     
+        
     }
 
     IEnumerator Pause(Vector3 pos)
@@ -70,12 +78,14 @@ public class Level : MonoBehaviour {
         cubePos.x = pos.x + 4.3f;
         rightWall = Instantiate(blackSquare, cubePos, Quaternion.Euler(rot)) as GameObject;
 
-        yield return new WaitForSeconds(0.025f);
+        yield return new WaitForSeconds(0.029f);
         Destroy(topWall);
         Destroy(bottomWall);
         Destroy(leftWall);
         Destroy(rightWall);
         Time.timeScale = 1;
+
+        running = false;
     }
 
     public Vector3 findRespawn(){

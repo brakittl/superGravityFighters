@@ -53,7 +53,7 @@ public class player : MonoBehaviour{
 	// sounds
 	AudioSource sound;
 	public AudioClip gunshot, block, death, swordSlash, gravitySwap;
-    float gravVolume = 0.25f;
+    float gravVolume = 0.1f;
 
     // bullet information
     public GameObject bullet, extraBullet;
@@ -76,8 +76,12 @@ public class player : MonoBehaviour{
 
 	// tracking statistics
 	public int gravitySwapCount = 0, totalPoisoned = 0, numBulletShots = 0,
-	numBulletHits = 0, numSwordSwipes = 0, numSwordHits = 0;
+	numBulletHits = 0, numSwordSwipes = 0, numSwordHits = 0, numBlocks = 0, steps = 0;
+    public float longestLife = 0, shortestLife = 1000000;
+    float lastDeath;
 	public List<String> playersKilled;
+    bool moving = false;
+
 
   // blocking
   bool swipeBlock = true;
@@ -171,21 +175,25 @@ public class player : MonoBehaviour{
 			// up
 			if((Input.GetButtonDown("Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up){
 				Gravity(orientation.up, transform.localEulerAngles.y, 180f);
+                gravitySwapCount++;
                 sound.PlayOneShot(gravitySwap, gravVolume);
             }
 			// down
 			if((Input.GetButtonDown("Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S)) && player_orientation != orientation.down){
 				Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
+                gravitySwapCount++;
                 sound.PlayOneShot(gravitySwap, gravVolume);
             }
 			// left
 			if((Input.GetButtonDown("Controller " + player_number + " X Button") || Input.GetKey(KeyCode.A)) && player_orientation != orientation.left){
 				Gravity(orientation.left, 0f, -90f);
+                gravitySwapCount++;
                 sound.PlayOneShot(gravitySwap, gravVolume);
             }
 			// right
 			if((Input.GetButtonDown("Controller " + player_number + " B Button") || Input.GetKey(KeyCode.D)) && player_orientation != orientation.right){
 				Gravity(orientation.right, 0f, 90f);
+                gravitySwapCount++;
                 sound.PlayOneShot(gravitySwap, gravVolume);
             }
 		}
@@ -233,8 +241,14 @@ public class player : MonoBehaviour{
 			}
 		}
 
-		// ==[movement bools]=======================================================
-		// =========================================================================
+        // ==[movement bools]=======================================================
+        // =========================================================================
+        if (moving && player_animator.GetBool("grounded"))
+        {
+            steps++;
+            moving = false;
+        }
+
 
 		move_left = false;
 		move_right = false;
@@ -243,6 +257,7 @@ public class player : MonoBehaviour{
 
 		// move right
 		if(Input.GetAxis("Controller " + player_number + " Left Stick X Axis") >= 0.9f || Input.GetKey(KeyCode.RightArrow)){
+            moving = true;
 			if(player_orientation == orientation.up){
 				move_left = true;
 				lastDirection = "left";
@@ -263,6 +278,7 @@ public class player : MonoBehaviour{
 
 		// move left
 		if(Input.GetAxis("Controller " + player_number + " Left Stick X Axis") <= -0.9f || Input.GetKey(KeyCode.LeftArrow)){
+            moving = true;
 			if(player_orientation == orientation.up){
 				move_right = true;
 				lastDirection = "right";
@@ -283,6 +299,7 @@ public class player : MonoBehaviour{
 
 		// move up
 		if(Input.GetAxis("Controller " + player_number + " Left Stick Y Axis") <= -0.9f || Input.GetKey(KeyCode.UpArrow)){
+            moving = true;
 			if(player_orientation == orientation.up){
 				move_down = true;
 				lastDirection = "down";
@@ -303,6 +320,7 @@ public class player : MonoBehaviour{
 
 		// move down
 		if(Input.GetAxis("Controller " + player_number + " Left Stick Y Axis") >= 0.9f || Input.GetKey(KeyCode.DownArrow)){
+            moving = true;
 			if(player_orientation == orientation.up){
 				move_up = true;
 				lastDirection = "up";
@@ -342,12 +360,6 @@ public class player : MonoBehaviour{
     // =========================================================================
 
     // apply movement
-    if(move_right && !player_animator.GetBool("landing")){
-			Run(true);
-		}
-		if(move_left && !player_animator.GetBool("landing")){
-			Run(false);
-		}
 
 		// crouch
 		player_animator.SetBool("crouched", false);
@@ -403,12 +415,17 @@ public class player : MonoBehaviour{
 	}
 
 	void FixedUpdate(){
-
+		if(move_right && !player_animator.GetBool("landing")){
+			Run(true);
+		}
+		if(move_left && !player_animator.GetBool("landing")){
+			Run(false);
+		}
 		// grounded
 		if(!checkGround()){
 			if(grounded == 0){
 				// need a little delay to have the player land completely
-				delay = 0.05F;
+				delay = 0.08F;
 			}
 			grounded = 1;
 			player_animator.SetBool("grounded", true);
@@ -427,22 +444,22 @@ public class player : MonoBehaviour{
     float speed = body.velocity.magnitude;
 
 		if(player_orientation == orientation.down){
-      if(speed < terminal_velocity){
+			if(speed < terminal_velocity && grounded == 0){
 			  body.AddForce(down);
       }
 		}
 		else if(player_orientation == orientation.up){
-			if(speed < terminal_velocity){
+			if(speed < terminal_velocity && grounded == 0){
         body.AddForce(up);
       }
 		}
 		else if(player_orientation == orientation.left){
-			if(speed < terminal_velocity){
+			if(speed < terminal_velocity && grounded == 0){
         body.AddForce(left);
       }
 		}
 		else if(player_orientation == orientation.right){
-			if(speed < terminal_velocity){
+			if(speed < terminal_velocity && grounded == 0){
         body.AddForce(right);
       }
 		}
@@ -454,7 +471,14 @@ public class player : MonoBehaviour{
 		if(move_up && grounded == 1 && (delay < 0)){
 			Jump();
 		}
-		else{
+		else if (grounded == 1 && (player_orientation == orientation.up || player_orientation == orientation.down))
+		{
+			body.velocity = new Vector2(body.velocity.x, 0);
+			delay -= Time.deltaTime;
+		}
+		else if (grounded == 1 && (player_orientation == orientation.left || player_orientation == orientation.right))
+		{
+			body.velocity = new Vector2(0, body.velocity.y);
 			delay -= Time.deltaTime;
 		}
 	}
@@ -533,8 +557,8 @@ public class player : MonoBehaviour{
 
 		float length_ray_leftright = (player_length * 1.1F);
 
-		// Vector2 left = transform.TransformDirection(new Vector2(length_ray_leftright, 0));
-		// Vector2 right = transform.TransformDirection(new Vector2(-length_ray_leftright, 0));
+		Vector2 left = transform.TransformDirection(new Vector2(length_ray_leftright, 0));
+		Vector2 right = transform.TransformDirection(new Vector2(-length_ray_leftright, 0));
 
 		LayerMask ignoreplayer_layerMask = ~(LayerMask.NameToLayer("Player") | LayerMask.NameToLayer("Border"));
 		//print(ignoreplayer_layerMask);
@@ -620,7 +644,7 @@ public class player : MonoBehaviour{
 			break;
 		}
 
-		float length_ray_updw = (player_height / 2) + (player_height * 0.08F);
+		float length_ray_updw = (player_height / 2) + (player_height * .2F);
 
 		Vector2 below = transform.TransformDirection(new Vector2(0F, -length_ray_updw));
 
@@ -647,7 +671,6 @@ public class player : MonoBehaviour{
 
 	void Gravity(orientation new_orientation, float y_rot, float z_rot){
 		body.velocity = new Vector2(0f, 0f); // set velocity to zero at swap initializaiton
-		gravitySwapCount++; // increment count for statistics
 		player_orientation = new_orientation; // set new orientation
 		transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, y_rot, z_rot); // rotate for new orientation
 		player_animator.Play("Swap"); // play animation
@@ -826,8 +849,8 @@ public class player : MonoBehaviour{
 	}
 
 	void Block(){
-    nextFire = Time.time + fireRate;
-    player_animator.Play("Block");
+        nextFire = Time.time + fireRate;
+        player_animator.Play("Block");
 		player_animator.SetBool("block", true);
 		shield_animator.Play("Shield");
 		shield.GetComponent<CircleCollider2D>().enabled = true;
@@ -850,8 +873,6 @@ public class player : MonoBehaviour{
 	public void FindKiller(GameObject collideObject, bool bulletAttack){
 		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
 		foreach(GameObject p in players){
-			if(p.gameObject == this.gameObject)
-				continue;
 			player other = (player)p.GetComponent(typeof(player));
 			if(bulletAttack && other.bullet_instance == collideObject){
 				other.playersKilled.Add(this.gameObject.name);
@@ -860,7 +881,6 @@ public class player : MonoBehaviour{
 
 			else if(!bulletAttack && (other.slash == collideObject || other.down_slash == collideObject || other.up_slash == collideObject || other.side_slash == collideObject)){
 				other.playersKilled.Add(this.gameObject.name);
-                print(this.gameObject.name + " " + lives);
                 other.numSwordHits++;
 			}
 		}
@@ -875,7 +895,6 @@ public class player : MonoBehaviour{
 		up_slash.GetComponent<BoxCollider2D>().enabled = false;
 		down_slash.GetComponent<BoxCollider2D>().enabled = false;
         lives--;
-
         Level.S.KillPause(transform.position);
 
         poisoned = false;
@@ -886,6 +905,12 @@ public class player : MonoBehaviour{
 		Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
 
         player_animator.Play("Death");
+        if (Time.time - lastDeath > longestLife)
+            longestLife = Time.time - lastDeath;
+        if (Time.time - lastDeath < shortestLife)
+            shortestLife = Time.time - lastDeath;
+        lastDeath = Time.time;
+
 		body.velocity = new Vector2(0f, 0f);
 		player_orientation = orientation.down;
 		StartCoroutine(Wait());
@@ -964,6 +989,7 @@ public class player : MonoBehaviour{
                     swipeBlockStart = Time.time;
                     sound.PlayOneShot(block);
                     body.AddForce(transform.right * -1 * 0.1f, ForceMode2D.Impulse);
+                    numBlocks++;
                 }
                 swipeBlock = false;
 				return;
