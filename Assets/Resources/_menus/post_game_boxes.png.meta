@@ -1,12 +1,5 @@
 fileFormatVersion: 2
-<<<<<<< HEAD:Assets/Resources/_menus/post_game_boxes.png.meta
 guid: 3e79bb0abd9c5f3488645069faaf4a51
-timeCreated: 1459541976
-=======
-guid: a16bfd49a539f4e06b1592d3f268c5bf
-timeCreated: 1459541867
->>>>>>> 2fe96ba483f92d5d678c536dde04686cc85deab6:Assets/Resources/_menus/post_game_boxes.png.meta
-licenseType: Free
 TextureImporter:
   fileIDToRecycleName: {}
   serializedVersion: 2
