@@ -51,6 +51,7 @@ public class Level : MonoBehaviour {
     public bool pause = false, running = false;
     int runAgain = 0;
     public List<Vector3> positions = new List<Vector3>();
+    public List<player> ranking = new List<player>();
 
     public void KillPause(Vector3 playerPos)
     {
@@ -116,4 +117,10 @@ public class Level : MonoBehaviour {
 
     return respawnPoint;
   }
+
+    public void endGame()
+    {
+        //Send stats
+        //Load Scene
+    }
 }

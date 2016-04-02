@@ -77,7 +77,7 @@ public class player : MonoBehaviour{
 	// tracking statistics
 	public int gravitySwapCount = 0, totalPoisoned = 0, numBulletShots = 0,
 	numBulletHits = 0, numSwordSwipes = 0, numSwordHits = 0, numBlocks = 0, steps = 0;
-    public float longestLife = 0, shortestLife = 1000000;
+    public float longestLife = 0, shortestLife = 1000000; //try to make ints
     float lastDeath;
 	public List<String> playersKilled;
     bool moving = false;
