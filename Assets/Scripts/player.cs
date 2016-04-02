@@ -525,52 +525,52 @@ public class player : MonoBehaviour{
 
   	bool checkSides(){
 
-  		float bc_offset_x = GetComponent<BoxCollider2D>().offset.x;
-  		float bc_offset_y = GetComponent<BoxCollider2D>().offset.y;
+		float bc_offset_x = GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
+		float bc_offset_y = GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
 
-  		float player_length = GetComponent<BoxCollider2D>().size.x;
-  		float player_height = GetComponent<BoxCollider2D>().size.y;
+		float player_length = GetComponent<BoxCollider2D>().size.x * transform.localScale.x;
+		float player_height = GetComponent<BoxCollider2D>().size.y * transform.localScale.y;
 
   		// due to the box collider's position being off (due to rotation and offset), also need to "rotate" the ray		
       switch (player_orientation){
   		case orientation.down:
   			if(transform.rotation.y == 0){
-  				bc_offset_x = GetComponent<BoxCollider2D>().offset.x;
-  				bc_offset_y = GetComponent<BoxCollider2D>().offset.y;
+				bc_offset_x = GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
+				bc_offset_y = GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
   			}
   			else {
-  				bc_offset_x = -GetComponent<BoxCollider2D>().offset.x;
-  				bc_offset_y = GetComponent<BoxCollider2D>().offset.y;
+				bc_offset_x = -GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
+				bc_offset_y = GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
   			}
   			break;
   		case orientation.up:
   			if(transform.rotation.y == 0){
-  				bc_offset_x = -GetComponent<BoxCollider2D>().offset.x;
-  				bc_offset_y = -GetComponent<BoxCollider2D>().offset.y;
+				bc_offset_x = -GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
+				bc_offset_y = -GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
   			}
   			else {
-  				bc_offset_x = GetComponent<BoxCollider2D>().offset.x;
-  				bc_offset_y = -GetComponent<BoxCollider2D>().offset.y;
+				bc_offset_x = GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
+				bc_offset_y = -GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
   			}
   			break;
   		case orientation.left:
   			if(transform.rotation.y == 0){
-  				bc_offset_x = GetComponent<BoxCollider2D>().offset.x;
-  				bc_offset_y = -GetComponent<BoxCollider2D>().offset.y;
+				bc_offset_x = GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
+				bc_offset_y = -GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
   			}
   			else {
-  				bc_offset_x = GetComponent<BoxCollider2D>().offset.x;
-  				bc_offset_y = GetComponent<BoxCollider2D>().offset.y;
+				bc_offset_x = GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
+				bc_offset_y = GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
   			}
   			break;
   		case orientation.right:
   			if(transform.rotation.y == 0){
-  				bc_offset_x = -GetComponent<BoxCollider2D>().offset.x;
-  				bc_offset_y = GetComponent<BoxCollider2D>().offset.y;
+				bc_offset_x = -GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
+				bc_offset_y = GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
   			}
   			else {
-  				bc_offset_x = -GetComponent<BoxCollider2D>().offset.x;
-  				bc_offset_y = -GetComponent<BoxCollider2D>().offset.y;
+				bc_offset_x = -GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
+				bc_offset_y = -GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
   			}
   			break;
   		default:
@@ -590,8 +590,8 @@ public class player : MonoBehaviour{
   		//print(Physics2D.Raycast(new Vector3(transform.position.x + (player_length / 2), transform.position.y),below,length_ray_updw,ignoreplayer_layerMask));
   		//print(hit.collider);
   		if(player_orientation == orientation.up || player_orientation == orientation.down){  
-  			//Debug.DrawRay(new Vector2(transform.position.x - bc_offset_x, transform.position.y + bc_offset_y  + (player_length / 2)), left, Color.green);
-  			//Debug.DrawRay(new Vector2(transform.position.x - bc_offset_x, transform.position.y + bc_offset_y  - (player_length / 2)), left, Color.green);
+  			Debug.DrawRay(new Vector2(transform.position.x - bc_offset_x, transform.position.y + bc_offset_y  + (player_length / 2)), left, Color.green);
+  			Debug.DrawRay(new Vector2(transform.position.x - bc_offset_x, transform.position.y + bc_offset_y  - (player_length / 2)), left, Color.green);
   			return(!Physics2D.Raycast(new Vector3(transform.position.x - bc_offset_x, transform.position.y + bc_offset_y  + (player_length / 2)),left,length_ray_leftright,ignoreplayer_layerMask) && 
   				!Physics2D.Raycast(new Vector3(transform.position.x - bc_offset_x, transform.position.y + bc_offset_y  - (player_length / 2)),left,length_ray_leftright, ignoreplayer_layerMask));
   		}
@@ -599,60 +599,62 @@ public class player : MonoBehaviour{
   		else {
   			length_ray_leftright = (player_length * 1.7F);
   			left = transform.TransformDirection(new Vector2(length_ray_leftright, 0));
-  			//Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x  + (player_length / 2), transform.position.y + bc_offset_y), left, Color.green);
-  			//Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x  - (player_length / 2), transform.position.y + bc_offset_y), left, Color.green);
+  			Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x  + (player_length / 2), transform.position.y + bc_offset_y), left, Color.green);
+  			Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x  - (player_length / 2), transform.position.y + bc_offset_y), left, Color.green);
   			return(!Physics2D.Raycast(new Vector3(transform.position.x + bc_offset_x  + (player_length / 2), transform.position.y + bc_offset_y),left,length_ray_leftright,ignoreplayer_layerMask) && 
   				!Physics2D.Raycast(new Vector3(transform.position.x + bc_offset_x  - (player_length / 2), transform.position.y + bc_offset_y),left,length_ray_leftright, ignoreplayer_layerMask));
   		}
   	}
       
   	bool checkGround(){
-  		
-  		float bc_offset_x = GetComponent<BoxCollider2D>().offset.x;
-  		float bc_offset_y = GetComponent<BoxCollider2D>().offset.y;
-  		float player_length = GetComponent<BoxCollider2D>().size.x;
-  		float player_height = GetComponent<BoxCollider2D>().size.y;
+		print(transform.localScale.x);
+		print(transform.localScale.y);
+	
+		float bc_offset_x = GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
+		float bc_offset_y = GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
+		float player_length = GetComponent<BoxCollider2D>().size.x * transform.localScale.x;
+		float player_height = GetComponent<BoxCollider2D>().size.y * transform.localScale.y;
 
   		// due to the box collider's position being off (due to rotation and offset), also need to "rotate" the ray		
       switch (player_orientation){
   		case orientation.down:
   			if(transform.rotation.y == 0){
-  				bc_offset_x = GetComponent<BoxCollider2D>().offset.x;
-  				bc_offset_y = GetComponent<BoxCollider2D>().offset.y;
+				bc_offset_x = GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
+				bc_offset_y = GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
   			}
   			else{
-  				bc_offset_x = -GetComponent<BoxCollider2D>().offset.x;
-  				bc_offset_y = GetComponent<BoxCollider2D>().offset.y;
+				bc_offset_x = -GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
+				bc_offset_y = GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
   			}
   			break;
   		case orientation.up:
   			if(transform.rotation.y == 0){
-  				bc_offset_x = -GetComponent<BoxCollider2D>().offset.x;
-  				bc_offset_y = -GetComponent<BoxCollider2D>().offset.y;
+				bc_offset_x = -GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
+				bc_offset_y = -GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
   			}
   			else{
-  				bc_offset_x = GetComponent<BoxCollider2D>().offset.x;
-  				bc_offset_y = -GetComponent<BoxCollider2D>().offset.y;
+				bc_offset_x = GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
+				bc_offset_y = -GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
   			}
   			break;
   		case orientation.left:
   			if(transform.rotation.y == 0){
-  				bc_offset_x = GetComponent<BoxCollider2D>().offset.x;
-  				bc_offset_y = -GetComponent<BoxCollider2D>().offset.y;
+				bc_offset_x = GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
+				bc_offset_y = -GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
   			}
   			else{
-  				bc_offset_x = GetComponent<BoxCollider2D>().offset.x;
-  				bc_offset_y = GetComponent<BoxCollider2D>().offset.y;
+				bc_offset_x = GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
+				bc_offset_y = GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
   			}
   			break;
   		case orientation.right:
   			if(transform.rotation.y == 0){
-  				bc_offset_x = -GetComponent<BoxCollider2D>().offset.x;
-  				bc_offset_y = GetComponent<BoxCollider2D>().offset.y;
+				bc_offset_x = -GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
+				bc_offset_y = GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
   			}
   			else{
-  				bc_offset_x = -GetComponent<BoxCollider2D>().offset.x;
-  				bc_offset_y = -GetComponent<BoxCollider2D>().offset.y;
+				bc_offset_x = -GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
+				bc_offset_y = -GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
   			}
   			break;
   		default:
@@ -671,14 +673,14 @@ public class player : MonoBehaviour{
   		//print(Physics2D.Raycast(new Vector3(transform.position.x + (player_length / 2), transform.position.y),below,length_ray_updw,ignoreplayer_layerMask));
   		//print(hit.collider);
   		if(player_orientation == orientation.up || player_orientation == orientation.down){ 
-  			//Debug.DrawRay(new Vector2(transform.position.x + (player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y), below, Color.green);
-  			//Debug.DrawRay(new Vector2(transform.position.x - (player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y), below, Color.green);
+  			Debug.DrawRay(new Vector2(transform.position.x + (player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y), below, Color.green);
+  			Debug.DrawRay(new Vector2(transform.position.x - (player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y), below, Color.green);
   			return(!Physics2D.Raycast(new Vector3(transform.position.x + (player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y),below,length_ray_updw,ignoreplayer_layerMask) && 
   				!Physics2D.Raycast(new Vector3(transform.position.x - (player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y),below,length_ray_updw, ignoreplayer_layerMask));
   		}
   		else{
-  			//Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x, transform.position.y + (player_length / 2) + bc_offset_y), below, Color.green);
-  			//Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x, transform.position.y  - (player_length / 2) + bc_offset_y), below, Color.green);
+  			Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x, transform.position.y + (player_length / 2) + bc_offset_y), below, Color.green);
+  			Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x, transform.position.y  - (player_length / 2) + bc_offset_y), below, Color.green);
   			return(!Physics2D.Raycast(new Vector3(transform.position.x + bc_offset_x, transform.position.y + (player_length / 2) + bc_offset_y),below,length_ray_updw,ignoreplayer_layerMask) && 
   				!Physics2D.Raycast(new Vector3(transform.position.x + bc_offset_x, transform.position.y - (player_length / 2) + bc_offset_y),below,length_ray_updw, ignoreplayer_layerMask));
   		}
