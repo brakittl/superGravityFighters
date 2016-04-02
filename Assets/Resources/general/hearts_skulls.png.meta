@@ -1,0 +1,323 @@
+fileFormatVersion: 2
+guid: 2db825801ef224b1ebf3d1bd48ae077b
+timeCreated: 1459487331
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: hearts_skulls_0
+    21300002: hearts_skulls_1
+    21300004: hearts_skulls_2
+    21300006: hearts_skulls_3
+    21300008: hearts_skulls_4
+    21300010: hearts_skulls_5
+    21300012: hearts_skulls_6
+    21300014: hearts_skulls_7
+    21300016: hearts_skulls_8
+    21300018: hearts_skulls_9
+    21300020: hearts_skulls_10
+    21300022: hearts_skulls_11
+    21300024: hearts_skulls_12
+    21300026: hearts_skulls_13
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: hearts_skulls_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 128
+        width: 126
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -47, y: 54}
+        - {x: -63, y: 38}
+        - {x: -63, y: -21}
+        - {x: -47, y: -54}
+        - {x: 63, y: -54}
+        - {x: 63, y: 38}
+        - {x: 47, y: 54}
+    - name: hearts_skulls_1
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 128
+        width: 127
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -46.5, y: 54}
+        - {x: -63.5, y: 38}
+        - {x: -63.5, y: -37}
+        - {x: -46.5, y: -54}
+        - {x: 63.5, y: -54}
+        - {x: 63.5, y: 38}
+        - {x: 47.5, y: 54}
+    - name: hearts_skulls_2
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 128
+        width: 126
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -47, y: 54}
+        - {x: -63, y: 38}
+        - {x: -63, y: -21}
+        - {x: -47, y: -54}
+        - {x: 63, y: -54}
+        - {x: 63, y: 38}
+        - {x: 47, y: 54}
+    - name: hearts_skulls_3
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 128
+        width: 126
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -47, y: 54}
+        - {x: -63, y: 38}
+        - {x: -63, y: -21}
+        - {x: -47, y: -54}
+        - {x: 63, y: -54}
+        - {x: 63, y: 38}
+        - {x: 47, y: 54}
+    - name: hearts_skulls_4
+      rect:
+        serializedVersion: 2
+        x: 575
+        y: 128
+        width: 126
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -47, y: 54}
+        - {x: -63, y: 38}
+        - {x: -63, y: -21}
+        - {x: -47, y: -54}
+        - {x: 63, y: -54}
+        - {x: 63, y: 38}
+        - {x: 47, y: 54}
+    - name: hearts_skulls_5
+      rect:
+        serializedVersion: 2
+        x: 719
+        y: 128
+        width: 126
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -47, y: 54}
+        - {x: -63, y: 38}
+        - {x: -63, y: -21}
+        - {x: -47, y: -54}
+        - {x: 63, y: -54}
+        - {x: 63, y: 38}
+        - {x: 47, y: 54}
+    - name: hearts_skulls_6
+      rect:
+        serializedVersion: 2
+        x: 863
+        y: 128
+        width: 126
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -47, y: 54}
+        - {x: -63, y: 38}
+        - {x: -63, y: -21}
+        - {x: -47, y: -54}
+        - {x: 63, y: -54}
+        - {x: 63, y: 38}
+        - {x: 47, y: 54}
+    - name: hearts_skulls_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 126
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -63, y: 54}
+        - {x: -63, y: -15}
+        - {x: -24, y: -54}
+        - {x: 24, y: -54}
+        - {x: 61, y: -26}
+        - {x: 63, y: -7}
+        - {x: 63, y: 54}
+    - name: hearts_skulls_8
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 0
+        width: 126
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -63, y: 54}
+        - {x: -63, y: -15}
+        - {x: -24, y: -54}
+        - {x: 24, y: -54}
+        - {x: 61, y: -26}
+        - {x: 63, y: -7}
+        - {x: 63, y: 54}
+    - name: hearts_skulls_9
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 126
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -63, y: 54}
+        - {x: -63, y: -15}
+        - {x: -24, y: -54}
+        - {x: 24, y: -54}
+        - {x: 61, y: -26}
+        - {x: 63, y: -7}
+        - {x: 63, y: 54}
+    - name: hearts_skulls_10
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 0
+        width: 126
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -63, y: 54}
+        - {x: -63, y: -15}
+        - {x: -24, y: -54}
+        - {x: 24, y: -54}
+        - {x: 61, y: -26}
+        - {x: 63, y: -7}
+        - {x: 63, y: 54}
+    - name: hearts_skulls_11
+      rect:
+        serializedVersion: 2
+        x: 575
+        y: 0
+        width: 126
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -63, y: 54}
+        - {x: -63, y: -15}
+        - {x: -24, y: -54}
+        - {x: 24, y: -54}
+        - {x: 61, y: -26}
+        - {x: 63, y: -7}
+        - {x: 63, y: 54}
+    - name: hearts_skulls_12
+      rect:
+        serializedVersion: 2
+        x: 719
+        y: 0
+        width: 126
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -63, y: 54}
+        - {x: -63, y: -15}
+        - {x: -24, y: -54}
+        - {x: 24, y: -54}
+        - {x: 61, y: -26}
+        - {x: 63, y: -7}
+        - {x: 63, y: 54}
+    - name: hearts_skulls_13
+      rect:
+        serializedVersion: 2
+        x: 863
+        y: 0
+        width: 126
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -63, y: 54}
+        - {x: -63, y: -15}
+        - {x: -24, y: -54}
+        - {x: 24, y: -54}
+        - {x: 61, y: -26}
+        - {x: 63, y: -7}
+        - {x: 63, y: 54}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
