@@ -121,31 +121,32 @@ public class EndGame : MonoBehaviour {
   // calculate the winner of each award
   void CalculateAwards()
   {
-    // Airborne: most time in air
-    // Grounded: least time in air
-    // Skydiver: longest time without touching the ground
-    // Greed: most bullets picked up
-    // Poverty: least bullets picked up
-    // Teleporter: most border swaps
-    // Cautious: least border swaps
-    // Astronaut: most gravity swaps
-    // Steady: least gravity swaps
-    // Survivor: longest life
-    // Reckless: shortest life
-    // Lich King: most poisons
-    // Samurai: sword accuracy
-    // Sniper: bullet accuracy
-    // Assassin: most sword kills
-    // Gunslinger: most bullet kills
-    // Pacifist: least kills
-    // Athlete: most distance traveled
-    // Camper: least distance traveled
-    // Whoops: most suicides
-    // Participant: had fun (couldn't find an award for them)
-  }
+        // Airborne: most time in air
+        // Grounded: least time in air
+        // Skydiver: longest time without touching the ground
+        // Teleporter: most border swaps
+        // Cautious: least border swaps
 
-  // display each player's awards
-  void DisplayAwards()
+        // Greed: most bullets picked up
+        // Poverty: least bullets picked up
+        // Astronaut: most gravity swaps
+        // Steady: least gravity swaps
+        // Survivor: longest life
+        // Reckless: shortest life
+        // Lich King: most poisons
+        // Samurai: sword accuracy
+        // Sniper: bullet accuracy
+        // Assassin: most sword kills
+        // Gunslinger: most bullet kills
+        // Pacifist: least kills
+        // Athlete: most distance traveled
+        // Camper: least distance traveled
+        // Whoops: most suicides
+        // Participant: had fun (couldn't find an award for them)
+    }
+
+    // display each player's awards
+    void DisplayAwards()
   {
 
   }

@@ -11,6 +11,8 @@ public class Level : MonoBehaviour{
   public int rt_point_limit = 100;
 
   public Vector3[] respawnPoints;
+    public List<player> ranking = new List<player>();
+    int numPlayers;
   Texture2D black = new Texture2D(1, 1);
 
   void Start(){
@@ -71,6 +73,13 @@ public class Level : MonoBehaviour{
     // }
 
   }
+
+    void Update()
+    {
+        int count = 0;
+        foreach (player p in ranking)
+            count++;
+    }
 
   public Vector3 returnPosition(int i){
     return respawnPoints[i];

@@ -83,10 +83,10 @@ public class player : MonoBehaviour{
 	bool playerContact = false;
 	player playerInContact = null;
 
-	// tracking statistics
-	public int gravitySwapCount = 0, totalPoisoned = 0, numBulletShots = 0,
-	numBulletHits = 0, numSwordSwipes = 0, numSwordHits = 0, numBlocks = 0, steps = 0;
-    public float longestLife = 0, shortestLife = 1000000; //try to make ints
+    // tracking statistics
+    public int gravitySwapCount = 0, totalPoisoned = 0, numBulletShots = 0,
+    numBulletHits = 0, numSwordSwipes = 0, numSwordHits = 0, numBlocks = 0,
+    steps = 0, longestLife = 0, shortestLife = 1000000, bulletPickUps = 0;
     float lastDeath;
   	public List<String> playersKilled;
     bool moving = false;
@@ -933,10 +933,10 @@ public class player : MonoBehaviour{
 
       player_animator.Play("Death");
       if(Time.time - lastDeath > longestLife){
-        longestLife = Time.time - lastDeath;
+        longestLife = (int)((Time.time - lastDeath) *100);
       }
       if(Time.time - lastDeath < shortestLife){
-        shortestLife = Time.time - lastDeath;
+        shortestLife = (int)((Time.time - lastDeath) * 100);
       }
       lastDeath = Time.time;
 
@@ -964,6 +964,7 @@ public class player : MonoBehaviour{
       if(lives == 0 && (Level.S.gamemode == GameMode.SURVIVAL)){
         halo.SetActive(true);
         dead = true;
+        Level.S.ranking.Add(this);
       }
       
       respawning = true;
@@ -1033,6 +1034,7 @@ public class player : MonoBehaviour{
       
       else if(col.tag == "extraBullets" && !player_animator.GetBool("attack")){
         numBullets++;
+        bulletPickUps++;
         Destroy(col.gameObject);
       }
     }
