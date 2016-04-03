@@ -86,7 +86,8 @@ public class player : MonoBehaviour{
     // tracking statistics
     public int gravitySwapCount = 0, totalPoisoned = 0, numBulletShots = 0,
     numBulletHits = 0, numSwordSwipes = 0, numSwordHits = 0, numBlocks = 0,
-    steps = 0, longestLife = 0, shortestLife = 1000000, bulletPickUps = 0;
+    steps = 0, longestLife = 0, shortestLife = 1000000, bulletPickUps = 0,
+    airTime = 0, borderSwaps = 0;
     float lastDeath;
   	public List<String> playersKilled;
     bool moving = false;
@@ -269,6 +270,10 @@ public class player : MonoBehaviour{
         steps++;
         moving = false;
       }
+      else if (!player_animator.GetBool("grounded"))
+        {
+            airTime++;
+        }
 
   		move_left = false;
   		move_right = false;

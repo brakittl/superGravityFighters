@@ -121,12 +121,12 @@ public class EndGame : MonoBehaviour {
   // calculate the winner of each award
   void CalculateAwards()
   {
-        // Airborne: most time in air
-        // Grounded: least time in air
         // Skydiver: longest time without touching the ground
         // Teleporter: most border swaps
         // Cautious: least border swaps
 
+        // Airborne: most time in air
+        // Grounded: least time in air
         // Greed: most bullets picked up
         // Poverty: least bullets picked up
         // Astronaut: most gravity swaps
