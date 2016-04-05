@@ -67,7 +67,8 @@ public class CharacterSelectUI : MonoBehaviour {
           }
         }
 
-        SceneManager.LoadScene("_BK");
+        PlayerPrefs.SetString("GameMode", "SURVIVAL");
+        SceneManager.LoadScene("_city");
       }
     }    
   }
