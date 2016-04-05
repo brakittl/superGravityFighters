@@ -8,8 +8,8 @@ public enum GameMode{ NONE, SURVIVAL, DEATHMATCH, REVERSE_TAG };
 
 public class Level : MonoBehaviour{
 
-  public static Level S; 
-  public GameMode gamemode; // You can use this for selecting the GameMode right from the Map Screen
+  public static Level S;
+    public GameMode gamemode; // You can use this for selecting the GameMode right from the Map Screen
   public int rt_point_limit = 100;
 
   public GameObject player1, player2, player3, player4;
@@ -267,24 +267,24 @@ public class Level : MonoBehaviour{
       StartCoroutine(Pause(playerPos));
     }
   }
-
-  IEnumerator Pause(Vector3 pos){
     
+  IEnumerator Pause(Vector3 pos){
     //yield return new WaitForSeconds(0.05f);
     Time.timeScale = 0.1f;
     Vector3 cubePos = pos, rot = transform.rotation.eulerAngles;
-
-    cubePos.y = pos.y - 4.3f;
+        print(cubePos);
+    cubePos.y = pos.y - 3f;
+        print(cubePos);
     bottomWall = Instantiate(blackSquare, cubePos, transform.rotation) as GameObject;
-    cubePos.y = pos.y + 4.3f;
+    cubePos.y = pos.y + 3f;
     topWall = Instantiate(blackSquare, cubePos, transform.rotation) as GameObject;
-    cubePos.x = pos.x - 4.3f;
+    cubePos.x = pos.x - 3f;
     rot.z = 90;
     leftWall = Instantiate(blackSquare, cubePos, Quaternion.Euler(rot)) as GameObject;
-    cubePos.x = pos.x + 4.3f;
+    cubePos.x = pos.x + 3f;
     rightWall = Instantiate(blackSquare, cubePos, Quaternion.Euler(rot)) as GameObject;
-
-    yield return new WaitForSeconds(0.029f);
+    
+    yield return new WaitForSeconds(0.03f);
     Destroy(topWall);
     Destroy(bottomWall);
     Destroy(leftWall);

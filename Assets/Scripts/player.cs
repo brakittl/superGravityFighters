@@ -21,9 +21,11 @@ public class player : MonoBehaviour{
   	public int lives = 3;
   	public bool dead = false;
 
-  	//gamemode specific info: rt (reverse tag)
-  	public int rt_points = 0;
-  	//point limit is in Level script, call with Level.S.rt_point_limit
+	//gamemode specific info: rt (reverse tag)
+	public int rt_points = 0;
+	public float rt_total_time = 0; // Total time holding the "gem"
+	public float rt_longest_continuous_hold = 0; // Longest time holding the "gem" without losing it
+	//point limit is in Level script, call with Level.S.rt_point_limit
 
   	// orientation
   	public enum orientation{up, down, left, right};
@@ -71,7 +73,7 @@ public class player : MonoBehaviour{
     public GameObject bullet, extraBullet;
 	GameObject bullet_instance;
 	public float shotVelocity = 5f, numBullets = 1;
-  public float fireRate = 1f;
+    public float fireRate = 1f;
 	float nextFire = 0f, bulletCreationDist = 0.25f;
 	string lastDirection = "right";
 
@@ -90,10 +92,11 @@ public class player : MonoBehaviour{
     public int gravitySwapCount = 0, totalPoisoned = 0, numBulletShots = 0,
     numBulletHits = 0, numSwordSwipes = 0, numSwordHits = 0, numBlocks = 0,
     steps = 0, longestLife = 0, shortestLife = 1000000, bulletPickUps = 0,
-    airTime = 0, borderSwaps = 0;
-    float lastDeath;
+    airTime = 0, longestAirTime = 0, borderSwaps = 0, suicides = 0;
+    
+    float lastDeath, curAirTime;
   	public List<String> playersKilled;
-    bool moving = false;
+    bool moving = false, airStart = false;
 
     // blocking
     bool swipeBlock = true;
@@ -305,12 +308,22 @@ public class player : MonoBehaviour{
         steps++;
         moving = false;
       }
-      else if (!player_animator.GetBool("grounded"))
+
+
+        if (!player_animator.GetBool("grounded") && !airStart )
         {
-            airTime++;
+            curAirTime = Time.time;
+            airStart = true; 
+        }
+        else if (player_animator.GetBool("grounded")  && airStart)
+        {
+            if ((int)((Time.time - curAirTime) * 100) > longestAirTime)
+                longestAirTime = (int)((Time.time - curAirTime) * 100);
+            airTime += (int)((Time.time - curAirTime) * 100);
+            airStart = false;
         }
 
-  		move_left = false;
+        move_left = false;
   		move_right = false;
   		move_up = false;
   		move_down = false;
@@ -646,8 +659,6 @@ public class player : MonoBehaviour{
   	}
       
   	bool checkGround(){
-		print(transform.localScale.x);
-		print(transform.localScale.y);
 	
 		float bc_offset_x = GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
 		float bc_offset_y = GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
@@ -708,9 +719,6 @@ public class player : MonoBehaviour{
   		LayerMask ignoreplayer_layerMask = ~(LayerMask.NameToLayer("Player") | LayerMask.NameToLayer("Border") | LayerMask.NameToLayer("TagBall"));
   		ignoreplayer_layerMask = ~ignoreplayer_layerMask;
 
-  		//RaycastHit2D hit = Physics2D.Raycast(new Vector3(transform.position.x + (player_length / 4) + bc_offset_x, transform.position.y + bc_offset_y),below,length_ray_updw,ignoreplayer_layerMask);
-  		//print(Physics2D.Raycast(new Vector3(transform.position.x + (player_length / 2), transform.position.y),below,length_ray_updw,ignoreplayer_layerMask));
-  		//print(hit.collider);
   		if(player_orientation == orientation.up || player_orientation == orientation.down){ 
   			//Debug.DrawRay(new Vector2(transform.position.x + (player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y), below, Color.green);
   			//Debug.DrawRay(new Vector2(transform.position.x - (player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y), below, Color.green);
@@ -942,9 +950,13 @@ public class player : MonoBehaviour{
   		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
   		foreach(GameObject p in players){
   			player other = (player)p.GetComponent(typeof(player));
-  			if(bulletAttack && other.bullet_instance == collideObject){
-  				other.playersKilled.Add(this.gameObject.name);
-  				other.numBulletHits++;
+  			if(bulletAttack && other.bullet_instance == collideObject)
+            {
+                other.numBulletHits++;
+                if (this.name != other.name)
+                    other.playersKilled.Add(this.gameObject.name);
+                else
+                    suicides++;
   			}
 
   			else if(!bulletAttack && (other.slash == collideObject || other.down_slash == collideObject || other.up_slash == collideObject || other.side_slash == collideObject)){
@@ -957,19 +969,20 @@ public class player : MonoBehaviour{
   	public void KillPlayer(){
       sound.PlayOneShot(death);
       respawn = true;
-  		slash.GetComponent<BoxCollider2D>().enabled = false;
-  		side_slash.GetComponent<BoxCollider2D>().enabled = false;
-  		up_slash.GetComponent<BoxCollider2D>().enabled = false;
-  		down_slash.GetComponent<BoxCollider2D>().enabled = false;
+      slash.GetComponent<BoxCollider2D>().enabled = false;
+  	  side_slash.GetComponent<BoxCollider2D>().enabled = false;
+  	  up_slash.GetComponent<BoxCollider2D>().enabled = false;
+  	  down_slash.GetComponent<BoxCollider2D>().enabled = false;
       lives--;
       Level.S.KillPause(transform.position);
 
+      //Turn off poison
       poisoned = false;
       poisonGO.SetActive(false);
       thrust = jump_speed;
       speed = run_speed;
+
       numBullets = 1;
-  		Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
 
       player_animator.Play("Death");
       if(Time.time - lastDeath > longestLife){
@@ -979,10 +992,9 @@ public class player : MonoBehaviour{
         shortestLife = (int)((Time.time - lastDeath) * 100);
       }
       lastDeath = Time.time;
-
-  		body.velocity = new Vector2(0f, 0f);
-  		player_orientation = orientation.down;
-  		StartCoroutine(Wait());
+        
+      body.velocity = new Vector2(0f, 0f);
+  	  StartCoroutine(Wait());
   	}
 
   	IEnumerator Wait(){
@@ -992,8 +1004,10 @@ public class player : MonoBehaviour{
       Vector3 pos = transform.position;
   		transform.position = offscreen;
       Instantiate(extraBullet, pos, transform.rotation);
+        Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
+        player_orientation = orientation.down;
 
-  		yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(2f);
 
   		transform.position = Level.S.findRespawn();
   		transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
@@ -1051,9 +1065,6 @@ public class player : MonoBehaviour{
 
         if(player_animator.GetBool("block") || player_animator.GetBool("attack")){
           if(swipeBlock){
-            // if attack one players back while they are attacking
-            // pushes both players backwards same direction
-            // kills player in front
             swipeBlockStart = Time.time;
             sound.PlayOneShot(block);
             body.AddForce(transform.right * -1 * 0.1f, ForceMode2D.Impulse);
