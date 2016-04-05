@@ -49,9 +49,9 @@ public class character_select : MonoBehaviour {
 	
 	void Update(){
 
-    // if(System.Math.Abs(Input.GetAxis("Controller " + player + " Left Stick X Axis")) < 0.9f){
-    //   axis_in_use = false;
-    // }
+    if(System.Math.Abs(Input.GetAxis("Controller " + player + " Left Stick X Axis")) < 0.9f){
+      axis_in_use = false;
+    }
 
     axis_in_use = false;
 

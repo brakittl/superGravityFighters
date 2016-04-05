@@ -423,18 +423,18 @@ public class player : MonoBehaviour{
       }
 
 
-        if(!player_animator.GetBool("grounded") && !airStart ){
-            curAirTime = Time.time;
-            airStart = true; 
-        }
-        else if(player_animator.GetBool("grounded")  && airStart){
-            if((int)((Time.time - curAirTime) * 100) > longestAirTime)
-                longestAirTime = (int)((Time.time - curAirTime) * 100);
-            airTime += (int)((Time.time - curAirTime) * 100);
-            airStart = false;
-        }
+      if(!player_animator.GetBool("grounded") && !airStart ){
+          curAirTime = Time.time;
+          airStart = true; 
+      }
+      else if(player_animator.GetBool("grounded")  && airStart){
+          if((int)((Time.time - curAirTime) * 100) > longestAirTime)
+              longestAirTime = (int)((Time.time - curAirTime) * 100);
+          airTime += (int)((Time.time - curAirTime) * 100);
+          airStart = false;
+      }
 
-        move_left = false;
+      move_left = false;
   		move_right = false;
   		move_up = false;
   		move_down = false;
