@@ -158,7 +158,7 @@ public class character_select : MonoBehaviour {
       return_set.SetActive(true);
       cancel_button.SetActive(true);
       player_object.GetComponent<player>().player_number = player;
-      UI.GetComponent<CharacterSelectUI>().selectedCharacter["P" + player] = prefabNumber;
+      manager.GetComponent<character_select_manager>().selected_character["P" + player] = prefab_number;
     }
   }
 

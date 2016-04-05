@@ -102,10 +102,11 @@ public class Level : MonoBehaviour {
     // ==[players]============================================================
     // =========================================================================
 
-    PlayerPrefs.SetString("P1", "orange_player");
-    PlayerPrefs.SetString("P2", "none");
-    PlayerPrefs.SetString("P3", "none");
-    PlayerPrefs.SetString("P4", "green_player");
+
+    // PlayerPrefs.SetString("P1", "orange_player");
+    // PlayerPrefs.SetString("P2", "none");
+    // PlayerPrefs.SetString("P3", "none");
+    // PlayerPrefs.SetString("P4", "green_player");
 
     PlayerPrefs.SetString("Player Name", "Foobar");
 
@@ -143,6 +144,7 @@ public class Level : MonoBehaviour {
     if(isMap && gamemode == GameMode.REVERSE_TAG){
       GameObject gravity_stone_instance;
       gravity_stone_instance = Instantiate(gravity_stone, stone_position, Quaternion.Euler(rot)) as GameObject;
+      Debug.Log(gravity_stone_instance);
     }
 
 
@@ -182,6 +184,7 @@ public class Level : MonoBehaviour {
         Debug.Log("numPlayers: " + numPlayers);
         //SceneManager.LoadScene("_scene_MapSelect");
         //SceneManager.LoadScene("_scene_Menu");
+        SceneManager.LoadScene("_map_game_select");
       }
     }
     else{

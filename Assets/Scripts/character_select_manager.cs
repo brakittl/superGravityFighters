@@ -40,10 +40,10 @@ public class character_select_manager : MonoBehaviour {
     ready_text.SetActive(all_players_ready());
 
     if(all_players_ready()){
-      if(Input.GetButtonDown("Controller 1 Start Button")
-      || Input.GetButtonDown("Controller 2 Start Button")
-      || Input.GetButtonDown("Controller 3 Start Button")
-      || Input.GetButtonDown("Controller 4 Start Button")){
+      if(Input.GetButtonUp("Controller 1 Start Button")
+      || Input.GetButtonUp("Controller 2 Start Button")
+      || Input.GetButtonUp("Controller 3 Start Button")
+      || Input.GetButtonUp("Controller 4 Start Button")){
         for(int i = 1; i <= 4; i++){
           if(selected_character["P" + i] >= 0){
             PlayerPrefs.SetString("P" + i, player_prefab_names[selected_character["P" + i]]);

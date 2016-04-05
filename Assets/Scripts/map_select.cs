@@ -22,14 +22,14 @@ public class map_select : MonoBehaviour {
   public SpriteRenderer left_arrow_sr;
   public SpriteRenderer right_arrow_sr;
 
-  bool axis_held;
+  bool axis_held_x, axis_held_y;
 
 	// Use this for initialization
 	void Start(){
 
     game_mode = 0;
     map = 0;
-    axis_held = false;
+    axis_held_x = axis_held_y = false;
 
     ColorUtility.TryParseHtmlString("#ec393d", out red);
     ColorUtility.TryParseHtmlString("#ebebeb", out white);
@@ -40,9 +40,9 @@ public class map_select : MonoBehaviour {
 	void Update(){
 
     if(Input.GetKeyDown(KeyCode.RightArrow) ||
-       (!axis_held && Input.GetAxis("Controller 1 Left Stick X Axis") >= 0.95f)){
+       (!axis_held_x && Input.GetAxis("Controller 1 Left Stick X Axis") >= 0.95f)){
       
-      axis_held = true;
+      axis_held_x = true;
 
       ++map;
       if(map >= map_game_objects.Count){
@@ -66,9 +66,9 @@ public class map_select : MonoBehaviour {
     }
 
     else if(Input.GetKeyDown(KeyCode.LeftArrow) ||
-            (!axis_held && Input.GetAxis("Controller 1 Left Stick X Axis") <= -0.95f)){
+            (!axis_held_x && Input.GetAxis("Controller 1 Left Stick X Axis") <= -0.95f)){
       
-      axis_held = true;
+      axis_held_x = true;
 
       --map;
       if(map < 0){
@@ -92,27 +92,27 @@ public class map_select : MonoBehaviour {
     }
 
     else if(Input.GetKeyDown(KeyCode.UpArrow) ||
-            (!axis_held && Input.GetAxis("Controller 1 Left Stick Y Axis") <= -0.9f)){
+            (!axis_held_y && Input.GetAxis("Controller 1 Left Stick Y Axis") <= -0.9f)){
       
-      axis_held = true;
+      axis_held_y = true;
 
       --game_mode;
       if(game_mode < 0){
         game_mode = game_mode_objects.Count - 1;
       }
-      axis_held = true;
+      axis_held_y = true;
     }
 
     else if(Input.GetKeyDown(KeyCode.DownArrow) ||
-            (!axis_held && Input.GetAxis("Controller 1 Left Stick Y Axis") >= 0.9f)){
+            (!axis_held_y && Input.GetAxis("Controller 1 Left Stick Y Axis") >= 0.9f)){
       
-      axis_held = true;
+      axis_held_y = true;
 
       ++game_mode;
       if(game_mode >= game_mode_objects.Count){
         game_mode = 0;
       }
-      axis_held = true;
+      axis_held_y = true;
     }
 
     else{
@@ -125,8 +125,6 @@ public class map_select : MonoBehaviour {
        Input.GetButtonDown("Controller 2 Start Button") ||
        Input.GetButtonDown("Controller 3 Start Button") ||
        Input.GetButtonDown("Controller 4 Start Button") ){
-
-      string game_mode_string;
 
       if(game_mode == 0){
         PlayerPrefs.SetString("GameMode", "SURVIVAL");
@@ -158,11 +156,17 @@ public class map_select : MonoBehaviour {
 
     }
 
-    if(Input.GetAxisRaw("Controller 1 Left Stick Y Axis") == 0){
-      axis_held = false;
+    if(Input.GetAxisRaw("Controller 1 Left Stick Y Axis") == 0)
+    {
+      axis_held_y = false;
     }
 
-    foreach(Text game_mode_GO in game_mode_objects){
+    if (Input.GetAxisRaw("Controller 1 Left Stick X Axis") == 0)
+    {
+      axis_held_x = false;
+    }
+
+    foreach (Text game_mode_GO in game_mode_objects){
       game_mode_GO.color = white;
     }
     game_mode_objects[game_mode].color = red;
