@@ -53,7 +53,7 @@ public class character_select_manager : MonoBehaviour {
           }
         }
 
-        SceneManager.LoadScene("_BK");
+        SceneManager.LoadScene("_map_game_select");
       }
     }    
   }

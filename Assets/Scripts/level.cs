@@ -92,7 +92,7 @@ public class Level : MonoBehaviour {
 			else if(PlayerPrefs.GetString("GameMode") == "REVERSE_TAG"){
 				gamemode = GameMode.REVERSE_TAG;
 			} 
-			else Debug.LogError("INCORRECT GAMEMODE STRING PASSED IN FROM PLAYERPREFS. CHECK LEVEL SCRIPT");
+			else Debug.Log("INCORRECT GAMEMODE STRING PASSED IN FROM PLAYERPREFS. CHECK LEVEL SCRIPT");
 		}
 		else{
 			// Debug.Log("GAMEMODE ALREADY SET FROM LEVEL SCRIPT. CURRENT GAMEMODE: " + gamemode);

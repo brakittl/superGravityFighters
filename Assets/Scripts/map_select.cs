@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class map_select : MonoBehaviour {
@@ -21,11 +22,14 @@ public class map_select : MonoBehaviour {
   public SpriteRenderer left_arrow_sr;
   public SpriteRenderer right_arrow_sr;
 
+  bool axis_held;
+
 	// Use this for initialization
 	void Start(){
 
     game_mode = 0;
     map = 0;
+    axis_held = false;
 
     ColorUtility.TryParseHtmlString("#ec393d", out red);
     ColorUtility.TryParseHtmlString("#ebebeb", out white);
@@ -35,7 +39,14 @@ public class map_select : MonoBehaviour {
 	// Update is called once per frame
 	void Update(){
 
-    if(Input.GetKeyDown(KeyCode.RightArrow)){
+    if(Input.GetKeyDown(KeyCode.RightArrow) ||
+       (!axis_held && Input.GetAxis("Controller 1 Left Stick X Axis") >= 0.95f) ||
+       (!axis_held && Input.GetAxis("Controller 2 Left Stick X Axis") >= 0.95f) ||
+       (!axis_held && Input.GetAxis("Controller 3 Left Stick X Axis") >= 0.95f) ||
+       (!axis_held && Input.GetAxis("Controller 4 Left Stick X Axis") >= 0.95f) ){
+      
+      axis_held = true;
+
       ++map;
       if(map >= map_game_objects.Count){
         map = 0;
@@ -43,6 +54,12 @@ public class map_select : MonoBehaviour {
       right_arrow_sr.color = red;
       
       map_name.text = map_game_objects[map].name.ToUpper();
+      map_name.color = white;
+
+      if(map_name.text == "FOREST" || map_name.text == "VOLCANO"){
+        map_name.text = "COMING SOON";
+        map_name.color = red;
+      }
 
       foreach(GameObject map_GO in map_game_objects){
         map_GO.SetActive(false);
@@ -51,7 +68,14 @@ public class map_select : MonoBehaviour {
       map_game_objects[map].SetActive(true);
     }
 
-    else if(Input.GetKeyDown(KeyCode.LeftArrow)){
+    else if(Input.GetKeyDown(KeyCode.LeftArrow) ||
+            (!axis_held && Input.GetAxis("Controller 1 Left Stick X Axis") <= -0.95f) ||
+            (!axis_held && Input.GetAxis("Controller 2 Left Stick X Axis") <= -0.95f) ||
+            (!axis_held && Input.GetAxis("Controller 3 Left Stick X Axis") <= -0.95f) ||
+            (!axis_held && Input.GetAxis("Controller 4 Left Stick X Axis") <= -0.95f) ){
+      
+      axis_held = true;
+
       --map;
       if(map < 0){
         map = map_game_objects.Count - 1;
@@ -59,6 +83,12 @@ public class map_select : MonoBehaviour {
       left_arrow_sr.color = red;
       
       map_name.text = map_game_objects[map].name.ToUpper();
+      map_name.color = white;
+
+      if(map_name.text == "FOREST" || map_name.text == "VOLCANO"){
+        map_name.text = "COMING SOON";
+        map_name.color = red;
+      }
       
       foreach(GameObject map_GO in map_game_objects){
         map_GO.SetActive(false);
@@ -67,18 +97,34 @@ public class map_select : MonoBehaviour {
       map_game_objects[map].SetActive(true);
     }
 
-    else if(Input.GetKeyDown(KeyCode.UpArrow)){
+    else if(Input.GetKeyDown(KeyCode.UpArrow) ||
+            (!axis_held && Input.GetAxis("Controller 1 Left Stick Y Axis") <= -0.9f) ||
+            (!axis_held && Input.GetAxis("Controller 2 Left Stick Y Axis") <= -0.9f) ||
+            (!axis_held && Input.GetAxis("Controller 3 Left Stick Y Axis") <= -0.9f) ||
+            (!axis_held && Input.GetAxis("Controller 4 Left Stick Y Axis") <= -0.9f) ){
+      
+      axis_held = true;
+
       --game_mode;
       if(game_mode < 0){
         game_mode = game_mode_objects.Count - 1;
       }
+      axis_held = true;
     }
 
-    else if(Input.GetKeyDown(KeyCode.DownArrow)){
+    else if(Input.GetKeyDown(KeyCode.DownArrow) ||
+            (!axis_held && Input.GetAxis("Controller 1 Left Stick Y Axis") >= 0.9f) ||
+            (!axis_held && Input.GetAxis("Controller 2 Left Stick Y Axis") >= 0.9f) ||
+            (!axis_held && Input.GetAxis("Controller 3 Left Stick Y Axis") >= 0.9f) ||
+            (!axis_held && Input.GetAxis("Controller 4 Left Stick Y Axis") >= 0.9f) ){
+      
+      axis_held = true;
+
       ++game_mode;
       if(game_mode >= game_mode_objects.Count){
         game_mode = 0;
       }
+      axis_held = true;
     }
 
     else{
@@ -86,7 +132,47 @@ public class map_select : MonoBehaviour {
       left_arrow_sr.color = white;
     }
 
-    
+    if(Input.GetKeyDown(KeyCode.Return) ||
+       Input.GetButtonDown("Controller 1 Start Button") ||
+       Input.GetButtonDown("Controller 2 Start Button") ||
+       Input.GetButtonDown("Controller 3 Start Button") ||
+       Input.GetButtonDown("Controller 4 Start Button") ){
+
+      string game_mode_string;
+
+      if(game_mode == 0){
+        PlayerPrefs.SetString("GameMode", "SURVIVAL");
+      }
+
+      else if(game_mode == 1){
+        PlayerPrefs.SetString("GameMode", "DEATHMATCH");
+      }
+
+      else if(game_mode == 2){
+        PlayerPrefs.SetString("GameMode", "REVERSE_TAG");
+      }
+
+      if(map == 0){
+        SceneManager.LoadScene("_galaxy");
+      }
+      else if(map == 0){
+        SceneManager.LoadScene("_city");
+      }
+      else if(map == 0){
+        SceneManager.LoadScene("_desert");
+      }
+      else if(map == 0){
+        // SceneManager.LoadScene("_forest");
+      }
+      else{
+        // SceneManager.LoadScene("_volcano");
+      }
+
+    }
+
+    // if(Input.GetAxisRaw("Controller " + player + " Left Stick Y Axis") == 0){
+    //   axis_held = false;
+    // }
 
     foreach(Text game_mode_GO in game_mode_objects){
       game_mode_GO.color = white;
