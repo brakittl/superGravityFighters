@@ -46,7 +46,7 @@ public class ReverseTag : MonoBehaviour {
 	void ResetTimers() {
 		time_before_points = 0;
 		total_current_time_with_player = 0;
-		invincibility_time = 0.5F;
+		invincibility_time = 1F;
 	}
 
 
