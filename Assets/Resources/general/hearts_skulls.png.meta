@@ -1,23 +1,23 @@
 fileFormatVersion: 2
 guid: 2db825801ef224b1ebf3d1bd48ae077b
-timeCreated: 1459487331
+timeCreated: 1459842595
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: hearts_skulls_0
-    21300002: hearts_skulls_1
-    21300004: hearts_skulls_2
-    21300006: hearts_skulls_3
-    21300008: hearts_skulls_4
-    21300010: hearts_skulls_5
-    21300012: hearts_skulls_6
-    21300014: hearts_skulls_7
-    21300016: hearts_skulls_8
-    21300018: hearts_skulls_9
-    21300020: hearts_skulls_10
-    21300022: hearts_skulls_11
-    21300024: hearts_skulls_12
-    21300026: hearts_skulls_13
+    21300000: red_skull
+    21300002: orange_skull
+    21300004: yellow_skull
+    21300006: green_skull
+    21300008: blue_skull
+    21300010: purple_skull
+    21300012: black_skull
+    21300014: red_heart
+    21300016: orange_heart
+    21300018: yellow_heart
+    21300020: green_heart
+    21300022: blue_heart
+    21300024: purple_heart
+    21300026: black_heart
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -64,7 +64,7 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: hearts_skulls_0
+    - name: red_skull
       rect:
         serializedVersion: 2
         x: 0
@@ -72,7 +72,7 @@ TextureImporter:
         width: 126
         height: 108
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
       - - {x: -47, y: 54}
@@ -82,7 +82,7 @@ TextureImporter:
         - {x: 63, y: -54}
         - {x: 63, y: 38}
         - {x: 47, y: 54}
-    - name: hearts_skulls_1
+    - name: orange_skull
       rect:
         serializedVersion: 2
         x: 143
@@ -90,7 +90,7 @@ TextureImporter:
         width: 127
         height: 108
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
       - - {x: -46.5, y: 54}
@@ -100,7 +100,7 @@ TextureImporter:
         - {x: 63.5, y: -54}
         - {x: 63.5, y: 38}
         - {x: 47.5, y: 54}
-    - name: hearts_skulls_2
+    - name: yellow_skull
       rect:
         serializedVersion: 2
         x: 288
@@ -108,7 +108,7 @@ TextureImporter:
         width: 126
         height: 108
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
       - - {x: -47, y: 54}
@@ -118,7 +118,7 @@ TextureImporter:
         - {x: 63, y: -54}
         - {x: 63, y: 38}
         - {x: 47, y: 54}
-    - name: hearts_skulls_3
+    - name: green_skull
       rect:
         serializedVersion: 2
         x: 432
@@ -126,7 +126,7 @@ TextureImporter:
         width: 126
         height: 108
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
       - - {x: -47, y: 54}
@@ -136,7 +136,7 @@ TextureImporter:
         - {x: 63, y: -54}
         - {x: 63, y: 38}
         - {x: 47, y: 54}
-    - name: hearts_skulls_4
+    - name: blue_skull
       rect:
         serializedVersion: 2
         x: 575
@@ -144,7 +144,7 @@ TextureImporter:
         width: 126
         height: 108
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
       - - {x: -47, y: 54}
@@ -154,7 +154,7 @@ TextureImporter:
         - {x: 63, y: -54}
         - {x: 63, y: 38}
         - {x: 47, y: 54}
-    - name: hearts_skulls_5
+    - name: purple_skull
       rect:
         serializedVersion: 2
         x: 719
@@ -162,7 +162,7 @@ TextureImporter:
         width: 126
         height: 108
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
       - - {x: -47, y: 54}
@@ -172,7 +172,7 @@ TextureImporter:
         - {x: 63, y: -54}
         - {x: 63, y: 38}
         - {x: 47, y: 54}
-    - name: hearts_skulls_6
+    - name: black_skull
       rect:
         serializedVersion: 2
         x: 863
@@ -180,7 +180,7 @@ TextureImporter:
         width: 126
         height: 108
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
       - - {x: -47, y: 54}
@@ -190,7 +190,7 @@ TextureImporter:
         - {x: 63, y: -54}
         - {x: 63, y: 38}
         - {x: 47, y: 54}
-    - name: hearts_skulls_7
+    - name: red_heart
       rect:
         serializedVersion: 2
         x: 0
@@ -198,7 +198,7 @@ TextureImporter:
         width: 126
         height: 108
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
       - - {x: -63, y: 54}
@@ -208,7 +208,7 @@ TextureImporter:
         - {x: 61, y: -26}
         - {x: 63, y: -7}
         - {x: 63, y: 54}
-    - name: hearts_skulls_8
+    - name: orange_heart
       rect:
         serializedVersion: 2
         x: 144
@@ -216,7 +216,7 @@ TextureImporter:
         width: 126
         height: 108
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
       - - {x: -63, y: 54}
@@ -226,7 +226,7 @@ TextureImporter:
         - {x: 61, y: -26}
         - {x: 63, y: -7}
         - {x: 63, y: 54}
-    - name: hearts_skulls_9
+    - name: yellow_heart
       rect:
         serializedVersion: 2
         x: 288
@@ -234,7 +234,7 @@ TextureImporter:
         width: 126
         height: 108
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
       - - {x: -63, y: 54}
@@ -244,7 +244,7 @@ TextureImporter:
         - {x: 61, y: -26}
         - {x: 63, y: -7}
         - {x: 63, y: 54}
-    - name: hearts_skulls_10
+    - name: green_heart
       rect:
         serializedVersion: 2
         x: 432
@@ -252,7 +252,7 @@ TextureImporter:
         width: 126
         height: 108
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
       - - {x: -63, y: 54}
@@ -262,7 +262,7 @@ TextureImporter:
         - {x: 61, y: -26}
         - {x: 63, y: -7}
         - {x: 63, y: 54}
-    - name: hearts_skulls_11
+    - name: blue_heart
       rect:
         serializedVersion: 2
         x: 575
@@ -270,7 +270,7 @@ TextureImporter:
         width: 126
         height: 108
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
       - - {x: -63, y: 54}
@@ -280,7 +280,7 @@ TextureImporter:
         - {x: 61, y: -26}
         - {x: 63, y: -7}
         - {x: 63, y: 54}
-    - name: hearts_skulls_12
+    - name: purple_heart
       rect:
         serializedVersion: 2
         x: 719
@@ -288,7 +288,7 @@ TextureImporter:
         width: 126
         height: 108
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
       - - {x: -63, y: 54}
@@ -298,7 +298,7 @@ TextureImporter:
         - {x: 61, y: -26}
         - {x: 63, y: -7}
         - {x: 63, y: 54}
-    - name: hearts_skulls_13
+    - name: black_heart
       rect:
         serializedVersion: 2
         x: 863
@@ -306,7 +306,7 @@ TextureImporter:
         width: 126
         height: 108
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
       - - {x: -63, y: 54}
