@@ -18,9 +18,11 @@ public class player : MonoBehaviour{
   	public int lives = 3;
   	public bool dead = false;
 
-  	//gamemode specific info: rt (reverse tag)
-  	public int rt_points = 0;
-  	//point limit is in Level script, call with Level.S.rt_point_limit
+	//gamemode specific info: rt (reverse tag)
+	public int rt_points = 0;
+	public float rt_total_time = 0; // Total time holding the "gem"
+	public float rt_longest_continuous_hold = 0; // Longest time holding the "gem" without losing it
+	//point limit is in Level script, call with Level.S.rt_point_limit
 
   	// orientation
   	public enum orientation{up, down, left, right};
@@ -622,8 +624,6 @@ public class player : MonoBehaviour{
   	}
       
   	bool checkGround(){
-		print(transform.localScale.x);
-		print(transform.localScale.y);
 	
 		float bc_offset_x = GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
 		float bc_offset_y = GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
@@ -684,9 +684,6 @@ public class player : MonoBehaviour{
   		LayerMask ignoreplayer_layerMask = ~(LayerMask.NameToLayer("Player") | LayerMask.NameToLayer("Border") | LayerMask.NameToLayer("TagBall"));
   		ignoreplayer_layerMask = ~ignoreplayer_layerMask;
 
-  		//RaycastHit2D hit = Physics2D.Raycast(new Vector3(transform.position.x + (player_length / 4) + bc_offset_x, transform.position.y + bc_offset_y),below,length_ray_updw,ignoreplayer_layerMask);
-  		//print(Physics2D.Raycast(new Vector3(transform.position.x + (player_length / 2), transform.position.y),below,length_ray_updw,ignoreplayer_layerMask));
-  		//print(hit.collider);
   		if(player_orientation == orientation.up || player_orientation == orientation.down){ 
   			//Debug.DrawRay(new Vector2(transform.position.x + (player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y), below, Color.green);
   			//Debug.DrawRay(new Vector2(transform.position.x - (player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y), below, Color.green);
