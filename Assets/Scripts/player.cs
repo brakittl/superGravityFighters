@@ -15,18 +15,18 @@ public class player : MonoBehaviour{
   	// player information
   	public int player_number;
   	public string player_color;
-    public GameObject[] hearts;
 
-  	//gamemode specific info: survival 
+  	// gamemode specific info: survival 
   	public int lives = 3;
   	public bool dead = false;
     public float deathTime = 0;
 
-	//gamemode specific info: rt (reverse tag)
-	public int rt_points = 0;
-	public float rt_total_time = 0; // Total time holding the "gem"
-	public float rt_longest_continuous_hold = 0; // Longest time holding the "gem" without losing it
-	//point limit is in Level script, call with Level.S.rt_point_limit
+  	// gamemode specific info: rt (reverse tag)
+  	public int rt_points = 0;
+  	public float rt_total_time = 0; // total time holding the "gem"
+  	public float rt_longest_continuous_hold = 0; // longest time holding the "gem" without losing it
+  	
+    //point limit is in Level script, call with Level.S.rt_point_limit
 
   	// orientation
   	public enum orientation{up, down, left, right};
@@ -72,29 +72,28 @@ public class player : MonoBehaviour{
 
     // bullet information
     public GameObject bullet, extraBullet;
-	GameObject bullet_instance;
-	public float shotVelocity = 5f, numBullets = 1;
+  	GameObject bullet_instance;
+  	public float shotVelocity = 5f, numBullets = 1;
     public float fireRate = 1f;
-	float nextFire = 0f, bulletCreationDist = 0.25f;
-	string lastDirection = "right";
+  	float nextFire = 0f, bulletCreationDist = 0.25f;
+  	string lastDirection = "right";
 
-	// respawns
-	public bool respawn = false, respawning = false;
-	Vector3 offscreen = new Vector3(-1000, -1000, -1000);  
+  	// respawns
+  	public bool respawn = false, respawning = false;
+  	Vector3 offscreen = new Vector3(-1000, -1000, -1000);  
 
-	// poison
-	float poisonSpeed = 0.75f, poisonJump = 8f, poisonTime, poisonRate = 10;
-	public int poisonButtonTaps = 10, curButtonTaps;
-	public bool poisoned = false;
-	bool playerContact = false;
-	player playerInContact = null;
+  	// poison
+  	float poisonSpeed = 0.75f, poisonJump = 8f, poisonTime, poisonRate = 10;
+  	public int poisonButtonTaps = 10, curButtonTaps;
+  	public bool poisoned = false;
+  	bool playerContact = false;
+  	player playerInContact = null;
 
     // tracking statistics
     public int gravitySwapCount = 0, totalPoisoned = 0, numBulletShots = 0,
     numBulletHits = 0, numSwordSwipes = 0, numSwordHits = 0, numBlocks = 0,
     steps = 0, longestLife = 0, shortestLife = 1000000, bulletPickUps = 0,
     airTime = 0, longestAirTime = 0, borderSwaps = 0, suicides = 0;
-    
     float lastDeath, curAirTime;
   	public List<String> playersKilled;
     bool moving = false, airStart = false;
@@ -104,11 +103,28 @@ public class player : MonoBehaviour{
     float swipeBlockStart = 0f, swipeBlockTime = 0.25f;
     float delay = 0;
 
-    // hearts/skulls
+    // ui
+    public Sprite[] bullet_sprites;
     public Sprite[] hearts_skulls;
+    public GameObject[] hearts;
+    public GameObject bullet_image;
+    public GameObject rt_text_GO;
+    public Text bullet_text;
+    public Text rt_text;
+    bool ui_found;
 
     // medals earned
     public List<String> medals = new List<string>();
+
+    // colors
+    Color red = new Color();
+    Color orange = new Color();
+    Color yellow = new Color();
+    Color green = new Color();
+    Color blue = new Color();
+    Color purple = new Color();
+    Color black = new Color();
+    public Dictionary<string, Color> colors;
 
   // ==[helper functions]=======================================================
   // ===========================================================================
@@ -133,12 +149,38 @@ public class player : MonoBehaviour{
   // ===========================================================================
 
   	void Start(){
+
+      // initialize variables
       gameOver = false;
+      grounded = 0;
+
+      // colors
+      ColorUtility.TryParseHtmlString("#c04342", out red);
+      ColorUtility.TryParseHtmlString("#cd5c19", out orange);
+      ColorUtility.TryParseHtmlString("#c59522", out yellow);
+      ColorUtility.TryParseHtmlString("#45a349", out green);
+      ColorUtility.TryParseHtmlString("#2c5d99", out blue);
+      ColorUtility.TryParseHtmlString("#854db5", out purple);
+      ColorUtility.TryParseHtmlString("#ebebeb", out black);
+      colors = new Dictionary<string, Color>(){
+        { "red", red},
+        { "orange", orange},
+        { "yellow", yellow},
+        { "green", green},
+        { "blue", blue},
+        { "purple", purple},
+        { "black", black},
+      };
+
+      // get components
   		player_animator = GetComponent<Animator>();
   		body = gameObject.GetComponent<Rigidbody2D>();
-  		grounded = 0;
+
+      // gravity
   		player_orientation = orientation.down;
-  		body.gravityScale = 0;    
+  		body.gravityScale = 0;   
+
+      // slashes 
   		slash.GetComponent<BoxCollider2D>().enabled = false;
   		side_slash.GetComponent<BoxCollider2D>().enabled = false;
   		up_slash.GetComponent<BoxCollider2D>().enabled = false;
@@ -147,65 +189,134 @@ public class player : MonoBehaviour{
   		sound = GetComponent<AudioSource>();
   		jump_speed = thrust;
   		run_speed = speed;
-      hearts_skulls = Resources.LoadAll<Sprite>("hearts_skulls");
-      hearts = new GameObject[10];
-      for(int i = 0; i < 10; ++i){
-        string heart_string = "ui/p" + player_number.ToString() + "/" + player_number.ToString() + "_" + (i + 1).ToString();
-        GameObject current_heart = GameObject.Find(heart_string);
-        if(current_heart != null){
-        	current_heart.GetComponent<Image>().sprite = get_sprite_by_name(hearts_skulls, player_color.ToLower() + "_heart");
-        }
-        hearts[i] = current_heart;
+
+      // get sprites
+      hearts_skulls = Resources.LoadAll<Sprite>("general/hearts_skulls");
+      bullet_sprites = Resources.LoadAll<Sprite>("_player_" + player_color.ToLower() + "/" + player_color.ToLower() + "_bullet");
+
+      // test if ui element is present
+      GameObject ui = GameObject.Find("ui");
+      if(ui != null){
+        ui_found = true;
       }
+      else{
+        ui_found = false;
+      }
+
+      if(ui_found){
+
+        // get bullet information
+        string bullet_image_string = "ui/p" + player_number.ToString() + "/" + player_number.ToString() + "_bullet";
+        bullet_image = GameObject.Find(bullet_image_string);
+        bullet_image.GetComponent<Image>().sprite = get_sprite_by_name(bullet_sprites, player_color.ToLower() + "_bullet_1");
+        string bullet_text_string = "ui/p" + player_number.ToString() + "/" + player_number.ToString() + "_bullet_text";
+        bullet_text = GameObject.Find(bullet_text_string).GetComponent<Text>();
+        bullet_image.SetActive(true);
+        GameObject.Find(bullet_text_string).SetActive(true);
+
+        // get rt score text
+        string rt_string = "ui/p" + player_number.ToString() + "/" + player_number.ToString() + "_rt_score";
+        rt_text_GO = GameObject.Find(rt_string);
+        rt_text = rt_text_GO.GetComponent<Text>();
+
+        if(Level.S.gamemode != GameMode.REVERSE_TAG){
+          rt_text_GO.SetActive(false);
+        }
+        else{
+          rt_text_GO.SetActive(true);
+        }
+
+        // initialize hearts/skulls
+        hearts = new GameObject[10];
+        for(int i = 0; i < 10; ++i){
+          string heart_string = "ui/p" + player_number.ToString() + "/" + player_number.ToString() + "_" + (i + 1).ToString();
+          GameObject current_heart = GameObject.Find(heart_string);
+          if(current_heart != null){
+            if(Level.S.gamemode == GameMode.SURVIVAL){
+              current_heart.GetComponent<Image>().sprite = get_sprite_by_name(hearts_skulls, player_color.ToLower() + "_heart");
+            }
+            else{
+              current_heart.SetActive(false);
+            }
+          }
+          hearts[i] = current_heart;
+        }
+        
+
+      }
+
+        
   	}
 
   // ==[updates]================================================================
   // ===========================================================================
 
   	void Update(){
-      // ==[gameOver check to disable character control]==========================================
-      // =========================================================================
-      if (gameOver)
-      {
+
+      // ==[win conditions]=====================================================
+      // =======================================================================
+      
+      // gameOver check to disable character control
+      if(gameOver){
         return;
       }
 
-      // ==[ReverseTag point count check]==========================================
-      // =========================================================================
-
-      if (Level.S.gamemode == GameMode.REVERSE_TAG)
-      {
-        if (rt_points >= Level.S.rt_point_limit)
-        {
+      // reverse tag point count check
+      if(Level.S.gamemode == GameMode.REVERSE_TAG){
+        if(rt_points >= Level.S.rt_point_limit){
           Level.S.ranking.Add(this);
         }
       }
 
-      // ==[DeathMatch Kill count of 10]==========================================
-      // =========================================================================
-
-      if (Level.S.gamemode == GameMode.DEATHMATCH)
-      {
-        if (playersKilled.Capacity >= 10)
-        {
+      // deathmatch kill count of 10
+      if(Level.S.gamemode == GameMode.DEATHMATCH){
+        if(playersKilled.Capacity >= 10){
           Level.S.ranking.Add(this);
         }
       }
 
-      // ==[show hearts]==========================================================
-      // =========================================================================
+      // ==[ui management]======================================================
+      // =======================================================================
 
-      if(hearts[0] != null){
-        for(int i = 1; i <= lives; ++i){
-          hearts[i - 1].SetActive(true);
+      if(ui_found){
+
+        bullet_text.text = "x " + numBullets.ToString();
+
+        // survival ui
+        if(Level.S.gamemode == GameMode.SURVIVAL){
+          for(int i = 1; i <= lives; ++i){
+            hearts[i - 1].SetActive(true);
+          }
+          for(int i = lives + 1; i <= 10; ++i){
+            hearts[i - 1].SetActive(false);
+          }
         }
-        for(int i = lives + 1; i <= 10; ++i){
-          hearts[i - 1].SetActive(false);
+
+        // deathmatch ui
+        else if(Level.S.gamemode == GameMode.DEATHMATCH){
+          int i = 0;
+          foreach(string player_string in playersKilled){
+            char[] delimiters = {'_'};
+            string[] splits = player_string.Split(delimiters);
+            hearts[i].SetActive(true);
+            hearts[i].GetComponent<Image>().sprite = get_sprite_by_name(hearts_skulls, splits[0] + "_skull");
+            ++i;
+          }
+          for(i = i; i < 10; ++i){
+            hearts[i].SetActive(false);
+          }
         }
+
+        // reverse tag ui
+        else if(Level.S.gamemode == GameMode.REVERSE_TAG){
+          rt_text.text = rt_points.ToString();
+          rt_text.color = colors[player_color.ToLower()];
+        }
+
       }
 
-      // ==[gravity swap]=========================================================
-      // =========================================================================
+      // ==[gravity swap]=======================================================
+      // =======================================================================
 
       if(Input.GetButtonDown("Controller " + player_number + " Start Button") && !Level.S.pause){
         Time.timeScale = 0;
@@ -216,8 +327,8 @@ public class player : MonoBehaviour{
         Level.S.pause = false;
       }
 
-      // ==[gravity swap]=========================================================
-      // =========================================================================
+      // ==[gravity swap]=======================================================
+      // =======================================================================
 
       // gravity vectors
       right = new Vector2(acceleration, 0f);
@@ -253,8 +364,8 @@ public class player : MonoBehaviour{
         }
   		}
 
-  		// ==[actions]==============================================================
-  		// =========================================================================
+  		// ==[actions]============================================================
+  		// =======================================================================
 
   		// if alive, allow attack, shoot, and block action
   		if(!dead){
@@ -263,7 +374,8 @@ public class player : MonoBehaviour{
           // shoot
           //if((Input.GetButtonDown("Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.LeftShift)) && Time.time > nextFire && numBullets > 0)
           if((Input.GetButtonDown("Controller " + player_number + " Right Bumper") &&
-              Input.GetButtonDown("Controller " + player_number + " Left Bumper")) && Time.time > nextFire){
+              Input.GetButtonDown("Controller " + player_number + " Left Bumper") ||
+              Input.GetKeyDown(KeyCode.LeftShift)) && Time.time > nextFire){
           	Shoot();
           }
           
@@ -303,22 +415,20 @@ public class player : MonoBehaviour{
 
   		}
 
-      // ==[movement bools]=======================================================
-      // =========================================================================
+      // ==[movement bools]=====================================================
+      // =======================================================================
       if(moving && player_animator.GetBool("grounded")){
         steps++;
         moving = false;
       }
 
 
-        if (!player_animator.GetBool("grounded") && !airStart )
-        {
+        if(!player_animator.GetBool("grounded") && !airStart ){
             curAirTime = Time.time;
             airStart = true; 
         }
-        else if (player_animator.GetBool("grounded")  && airStart)
-        {
-            if ((int)((Time.time - curAirTime) * 100) > longestAirTime)
+        else if(player_animator.GetBool("grounded")  && airStart){
+            if((int)((Time.time - curAirTime) * 100) > longestAirTime)
                 longestAirTime = (int)((Time.time - curAirTime) * 100);
             airTime += (int)((Time.time - curAirTime) * 100);
             airStart = false;
@@ -425,8 +535,8 @@ public class player : MonoBehaviour{
 
   		}
 
-      // ==[resets]===============================================================
-      // =========================================================================
+      // ==[resets]=============================================================
+      // =======================================================================
 
       if(!move_left && !move_right){
         player_animator.SetBool("run", false);
@@ -442,8 +552,8 @@ public class player : MonoBehaviour{
         down_slash.GetComponent<BoxCollider2D>().enabled = false;
       }
       
-      // ==[movement]=============================================================
-      // =========================================================================
+      // ==[movement]===========================================================
+      // =======================================================================
 
       // apply movement
 
@@ -453,8 +563,8 @@ public class player : MonoBehaviour{
   			Crouch();
   		}
       
-  		// ==[respawn and death]====================================================
-  		// =========================================================================
+  		// ==[respawn and death]==================================================
+  		// =======================================================================
 
   		// respawn
   		if(respawn && respawning){
@@ -501,8 +611,8 @@ public class player : MonoBehaviour{
 
   	void FixedUpdate(){
 
-      // ==[run]==================================================================
-      // =========================================================================
+      // ==[run]================================================================
+      // =======================================================================
   		
       if(move_right && !player_animator.GetBool("landing")){
   			Run(true);
@@ -511,8 +621,8 @@ public class player : MonoBehaviour{
   			Run(false);
   		}
 
-      // ==[grounded]=============================================================
-      // =========================================================================
+      // ==[grounded]===========================================================
+      // =======================================================================
   		
   		if(!checkGround()){
   			if(grounded == 0){
@@ -530,8 +640,8 @@ public class player : MonoBehaviour{
   			}
   		}
 
-  		// ==[gravity force]========================================================
-  		// =========================================================================
+  		// ==[gravity force]======================================================
+  		// =======================================================================
 
       float speed = body.velocity.magnitude;
 
@@ -556,8 +666,8 @@ public class player : MonoBehaviour{
         }
   		}
 
-  		// ==[jump]=================================================================
-  		// =========================================================================
+  		// ==[jump]===============================================================
+  		// =======================================================================
 
   		// apply jump
   		if(move_up && grounded == 1 && (delay < 0)){
@@ -573,8 +683,8 @@ public class player : MonoBehaviour{
   		}
   	}
 
-  // ==[raycasts]===============================================================
-  // ===========================================================================
+  // ==[raycasts]=============================================================
+  // =========================================================================
 
   	bool checkSides(){
 
@@ -582,7 +692,7 @@ public class player : MonoBehaviour{
 		float bc_offset_y = GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
 
 		float player_length = GetComponent<BoxCollider2D>().size.x * transform.localScale.x;
-		float player_height = GetComponent<BoxCollider2D>().size.y * transform.localScale.y;
+		// float player_height = GetComponent<BoxCollider2D>().size.y * transform.localScale.y;
 
   		// due to the box collider's position being off (due to rotation and offset), also need to "rotate" the ray		
       switch (player_orientation){
@@ -634,7 +744,7 @@ public class player : MonoBehaviour{
   		float length_ray_leftright = (player_length * 1.1F);
 
   		Vector2 left = transform.TransformDirection(new Vector2(length_ray_leftright, 0));
-  		Vector2 right = transform.TransformDirection(new Vector2(-length_ray_leftright, 0));
+  		// Vector2 right = transform.TransformDirection(new Vector2(-length_ray_leftright, 0));
 
   		LayerMask ignoreplayer_layerMask = ~(LayerMask.NameToLayer("Player") | LayerMask.NameToLayer("Border") | LayerMask.NameToLayer("TagBall"));
   		ignoreplayer_layerMask = ~ignoreplayer_layerMask;
@@ -813,10 +923,10 @@ public class player : MonoBehaviour{
 
   		if(!player_animator.GetBool("attack") && !respawn && !player_animator.GetBool("crouched")){
 
-              sound.PlayOneShot(swordSlash);
-              numSwordSwipes++; // statistics count
-              nextFire = Time.time + fireRate;
-              player_animator.SetBool("attack", true);
+        sound.PlayOneShot(swordSlash);
+        numSwordSwipes++; // statistics count
+        nextFire = Time.time + fireRate;
+        player_animator.SetBool("attack", true);
 
   			if(!player_animator.GetBool("grounded")){
   				if(move_left || move_right){
@@ -849,74 +959,77 @@ public class player : MonoBehaviour{
   	}
 
   	void Shoot(){
-  		sound.PlayOneShot(gunshot);
-  		nextFire = Time.time + fireRate;
-  		numBulletShots++;
-  		numBullets--;
 
-  		Vector3 pos = transform.position, rot = transform.rotation.eulerAngles;
-  		rot.x = 0;
-  		rot.y = 0;
+      if(numBullets > 0){
+    		sound.PlayOneShot(gunshot);
+    		nextFire = Time.time + fireRate;
+    		numBulletShots++;
+    		numBullets--;
 
-  		// bullet rotation
-  		if(lastDirection == "up" && player_orientation == orientation.down ||
-  			(lastDirection == "up" && player_orientation == orientation.up) ||
-  			(lastDirection == "left" && player_orientation == orientation.left) ||
-  			(lastDirection == "right" && player_orientation == orientation.right)){
-  			rot.z = 90;
-  		}
-  		else if(lastDirection == "left" && player_orientation == orientation.down ||
-  			(lastDirection == "right" && player_orientation == orientation.up) ||
-  			(lastDirection == "down" && player_orientation == orientation.left) ||
-  			(lastDirection == "up" && player_orientation == orientation.right)){
-  			rot.z = 180;
-  		}
-  		else if(lastDirection == "down" && player_orientation == orientation.down ||
-  			(lastDirection == "down" && player_orientation == orientation.down) ||
-  			(lastDirection == "right" && player_orientation == orientation.left) ||
-  			(lastDirection == "left" && player_orientation == orientation.right)){
-  			rot.z = 270;
-  		}
-  		else if((lastDirection == "down" && player_orientation == orientation.down) ||
-  			(lastDirection == "left" && player_orientation == orientation.up) ||
-  			(lastDirection == "up" && player_orientation == orientation.left) ||
-  			(lastDirection == "down" && player_orientation == orientation.right)){
-  			rot.z = 0;
-  		}
+    		Vector3 pos = transform.position, rot = transform.rotation.eulerAngles;
+    		rot.x = 0;
+    		rot.y = 0;
 
-  		// bullet initiation
-  		if((lastDirection == "right" && player_orientation == orientation.down) || 
-  			(lastDirection == "left" && player_orientation == orientation.up) ||
-  			(lastDirection == "down" && player_orientation == orientation.right) ||
-  			(lastDirection == "up" && player_orientation == orientation.left)){
-  			pos.x = transform.position.x + bulletCreationDist;
-  			bullet_instance = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
-  			bullet_instance.GetComponent<Rigidbody2D>().velocity = Vector3.right * shotVelocity;
-  		}
-  		else if((lastDirection == "left" && player_orientation == orientation.down) || 
-  			(lastDirection == "right" && player_orientation == orientation.up) ||
-  			(lastDirection == "up" && player_orientation == orientation.right) ||
-  			(lastDirection == "down" && player_orientation == orientation.left)){
-  			pos.x = transform.position.x - bulletCreationDist;
-  			bullet_instance = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
-  			bullet_instance.GetComponent<Rigidbody2D>().velocity = Vector3.left * shotVelocity;
-  		}
-  		else if((lastDirection == "up" && player_orientation == orientation.down) ||
-  			(lastDirection == "down" && player_orientation == orientation.up) ||
-  			(lastDirection == "right" && player_orientation == orientation.right) ||
-  			(lastDirection == "left" && player_orientation == orientation.left)){
-  			pos.y = transform.position.y + bulletCreationDist;
-  			bullet_instance = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
-  			bullet_instance.GetComponent<Rigidbody2D>().velocity = Vector3.up * shotVelocity;
-  		}
-  		else if((lastDirection == "down" && player_orientation == orientation.down) || 
-  			(lastDirection == "up" && player_orientation == orientation.up) ||
-  			(lastDirection == "left" && player_orientation == orientation.right) ||
-  			(lastDirection == "right" && player_orientation == orientation.left)){
-  			pos.y = transform.position.y - bulletCreationDist;
-  			bullet_instance = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
-  			bullet_instance.GetComponent<Rigidbody2D>().velocity = Vector3.down * shotVelocity;
-  		}
+    		// bullet rotation
+    		if(lastDirection == "up" && player_orientation == orientation.down ||
+    			(lastDirection == "up" && player_orientation == orientation.up) ||
+    			(lastDirection == "left" && player_orientation == orientation.left) ||
+    			(lastDirection == "right" && player_orientation == orientation.right)){
+    			rot.z = 90;
+    		}
+    		else if(lastDirection == "left" && player_orientation == orientation.down ||
+    			(lastDirection == "right" && player_orientation == orientation.up) ||
+    			(lastDirection == "down" && player_orientation == orientation.left) ||
+    			(lastDirection == "up" && player_orientation == orientation.right)){
+    			rot.z = 180;
+    		}
+    		else if(lastDirection == "down" && player_orientation == orientation.down ||
+    			(lastDirection == "down" && player_orientation == orientation.down) ||
+    			(lastDirection == "right" && player_orientation == orientation.left) ||
+    			(lastDirection == "left" && player_orientation == orientation.right)){
+    			rot.z = 270;
+    		}
+    		else if((lastDirection == "down" && player_orientation == orientation.down) ||
+    			(lastDirection == "left" && player_orientation == orientation.up) ||
+    			(lastDirection == "up" && player_orientation == orientation.left) ||
+    			(lastDirection == "down" && player_orientation == orientation.right)){
+    			rot.z = 0;
+    		}
+
+    		// bullet initiation
+    		if((lastDirection == "right" && player_orientation == orientation.down) || 
+    			(lastDirection == "left" && player_orientation == orientation.up) ||
+    			(lastDirection == "down" && player_orientation == orientation.right) ||
+    			(lastDirection == "up" && player_orientation == orientation.left)){
+    			pos.x = transform.position.x + bulletCreationDist;
+    			bullet_instance = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
+    			bullet_instance.GetComponent<Rigidbody2D>().velocity = Vector3.right * shotVelocity;
+    		}
+    		else if((lastDirection == "left" && player_orientation == orientation.down) || 
+    			(lastDirection == "right" && player_orientation == orientation.up) ||
+    			(lastDirection == "up" && player_orientation == orientation.right) ||
+    			(lastDirection == "down" && player_orientation == orientation.left)){
+    			pos.x = transform.position.x - bulletCreationDist;
+    			bullet_instance = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
+    			bullet_instance.GetComponent<Rigidbody2D>().velocity = Vector3.left * shotVelocity;
+    		}
+    		else if((lastDirection == "up" && player_orientation == orientation.down) ||
+    			(lastDirection == "down" && player_orientation == orientation.up) ||
+    			(lastDirection == "right" && player_orientation == orientation.right) ||
+    			(lastDirection == "left" && player_orientation == orientation.left)){
+    			pos.y = transform.position.y + bulletCreationDist;
+    			bullet_instance = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
+    			bullet_instance.GetComponent<Rigidbody2D>().velocity = Vector3.up * shotVelocity;
+    		}
+    		else if((lastDirection == "down" && player_orientation == orientation.down) || 
+    			(lastDirection == "up" && player_orientation == orientation.up) ||
+    			(lastDirection == "left" && player_orientation == orientation.right) ||
+    			(lastDirection == "right" && player_orientation == orientation.left)){
+    			pos.y = transform.position.y - bulletCreationDist;
+    			bullet_instance = Instantiate(bullet, pos, Quaternion.Euler(rot)) as GameObject;
+    			bullet_instance.GetComponent<Rigidbody2D>().velocity = Vector3.down * shotVelocity;
+    		}
+      }
   	}
 
   	void Block(){
@@ -951,23 +1064,26 @@ public class player : MonoBehaviour{
   		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
   		foreach(GameObject p in players){
   			player other = (player)p.GetComponent(typeof(player));
-  			if(bulletAttack && other.bullet_instance == collideObject)
-            {
-                other.numBulletHits++;
-                if (this.name != other.name)
-                    other.playersKilled.Add(this.gameObject.name);
-                else
-                    suicides++;
+  			
+        if(bulletAttack && other.bullet_instance == collideObject){
+          other.numBulletHits++;
+          if(this.name != other.name){
+            other.playersKilled.Add(this.gameObject.name);
+          }
+          else{
+            suicides++;
+          }
   			}
 
   			else if(!bulletAttack && (other.slash == collideObject || other.down_slash == collideObject || other.up_slash == collideObject || other.side_slash == collideObject)){
   				other.playersKilled.Add(this.gameObject.name);
-                  other.numSwordHits++;
+          other.numSwordHits++;
   			}
   		}
   	}
 
   	public void KillPlayer(){
+      
       sound.PlayOneShot(death);
       respawn = true;
       slash.GetComponent<BoxCollider2D>().enabled = false;
@@ -977,7 +1093,7 @@ public class player : MonoBehaviour{
       lives--;
       Level.S.KillPause(transform.position);
 
-      //Turn off poison
+      // turn off poison
       poisoned = false;
       poisonGO.SetActive(false);
       thrust = jump_speed;
@@ -1005,10 +1121,10 @@ public class player : MonoBehaviour{
       Vector3 pos = transform.position;
   		transform.position = offscreen;
       Instantiate(extraBullet, pos, transform.rotation);
-        Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
-        player_orientation = orientation.down;
+      Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
+      player_orientation = orientation.down;
 
-        yield return new WaitForSeconds(2f);
+      yield return new WaitForSeconds(1f);
 
   		transform.position = Level.S.findRespawn();
   		transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
