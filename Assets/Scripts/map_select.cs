@@ -158,7 +158,7 @@ public class map_select : MonoBehaviour {
 
     }
 
-    if(Input.GetAxisRaw("Controller " + player + " Left Stick Y Axis") == 0){
+    if(Input.GetAxisRaw("Controller 1 Left Stick Y Axis") == 0){
       axis_held = false;
     }
 

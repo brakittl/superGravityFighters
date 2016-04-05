@@ -25,7 +25,7 @@ public class character_select : MonoBehaviour {
   int prefab_number = 0;
   GameObject player_object;
 
-  Color character_color = new Color(1,1,1,1);
+  Color character_color = new Color(1, 1, 1, 1);
 
   bool joined;
   bool selected;
@@ -52,8 +52,6 @@ public class character_select : MonoBehaviour {
     if(System.Math.Abs(Input.GetAxis("Controller " + player + " Left Stick X Axis")) < 0.9f){
       axis_in_use = false;
     }
-
-    axis_in_use = false;
 
     // set color to black if already selected
     if(player_object != null){
@@ -158,6 +156,7 @@ public class character_select : MonoBehaviour {
       return_set.SetActive(true);
       cancel_button.SetActive(true);
       player_object.GetComponent<player>().player_number = player;
+      UI.GetComponent<CharacterSelectUI>().selectedCharacter["P" + player] = prefabNumber;
     }
   }
 
