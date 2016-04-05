@@ -14,7 +14,7 @@ public class Level : MonoBehaviour{
 
   public GameObject player1, player2, player3, player4;
   public GameObject first, second, third, fourth;
-  public bool firstReady, secondReady, thirdReady, fourthReady;
+  public bool player1Ready, player2Ready, player3Ready, player4Ready;
 
   public Vector3[] respawnPoints;
   public List<player> ranking = new List<player>();
@@ -60,7 +60,7 @@ public class Level : MonoBehaviour{
     S = this;
 
     gameOver = false;
-    firstReady = secondReady = thirdReady = fourthReady = false;
+    player1Ready = player2Ready = player3Ready = player4Ready = false;
 
 		if(gamemode == GameMode.NONE){ 
 			if(PlayerPrefs.GetString("GameMode") == "SURVIVAL"){
@@ -123,41 +123,37 @@ public class Level : MonoBehaviour{
   {
     if (gameOver)
     {
-      /*
-      if (Input.GetButtonDown("Controller 1 A Button"))
+      if (!player1Ready && Input.GetButtonDown("Controller 1 A Button"))
       {
-        readyPlayers[0] = true;
+        player1Ready = true;
+        SetReady(1);
         readyCount++;
-
-        setReady(0);
       }
-      if (!readyPlayers[1] && Input.GetButtonDown("Controller 2 A Button"))
+      if (!player2Ready && Input.GetButtonDown("Controller 2 A Button"))
       {
-        readyPlayers[1] = true;
+        player2Ready = true;
+        SetReady(2);
         readyCount++;
-
-        setReady(1);
       }
-      if (!readyPlayers[2] && Input.GetButtonDown("Controller 3 A Button"))
+      if (!player3Ready && Input.GetButtonDown("Controller 3 A Button"))
       {
-        readyPlayers[2] = true;
+        player3Ready = true;
+        SetReady(3);
         readyCount++;
-        setReady(2);
       }
-      if (!readyPlayers[3] && Input.GetButtonDown("Controller 4 A Button"))
+      if (!player4Ready && Input.GetButtonDown("Controller 4 A Button"))
       {
-        readyPlayers[3] = true;
+        player4Ready = true;
+        SetReady(4);
         readyCount++;
-        setReady(3);
       }
 
       // check if all available players are ready
-      if (readyCount >= standing.Capacity)
+      if (readyCount >= numPlayers)
       {
         //SceneManager.LoadScene("_scene_MapSelect");
         SceneManager.LoadScene("_scene_Menu");
       }
-      */
     }
     else
     {
@@ -711,5 +707,29 @@ public class Level : MonoBehaviour{
     place.FindChild("info2").GetComponent<Text>().text = info2;
     place.FindChild("medal3").GetComponent<Text>().text = medal3;
     place.FindChild("info3").GetComponent<Text>().text = info3;
+  }
+
+  void SetReady(int controller)
+  {
+    if (first.GetComponent<player>().player_number == controller)
+    {
+      transform.Find("1place").FindChild("AButton").GetComponent<Image>().enabled = false;
+      transform.Find("1place").FindChild("readyText").GetComponent<Text>().enabled = true;
+    }
+    else if (second.GetComponent<player>().player_number == controller)
+    {
+      transform.Find("2place").FindChild("AButton").GetComponent<Image>().enabled = false;
+      transform.Find("2place").FindChild("readyText").GetComponent<Text>().enabled = true;
+    }
+    else if (third.GetComponent<player>().player_number == controller)
+    {
+      transform.Find("3place").FindChild("AButton").GetComponent<Image>().enabled = false;
+      transform.Find("3place").FindChild("readyText").GetComponent<Text>().enabled = true;
+    }
+    else if (fourth.GetComponent<player>().player_number == controller)
+    {
+      transform.Find("4place").FindChild("AButton").GetComponent<Image>().enabled = false;
+      transform.Find("4place").FindChild("readyText").GetComponent<Text>().enabled = true;
+    }
   }
 }
