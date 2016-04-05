@@ -25,6 +25,8 @@ public class ReverseTag : MonoBehaviour {
 			}
 			time_before_points += Time.deltaTime;
 			transform.parent.GetComponent<player>().rt_total_time += Time.deltaTime;
+			transform.localPosition = new Vector3(-0.06f, 0.15f, 0f);
+			transform.localEulerAngles = new Vector3(0f, 0f, 0f);
 			total_current_time_with_player += Time.deltaTime;
 			if (total_current_time_with_player >= transform.parent.GetComponent<player>().rt_longest_continuous_hold)
 			{
