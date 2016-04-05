@@ -192,7 +192,10 @@ public class Level : MonoBehaviour {
         // check number of dead players
         int deadCount = 0;
         foreach (player p in ranking)
+        {
+          Debug.Log(p);
           deadCount++;
+        }
 
         if(numPlayers - deadCount <= 1){
           // one player left, end the game
