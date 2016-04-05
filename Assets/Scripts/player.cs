@@ -278,7 +278,7 @@ public class player : MonoBehaviour{
             curAirTime = Time.time;
             airStart = true; 
         }
-        else if (player_animator.GetBool("grounded")  /*&& airStart*/)
+        else if (player_animator.GetBool("grounded")  && airStart)
         {
             if ((int)((Time.time - curAirTime) * 100) > longestAirTime)
                 longestAirTime = (int)((Time.time - curAirTime) * 100);
