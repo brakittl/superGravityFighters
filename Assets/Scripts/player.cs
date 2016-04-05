@@ -87,7 +87,7 @@ public class player : MonoBehaviour{
     public int gravitySwapCount = 0, totalPoisoned = 0, numBulletShots = 0,
     numBulletHits = 0, numSwordSwipes = 0, numSwordHits = 0, numBlocks = 0,
     steps = 0, longestLife = 0, shortestLife = 1000000, bulletPickUps = 0,
-    airTime = 0, longestAirTime = 0, borderSwaps = 0;
+    airTime = 0, longestAirTime = 0, borderSwaps = 0, suicides = 0;
     
     float lastDeath, curAirTime;
   	public List<String> playersKilled;
@@ -918,9 +918,13 @@ public class player : MonoBehaviour{
   		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
   		foreach(GameObject p in players){
   			player other = (player)p.GetComponent(typeof(player));
-  			if(bulletAttack && other.bullet_instance == collideObject){
-  				other.playersKilled.Add(this.gameObject.name);
-  				other.numBulletHits++;
+  			if(bulletAttack && other.bullet_instance == collideObject)
+            {
+                other.numBulletHits++;
+                if (this.name != other.name)
+                    other.playersKilled.Add(this.gameObject.name);
+                else
+                    suicides++;
   			}
 
   			else if(!bulletAttack && (other.slash == collideObject || other.down_slash == collideObject || other.up_slash == collideObject || other.side_slash == collideObject)){
@@ -1027,9 +1031,6 @@ public class player : MonoBehaviour{
 
         if(player_animator.GetBool("block") || player_animator.GetBool("attack")){
           if(swipeBlock){
-            // if attack one players back while they are attacking
-            // pushes both players backwards same direction
-            // kills player in front
             swipeBlockStart = Time.time;
             sound.PlayOneShot(block);
             body.AddForce(transform.right * -1 * 0.1f, ForceMode2D.Impulse);
