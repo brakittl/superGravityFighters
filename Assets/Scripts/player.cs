@@ -9,6 +9,9 @@ public class player : MonoBehaviour{
   // ==[variables]==============================================================
   // ===========================================================================
 
+    // endgame
+    public bool gameOver;
+
   	// player information
   	public int player_number;
   	public string player_color;
@@ -103,6 +106,9 @@ public class player : MonoBehaviour{
     // hearts/skulls
     public Sprite[] hearts_skulls;
 
+    // medals earned
+    public List<String> medals = new List<string>();
+
   // ==[helper functions]=======================================================
   // ===========================================================================
 
@@ -126,6 +132,7 @@ public class player : MonoBehaviour{
   // ===========================================================================
 
   	void Start(){
+      gameOver = false;
   		player_animator = GetComponent<Animator>();
   		body = gameObject.GetComponent<Rigidbody2D>();
   		grounded = 0;
@@ -155,6 +162,34 @@ public class player : MonoBehaviour{
   // ===========================================================================
 
   	void Update(){
+      // ==[gameOver check to disable character control]==========================================
+      // =========================================================================
+      if (gameOver)
+      {
+        return;
+      }
+
+      // ==[ReverseTag point count check]==========================================
+      // =========================================================================
+
+      if (Level.S.gamemode == GameMode.REVERSE_TAG)
+      {
+        if (rt_points >= Level.S.rt_point_limit)
+        {
+          Level.S.ranking.Add(this);
+        }
+      }
+
+      // ==[DeathMatch Kill count of 10]==========================================
+      // =========================================================================
+
+      if (Level.S.gamemode == GameMode.DEATHMATCH)
+      {
+        if (playersKilled.Capacity >= 10)
+        {
+          Level.S.ranking.Add(this);
+        }
+      }
 
       // ==[show hearts]==========================================================
       // =========================================================================
