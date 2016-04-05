@@ -40,10 +40,7 @@ public class map_select : MonoBehaviour {
 	void Update(){
 
     if(Input.GetKeyDown(KeyCode.RightArrow) ||
-       (!axis_held && Input.GetAxis("Controller 1 Left Stick X Axis") >= 0.95f) ||
-       (!axis_held && Input.GetAxis("Controller 2 Left Stick X Axis") >= 0.95f) ||
-       (!axis_held && Input.GetAxis("Controller 3 Left Stick X Axis") >= 0.95f) ||
-       (!axis_held && Input.GetAxis("Controller 4 Left Stick X Axis") >= 0.95f) ){
+       (!axis_held && Input.GetAxis("Controller 1 Left Stick X Axis") >= 0.95f)){
       
       axis_held = true;
 
@@ -69,10 +66,7 @@ public class map_select : MonoBehaviour {
     }
 
     else if(Input.GetKeyDown(KeyCode.LeftArrow) ||
-            (!axis_held && Input.GetAxis("Controller 1 Left Stick X Axis") <= -0.95f) ||
-            (!axis_held && Input.GetAxis("Controller 2 Left Stick X Axis") <= -0.95f) ||
-            (!axis_held && Input.GetAxis("Controller 3 Left Stick X Axis") <= -0.95f) ||
-            (!axis_held && Input.GetAxis("Controller 4 Left Stick X Axis") <= -0.95f) ){
+            (!axis_held && Input.GetAxis("Controller 1 Left Stick X Axis") <= -0.95f)){
       
       axis_held = true;
 
@@ -98,10 +92,7 @@ public class map_select : MonoBehaviour {
     }
 
     else if(Input.GetKeyDown(KeyCode.UpArrow) ||
-            (!axis_held && Input.GetAxis("Controller 1 Left Stick Y Axis") <= -0.9f) ||
-            (!axis_held && Input.GetAxis("Controller 2 Left Stick Y Axis") <= -0.9f) ||
-            (!axis_held && Input.GetAxis("Controller 3 Left Stick Y Axis") <= -0.9f) ||
-            (!axis_held && Input.GetAxis("Controller 4 Left Stick Y Axis") <= -0.9f) ){
+            (!axis_held && Input.GetAxis("Controller 1 Left Stick Y Axis") <= -0.9f)){
       
       axis_held = true;
 
@@ -113,10 +104,7 @@ public class map_select : MonoBehaviour {
     }
 
     else if(Input.GetKeyDown(KeyCode.DownArrow) ||
-            (!axis_held && Input.GetAxis("Controller 1 Left Stick Y Axis") >= 0.9f) ||
-            (!axis_held && Input.GetAxis("Controller 2 Left Stick Y Axis") >= 0.9f) ||
-            (!axis_held && Input.GetAxis("Controller 3 Left Stick Y Axis") >= 0.9f) ||
-            (!axis_held && Input.GetAxis("Controller 4 Left Stick Y Axis") >= 0.9f) ){
+            (!axis_held && Input.GetAxis("Controller 1 Left Stick Y Axis") >= 0.9f)){
       
       axis_held = true;
 
@@ -170,9 +158,9 @@ public class map_select : MonoBehaviour {
 
     }
 
-    // if(Input.GetAxisRaw("Controller " + player + " Left Stick Y Axis") == 0){
-    //   axis_held = false;
-    // }
+    if(Input.GetAxisRaw("Controller " + player + " Left Stick Y Axis") == 0){
+      axis_held = false;
+    }
 
     foreach(Text game_mode_GO in game_mode_objects){
       game_mode_GO.color = white;

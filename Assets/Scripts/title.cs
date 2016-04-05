@@ -30,10 +30,7 @@ public class title : MonoBehaviour {
 	void Update(){
 
     if(Input.GetKeyDown(KeyCode.UpArrow) ||
-       (!axis_held && Input.GetAxis("Controller 1 Left Stick Y Axis") <= -0.9f) ||
-       (!axis_held && Input.GetAxis("Controller 2 Left Stick Y Axis") <= -0.9f) ||
-       (!axis_held && Input.GetAxis("Controller 3 Left Stick Y Axis") <= -0.9f) ||
-       (!axis_held && Input.GetAxis("Controller 4 Left Stick Y Axis") <= -0.9f) ){
+       (!axis_held && Input.GetAxis("Controller 1 Left Stick Y Axis") <= -0.9f)){
       --i;
       if(i < 0){
         i = menu_objects.Count - 1;
@@ -42,10 +39,7 @@ public class title : MonoBehaviour {
     }
 
     else if(Input.GetKeyDown(KeyCode.DownArrow) ||
-            (!axis_held && Input.GetAxis("Controller 1 Left Stick Y Axis") >= 0.9f) ||
-            (!axis_held && Input.GetAxis("Controller 2 Left Stick Y Axis") >= 0.9f) ||
-            (!axis_held && Input.GetAxis("Controller 3 Left Stick Y Axis") >= 0.9f) ||
-            (!axis_held && Input.GetAxis("Controller 4 Left Stick Y Axis") >= 0.9f) ){
+            (!axis_held && Input.GetAxis("Controller 1 Left Stick Y Axis") >= 0.9f)){
       ++i;
       if(i >= menu_objects.Count){
         i = 0;
@@ -65,9 +59,9 @@ public class title : MonoBehaviour {
 
     }
 
-    // if(Input.GetAxisRaw("Controller 1 Left Stick Y Axis") == 0){
-    //   axis_held = false;
-    // }
+    if(Input.GetAxisRaw("Controller 1 Left Stick Y Axis") == 0){
+      axis_held = false;
+    }
 
     foreach(Text menu_GO in menu_objects){
       menu_GO.color = white;
