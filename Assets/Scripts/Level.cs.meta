@@ -1,10 +1,11 @@
 fileFormatVersion: 2
 guid: bda0c0160cf0249eaa24af99f14e000a
-timeCreated: 1458622955
+timeCreated: 1459829396
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - blackSquare: {fileID: 146142, guid: eb282afcec7130c42890e4abcf422ba7, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

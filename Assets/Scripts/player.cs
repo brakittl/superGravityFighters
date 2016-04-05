@@ -68,7 +68,7 @@ public class player : MonoBehaviour{
     public GameObject bullet, extraBullet;
 	GameObject bullet_instance;
 	public float shotVelocity = 5f, numBullets = 1;
-  public float fireRate = 1f;
+    public float fireRate = 1f;
 	float nextFire = 0f, bulletCreationDist = 0.25f;
 	string lastDirection = "right";
 
@@ -91,7 +91,7 @@ public class player : MonoBehaviour{
     
     float lastDeath, curAirTime;
   	public List<String> playersKilled;
-    bool moving = false, airStart;
+    bool moving = false, airStart = false;
 
     // blocking
     bool swipeBlock = true;
@@ -622,8 +622,6 @@ public class player : MonoBehaviour{
   	}
       
   	bool checkGround(){
-		print(transform.localScale.x);
-		print(transform.localScale.y);
 	
 		float bc_offset_x = GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
 		float bc_offset_y = GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
@@ -937,19 +935,20 @@ public class player : MonoBehaviour{
   	public void KillPlayer(){
       sound.PlayOneShot(death);
       respawn = true;
-  		slash.GetComponent<BoxCollider2D>().enabled = false;
-  		side_slash.GetComponent<BoxCollider2D>().enabled = false;
-  		up_slash.GetComponent<BoxCollider2D>().enabled = false;
-  		down_slash.GetComponent<BoxCollider2D>().enabled = false;
+      slash.GetComponent<BoxCollider2D>().enabled = false;
+  	  side_slash.GetComponent<BoxCollider2D>().enabled = false;
+  	  up_slash.GetComponent<BoxCollider2D>().enabled = false;
+  	  down_slash.GetComponent<BoxCollider2D>().enabled = false;
       lives--;
       Level.S.KillPause(transform.position);
 
+      //Turn off poison
       poisoned = false;
       poisonGO.SetActive(false);
       thrust = jump_speed;
       speed = run_speed;
+
       numBullets = 1;
-  		Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
 
       player_animator.Play("Death");
       if(Time.time - lastDeath > longestLife){
@@ -959,10 +958,9 @@ public class player : MonoBehaviour{
         shortestLife = (int)((Time.time - lastDeath) * 100);
       }
       lastDeath = Time.time;
-
-  		body.velocity = new Vector2(0f, 0f);
-  		player_orientation = orientation.down;
-  		StartCoroutine(Wait());
+        
+      body.velocity = new Vector2(0f, 0f);
+  	  StartCoroutine(Wait());
   	}
 
   	IEnumerator Wait(){
@@ -972,8 +970,10 @@ public class player : MonoBehaviour{
       Vector3 pos = transform.position;
   		transform.position = offscreen;
       Instantiate(extraBullet, pos, transform.rotation);
+        Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
+        player_orientation = orientation.down;
 
-  		yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(2f);
 
   		transform.position = Level.S.findRespawn();
   		transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
