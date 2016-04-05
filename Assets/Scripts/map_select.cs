@@ -155,13 +155,13 @@ public class map_select : MonoBehaviour {
       if(map == 0){
         SceneManager.LoadScene("_galaxy");
       }
-      else if(map == 0){
+      else if(map == 1){
         SceneManager.LoadScene("_city");
       }
-      else if(map == 0){
+      else if(map == 2){
         SceneManager.LoadScene("_desert");
       }
-      else if(map == 0){
+      else if(map == 3){
         // SceneManager.LoadScene("_forest");
       }
       else{
@@ -170,9 +170,9 @@ public class map_select : MonoBehaviour {
 
     }
 
-    // if(Input.GetAxisRaw("Controller " + player + " Left Stick Y Axis") == 0){
-    //   axis_held = false;
-    // }
+    if(Input.GetAxisRaw("Controller " + player + " Left Stick Y Axis") == 0){
+      axis_held = false;
+    }
 
     foreach(Text game_mode_GO in game_mode_objects){
       game_mode_GO.color = white;

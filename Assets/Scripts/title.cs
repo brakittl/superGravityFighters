@@ -65,9 +65,9 @@ public class title : MonoBehaviour {
 
     }
 
-    // if(Input.GetAxisRaw("Controller 1 Left Stick Y Axis") == 0){
-    //   axis_held = false;
-    // }
+    if(Input.GetAxisRaw("Controller 1 Left Stick Y Axis") == 0){
+      axis_held = false;
+    }
 
     foreach(Text menu_GO in menu_objects){
       menu_GO.color = white;
