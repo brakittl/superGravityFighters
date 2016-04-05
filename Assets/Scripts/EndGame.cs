@@ -148,7 +148,7 @@ public class EndGame : MonoBehaviour {
     // display each player's awards
     void DisplayAwards()
   {
-
+    
   }
 
   // change "press A to confirm" to "Ready"
@@ -159,4 +159,6 @@ public class EndGame : MonoBehaviour {
     placeOb.FindChild("readyText").GetComponent<Text>().fontSize = 20;
     placeOb.FindChild("AButton").GetComponent<Image>().enabled = false;
   }
+
+
 }
