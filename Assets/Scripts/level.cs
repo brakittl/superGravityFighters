@@ -6,8 +6,8 @@ public enum GameMode{ NONE, SURVIVAL, DEATHMATCH, REVERSE_TAG };
 
 public class Level : MonoBehaviour{
 
-  public static Level S; 
-  public GameMode gamemode; // You can use this for selecting the GameMode right from the Map Screen
+  public static Level S;
+    public GameMode gamemode; // You can use this for selecting the GameMode right from the Map Screen
   public int rt_point_limit = 100;
 
   public Vector3[] respawnPoints;

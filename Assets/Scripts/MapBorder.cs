@@ -31,6 +31,10 @@ public class MapBorder : MonoBehaviour {
 			else if ((other.transform.parent.transform.position.x < ((GetComponent<BoxCollider2D>().offset.x - GetComponent<BoxCollider2D>().size.x / 2)))){
 				other.transform.parent.transform.position = new Vector3(((GetComponent<BoxCollider2D>().offset.x + (GetComponent<BoxCollider2D>().size.x / 2) - 0.1F)),other.transform.parent.transform.position.y, 0);
 			}
+
+            GameObject go = GameObject.Find(other.transform.parent.name);
+            player playerGO = go.GetComponent<player>();
+            playerGO.borderSwaps++;
 		}
 	}
 }
