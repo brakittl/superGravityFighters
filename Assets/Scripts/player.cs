@@ -318,6 +318,7 @@ public class player : MonoBehaviour{
       // ==[gravity swap]=======================================================
       // =======================================================================
 
+    
       if(Input.GetButtonDown("Controller " + player_number + " Start Button") && !Level.S.pause){
         Time.timeScale = 0;
         Level.S.pause = true;

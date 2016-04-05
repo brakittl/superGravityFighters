@@ -143,13 +143,13 @@ public class map_select : MonoBehaviour {
       if(map == 0){
         SceneManager.LoadScene("_galaxy");
       }
-      else if(map == 0){
+      else if(map == 1){
         SceneManager.LoadScene("_city");
       }
-      else if(map == 0){
+      else if(map == 2){
         SceneManager.LoadScene("_desert");
       }
-      else if(map == 0){
+      else if(map == 3){
         // SceneManager.LoadScene("_forest");
       }
       else{

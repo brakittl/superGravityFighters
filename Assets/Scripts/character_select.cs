@@ -37,8 +37,8 @@ public class character_select : MonoBehaviour {
     selected = false;
     axis_in_use = false;
 
-    // if(player > Input.GetJoystickNames().Length){
-    if(player > 1){
+    if(player > Input.GetJoystickNames().Length){
+    // if(player > 1){
       this.gameObject.SetActive(false);
       join_button.SetActive(false);
     }
@@ -52,6 +52,8 @@ public class character_select : MonoBehaviour {
     if(System.Math.Abs(Input.GetAxis("Controller " + player + " Left Stick X Axis")) < 0.9f){
       axis_in_use = false;
     }
+
+    // axis_in_use = false;
 
     // set color to black if already selected
     if(player_object != null){
