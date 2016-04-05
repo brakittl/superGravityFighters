@@ -18,6 +18,10 @@ public class character_select : MonoBehaviour {
   public GameObject return_set;
   public GameObject podium;
 
+  public GameObject join_button;
+  public GameObject confirm_button;
+  public GameObject cancel_button;
+
   int prefab_number = 0;
   GameObject player_object;
 
@@ -34,8 +38,9 @@ public class character_select : MonoBehaviour {
     axis_in_use = false;
 
     // if(player > Input.GetJoystickNames().Length){
-    if(player > 4){
+    if(player > 1){
       this.gameObject.SetActive(false);
+      join_button.SetActive(false);
     }
 
     resize = new Vector3(1f, 1f, 1f);
@@ -80,12 +85,12 @@ public class character_select : MonoBehaviour {
 
       // change color right
       if(Input.GetKeyDown(KeyCode.RightArrow)){
-        Change(1);
+        Cycle(1);
       }
 
       // change color left
       if(Input.GetKeyDown(KeyCode.LeftArrow)){
-        Change(-1);
+        Cycle(-1);
       }
 
       // confirm color
@@ -114,7 +119,9 @@ public class character_select : MonoBehaviour {
   void Join(){
     joined = true;
     join_set.SetActive(false);
+    join_button.SetActive(false);
     select_set.SetActive(true);
+    confirm_button.SetActive(true);
     podium.SetActive(true);
     Show(true);
     manager.GetComponent<character_select_manager>().selected_character["P" + player] = -1;
@@ -124,7 +131,9 @@ public class character_select : MonoBehaviour {
     Show(false);
     joined = false;
     join_set.SetActive(true);
+    join_button.SetActive(true);
     select_set.SetActive(false);
+    confirm_button.SetActive(false);
     podium.SetActive(false);
     manager.GetComponent<character_select_manager>().selected_character["P" + player] = -2;
   }
@@ -133,8 +142,10 @@ public class character_select : MonoBehaviour {
     if(!manager.GetComponent<character_select_manager>().character_is_selected("P" + player, prefab_number)){
       selected = true;
       select_set.SetActive(false);
+      confirm_button.SetActive(false);
       podium.SetActive(false);
       return_set.SetActive(true);
+      cancel_button.SetActive(true);
       player_object.GetComponent<player>().player_number = player;
     }
   }
@@ -144,6 +155,7 @@ public class character_select : MonoBehaviour {
     selected = false;
     Join();
     return_set.SetActive(false);
+    cancel_button.SetActive(false);
     manager.GetComponent<character_select_manager>().selected_character["P" + player] = -1;
   }
 
@@ -160,7 +172,7 @@ public class character_select : MonoBehaviour {
   }
 
   // cycles player prefab
-  void Change(int value){
+  void Cycle(int value){
 
     axis_in_use = true;
 
