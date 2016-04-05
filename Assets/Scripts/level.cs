@@ -15,14 +15,15 @@ public class Level : MonoBehaviour{
     int numPlayers;
   Texture2D black = new Texture2D(1, 1);
 
-  void Start(){
+
+    void Start(){
 
     // ==[game mode]============================================================
     // =========================================================================
 
     S = this;
 
-		if(gamemode == GameMode.NONE){ 
+        if (gamemode == GameMode.NONE){ 
 			if(PlayerPrefs.GetString("GameMode") == "SURVIVAL"){
 				gamemode = GameMode.SURVIVAL;
 			}
