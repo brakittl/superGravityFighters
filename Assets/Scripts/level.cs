@@ -33,7 +33,7 @@ public class Level : MonoBehaviour {
   public Vector3 stone_position;
 
   public Sprite gold, silver, bronze;
-  public List<Vector3> podiumPositions = new List<Vector3>(){ new Vector3(-1.69f, 5f, 0f), new Vector3(-0.35f, 10f, 0f), new Vector3(1.03f, 15f, 0f), new Vector3(2.44f, 20f, 0f) };
+  public List<Vector3> podiumPositions = new List<Vector3>(){ new Vector3(-1.48f, 5f, 0f), new Vector3(-0.35f, 10f, 0f), new Vector3(0.98f, 15f, 0f), new Vector3(1.82f, 20f, 0f) };
 
   public Dictionary<string, string> medals = new Dictionary<string, string>(){
     { "SKY DIVER","longest consecutive airtime" },
@@ -664,8 +664,10 @@ public class Level : MonoBehaviour {
 
     if(first != null){
       place1.FindChild("trophy").GetComponent<Image>().sprite = gold;
-      first.transform.position = podiumPositions[0];
       first.transform.localScale = new Vector3(1.2f, 1.2f, 0f);
+      first.transform.position = podiumPositions[0];
+      first.GetComponent<player>().Gravity(player.orientation.down, 0f, 0f);
+      first.GetComponent<SpriteRenderer>().sortingOrder = 100;
       setResultsUI(place1, first.GetComponent<player>(), first.GetComponent<player>().medals);
     }
     else{
@@ -674,8 +676,10 @@ public class Level : MonoBehaviour {
 
     if(second != null){
       place2.FindChild("trophy").GetComponent<Image>().sprite = silver;
-      second.transform.position = podiumPositions[1];
       second.transform.localScale = new Vector3(1.2f, 1.2f, 0f);
+      second.transform.position = podiumPositions[1];
+      second.GetComponent<player>().Gravity(player.orientation.down, 0f, 0f);
+      second.GetComponent<SpriteRenderer>().sortingOrder = 100;
       setResultsUI(place2, second.GetComponent<player>(), second.GetComponent<player>().medals);
     }
     else{
@@ -684,8 +688,10 @@ public class Level : MonoBehaviour {
 
     if(third != null){
       place3.FindChild("trophy").GetComponent<Image>().sprite = bronze;
-      third.transform.position = podiumPositions[2];
       third.transform.localScale = new Vector3(1.2f, 1.2f, 0f);
+      third.transform.position = podiumPositions[2];
+      third.GetComponent<player>().Gravity(player.orientation.down, 0f, 0f);
+      third.GetComponent<SpriteRenderer>().sortingOrder = 100;
       setResultsUI(place3, third.GetComponent<player>(), third.GetComponent<player>().medals);
     }
     else{
@@ -694,8 +700,10 @@ public class Level : MonoBehaviour {
 
     if(fourth != null){
       place4.FindChild("trophy").GetComponent<Image>().enabled = false;
-      fourth.transform.position = podiumPositions[3];
       fourth.transform.localScale = new Vector3(1.2f, 1.2f, 0f);
+      fourth.transform.position = podiumPositions[3];
+      fourth.GetComponent<player>().Gravity(player.orientation.down, 0f, 0f);
+      fourth.GetComponent<SpriteRenderer>().sortingOrder = 100;
       setResultsUI(place4, fourth.GetComponent<player>(), fourth.GetComponent<player>().medals);
     }
     else{

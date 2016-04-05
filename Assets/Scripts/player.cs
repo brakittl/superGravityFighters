@@ -849,7 +849,7 @@ public class player : MonoBehaviour{
   // ==[gravity]================================================================
   // ===========================================================================
 
-  	void Gravity(orientation new_orientation, float y_rot, float z_rot){
+  	public void Gravity(orientation new_orientation, float y_rot, float z_rot){
   		body.velocity = new Vector2(0f, 0f); // set velocity to zero at swap initializaiton
   		player_orientation = new_orientation; // set new orientation
   		transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, y_rot, z_rot); // rotate for new orientation
