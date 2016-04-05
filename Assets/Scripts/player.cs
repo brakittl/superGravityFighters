@@ -20,6 +20,7 @@ public class player : MonoBehaviour{
   	//gamemode specific info: survival 
   	public int lives = 3;
   	public bool dead = false;
+    public float deathTime = 0;
 
 	//gamemode specific info: rt (reverse tag)
 	public int rt_points = 0;
@@ -1018,7 +1019,9 @@ public class player : MonoBehaviour{
       if(lives == 0 && (Level.S.gamemode == GameMode.SURVIVAL)){
         halo.SetActive(true);
         dead = true;
+        deathTime = Time.time;
         Level.S.ranking.Add(this);
+        Debug.Log("dead player");
       }
       
       respawning = true;

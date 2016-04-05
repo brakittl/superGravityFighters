@@ -9,5 +9,9 @@ public class bg : MonoBehaviour {
 	void Start(){
     background_animator.Play(map);
 	}
+
+  void OnEnable(){
+    background_animator.Play(map);
+  }
 	
 }
