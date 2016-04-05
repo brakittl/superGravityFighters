@@ -258,6 +258,7 @@ public class player : MonoBehaviour{
       
       // gameOver check to disable character control
       if(gameOver){
+      if (!dead) deathTime = Time.time;
         return;
       }
 
@@ -302,7 +303,7 @@ public class player : MonoBehaviour{
             hearts[i].GetComponent<Image>().sprite = get_sprite_by_name(hearts_skulls, splits[0] + "_skull");
             ++i;
           }
-          for(i = i; i < 10; ++i){
+          for(; i < 10; ++i){
             hearts[i].SetActive(false);
           }
         }
@@ -320,11 +321,11 @@ public class player : MonoBehaviour{
 
     
       if(Input.GetButtonDown("Controller " + player_number + " Start Button") && !Level.S.pause){
-        Time.timeScale = 0;
+        //Time.timeScale = 0;
         Level.S.pause = true;
       }
       else if(Input.GetButtonDown("Controller " + player_number + " Start Button") && Level.S.pause){
-        Time.timeScale = 1;
+        //Time.timeScale = 1;
         Level.S.pause = false;
       }
 

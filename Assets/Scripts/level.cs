@@ -9,10 +9,11 @@ public enum GameMode{ NONE, SURVIVAL, DEATHMATCH, REVERSE_TAG };
 public class Level : MonoBehaviour {
 
   public bool isMap;
+  public GameObject podium;
 
   public static Level S;
   public GameMode gamemode; // You can use this for selecting the GameMode right from the Map Screen
-  public int rt_point_limit = 100;
+  public int rt_point_limit = 50;
 
   public GameObject player1, player2, player3, player4;
   public GameObject first, second, third, fourth;
@@ -25,13 +26,14 @@ public class Level : MonoBehaviour {
 
   public bool gameOver;
   public int readyCount;
+  public GameObject PostGameOb;
   public Canvas PostGameUI;
 
   public GameObject gravity_stone;
   public Vector3 stone_position;
 
   public Sprite gold, silver, bronze;
-  public List<Vector3> podiumPositions = new List<Vector3>(){ new Vector3(-1.69f, 5f, 0f), new Vector3(-0.35f, 5f, 0f), new Vector3(1.03f, 5f, 0f), new Vector3(2.44f, 5f, 0f) };
+  public List<Vector3> podiumPositions = new List<Vector3>(){ new Vector3(-1.69f, 5f, 0f), new Vector3(-0.35f, 10f, 0f), new Vector3(1.03f, 15f, 0f), new Vector3(2.44f, 20f, 0f) };
 
   public Dictionary<string, string> medals = new Dictionary<string, string>(){
     { "SKY DIVER","longest consecutive airtime" },
@@ -75,8 +77,12 @@ public class Level : MonoBehaviour {
     S = this;
 
     if(isMap){
-      PostGameUI = GameObject.Find("PostGameCanvas").GetComponent<Canvas>();
-      if(PostGameUI != null) PostGameUI.enabled = false;
+      podium = GameObject.Find("Podium");
+      if (podium != null) podium.SetActive(false);
+      PostGameOb = GameObject.Find("PostGameCanvas");
+      if (PostGameOb != null) PostGameOb.SetActive(false);
+      //PostGameUI = GameObject.Find("PostGameCanvas").GetComponent<Canvas>();
+      //if(PostGameUI != null) PostGameUI.enabled = false;
 
       gameOver = false;
       player1Ready = player2Ready = player3Ready = player4Ready = false;
@@ -217,7 +223,7 @@ public class Level : MonoBehaviour {
           // sort by deathTime
           for (int i = 0; i < numPlayers; i++){
             for (int j = i + 1; j < numPlayers; j++){
-              if(activePlayers[i].deathTime > activePlayers[j].deathTime){
+              if(activePlayers[i].deathTime < activePlayers[j].deathTime){
                 player temp = activePlayers[i];
                 activePlayers[i] = activePlayers[j];
                 activePlayers[j] = temp;
@@ -225,10 +231,10 @@ public class Level : MonoBehaviour {
             }
           }
 
-          first = numPlayers >= 1 ? activePlayers[numPlayers-1].gameObject : null;
-          second = numPlayers >= 2 ? activePlayers[0].gameObject : null;
-          third = numPlayers >= 3 ? activePlayers[1].gameObject : null;
-          fourth = numPlayers >= 4 ? activePlayers[2].gameObject : null;
+          first = numPlayers >= 1 ? activePlayers[0].gameObject : null;
+          second = numPlayers >= 2 ? activePlayers[1].gameObject : null;
+          third = numPlayers >= 3 ? activePlayers[2].gameObject : null;
+          fourth = numPlayers >= 4 ? activePlayers[3].gameObject : null;
 
           AwardMedals();
 
@@ -237,6 +243,10 @@ public class Level : MonoBehaviour {
           foreach (player p in activePlayers){
             p.gameOver = true;
           }
+
+          GameObject.Find("colliders").SetActive(false);
+          podium.SetActive(true);
+
           gameOver = true;
         }
       }
@@ -289,13 +299,31 @@ public class Level : MonoBehaviour {
           foreach (player p in activePlayers){
             p.gameOver = true;
           }
+
+          GameObject.Find("colliders").SetActive(false);
+          podium.SetActive(true);
+
           gameOver = true;
         }
       }
       else if(gamemode == GameMode.REVERSE_TAG){
-        if(ranking.Capacity > 0){
+        if(ranking.Count > 0){
           // point limit reached, end the game
+
+          first = numPlayers >= 1 ? ranking[0].gameObject : null;
+          /*
+          second = numPlayers >= 2 ? activePlayers[1].gameObject : null;
+          third = numPlayers >= 3 ? activePlayers[2].gameObject : null;
+          fourth = numPlayers >= 4 ? activePlayers[3].gameObject : null;
+          */
+
           AwardMedals();
+
+          DisplayResults();
+
+          GameObject.Find("colliders").SetActive(false);
+          podium.SetActive(true);
+
           gameOver = true;
         }
       }
@@ -623,19 +651,21 @@ public class Level : MonoBehaviour {
   }
 
   void DisplayResults(){
-    if(PostGameUI != null) PostGameUI.enabled = true;
+    if (PostGameOb != null) PostGameOb.SetActive(true);
+    //if(PostGameUI != null) PostGameUI.enabled = true;
 
     // show the end game UI
     Transform place1, place2, place3, place4;
 
-    place1 = PostGameUI.transform.Find("1place");
-    place2 = PostGameUI.transform.Find("2place");
-    place3 = PostGameUI.transform.Find("3place");
-    place4 = PostGameUI.transform.Find("4place");
+    place1 = PostGameOb.transform.Find("1place");
+    place2 = PostGameOb.transform.Find("2place");
+    place3 = PostGameOb.transform.Find("3place");
+    place4 = PostGameOb.transform.Find("4place");
 
     if(first != null){
       place1.FindChild("trophy").GetComponent<Image>().sprite = gold;
-      //first.transform.position = podiumPositions[0];
+      first.transform.position = podiumPositions[0];
+      first.transform.localScale = new Vector3(1.2f, 1.2f, 0f);
       setResultsUI(place1, first.GetComponent<player>(), first.GetComponent<player>().medals);
     }
     else{
@@ -644,7 +674,8 @@ public class Level : MonoBehaviour {
 
     if(second != null){
       place2.FindChild("trophy").GetComponent<Image>().sprite = silver;
-      //second.transform.position = podiumPositions[1];
+      second.transform.position = podiumPositions[1];
+      second.transform.localScale = new Vector3(1.2f, 1.2f, 0f);
       setResultsUI(place2, second.GetComponent<player>(), second.GetComponent<player>().medals);
     }
     else{
@@ -653,7 +684,8 @@ public class Level : MonoBehaviour {
 
     if(third != null){
       place3.FindChild("trophy").GetComponent<Image>().sprite = bronze;
-      //third.transform.position = podiumPositions[2];
+      third.transform.position = podiumPositions[2];
+      third.transform.localScale = new Vector3(1.2f, 1.2f, 0f);
       setResultsUI(place3, third.GetComponent<player>(), third.GetComponent<player>().medals);
     }
     else{
@@ -662,7 +694,8 @@ public class Level : MonoBehaviour {
 
     if(fourth != null){
       place4.FindChild("trophy").GetComponent<Image>().enabled = false;
-      //fourth.transform.position = podiumPositions[3];
+      fourth.transform.position = podiumPositions[3];
+      fourth.transform.localScale = new Vector3(1.2f, 1.2f, 0f);
       setResultsUI(place4, fourth.GetComponent<player>(), fourth.GetComponent<player>().medals);
     }
     else{
@@ -675,7 +708,7 @@ public class Level : MonoBehaviour {
     string info1 = "", info2 = "", info3 = "";
 
     if(gamemode == GameMode.DEATHMATCH || gamemode == GameMode.SURVIVAL){
-      place.FindChild("killsText").GetComponent<Text>().text = "Kills: " + p.playersKilled.Capacity;
+      place.FindChild("killsText").GetComponent<Text>().text = "Kills: " + p.playersKilled.Count;
       place.FindChild("deathsText").GetComponent<Text>().text = "Deaths: " + (10 - p.lives);
     }
     if(gamemode == GameMode.REVERSE_TAG){
@@ -683,21 +716,21 @@ public class Level : MonoBehaviour {
       place.FindChild("deathsText").GetComponent<Text>().text = "";
     }
 
-    if(earnedMedals.Capacity != 0){
-      medal1 = earnedMedals[Random.Range(0, earnedMedals.Capacity)];
+    if(earnedMedals.Count != 0){
+      medal1 = earnedMedals[Random.Range(0, earnedMedals.Count)];
       earnedMedals.Remove(medal1);
       info1 = medals[medal1];
       medal1 += ":";
       
     }
-    if(earnedMedals.Capacity != 0){
-      medal2 = earnedMedals[Random.Range(0, earnedMedals.Capacity)];
+    if(earnedMedals.Count != 0){
+      medal2 = earnedMedals[Random.Range(0, earnedMedals.Count)];
       earnedMedals.Remove(medal2);
       info2 = medals[medal2];
       medal2 += ":";
     }
-    if(earnedMedals.Capacity != 0){
-      medal3 = earnedMedals[Random.Range(0, earnedMedals.Capacity)];
+    if(earnedMedals.Count != 0){
+      medal3 = earnedMedals[Random.Range(0, earnedMedals.Count)];
       earnedMedals.Remove(medal3);
       info3 = medals[medal3];
       medal3 += ":";
@@ -713,20 +746,20 @@ public class Level : MonoBehaviour {
 
   void SetReady(int controller){
     if(first.GetComponent<player>().player_number == controller){
-      PostGameUI.transform.Find("1place").FindChild("AButton").GetComponent<Image>().enabled = false;
-      PostGameUI.transform.Find("1place").FindChild("readyText").GetComponent<Text>().enabled = true;
+      PostGameOb.transform.Find("1place").FindChild("AButton").GetComponent<Image>().enabled = false;
+      PostGameOb.transform.Find("1place").FindChild("readyText").GetComponent<Text>().enabled = true;
     }
     else if(second.GetComponent<player>().player_number == controller){
-      PostGameUI.transform.Find("2place").FindChild("AButton").GetComponent<Image>().enabled = false;
-      PostGameUI.transform.Find("2place").FindChild("readyText").GetComponent<Text>().enabled = true;
+      PostGameOb.transform.Find("2place").FindChild("AButton").GetComponent<Image>().enabled = false;
+      PostGameOb.transform.Find("2place").FindChild("readyText").GetComponent<Text>().enabled = true;
     }
     else if(third.GetComponent<player>().player_number == controller){
-      PostGameUI.transform.Find("3place").FindChild("AButton").GetComponent<Image>().enabled = false;
-      PostGameUI.transform.Find("3place").FindChild("readyText").GetComponent<Text>().enabled = true;
+      PostGameOb.transform.Find("3place").FindChild("AButton").GetComponent<Image>().enabled = false;
+      PostGameOb.transform.Find("3place").FindChild("readyText").GetComponent<Text>().enabled = true;
     }
     else if(fourth.GetComponent<player>().player_number == controller){
-      PostGameUI.transform.Find("4place").FindChild("AButton").GetComponent<Image>().enabled = false;
-      PostGameUI.transform.Find("4place").FindChild("readyText").GetComponent<Text>().enabled = true;
+      PostGameOb.transform.Find("4place").FindChild("AButton").GetComponent<Image>().enabled = false;
+      PostGameOb.transform.Find("4place").FindChild("readyText").GetComponent<Text>().enabled = true;
     }
   }
 }

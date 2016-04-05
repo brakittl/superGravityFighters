@@ -180,7 +180,7 @@ public class map_select : MonoBehaviour {
       abilities.text = "Gravity swap\nSlash\n1 bullet per life";
     }
     else{
-      description.text = "Run to win! Control the gravity stone to win 100 points. Steal they stone from your enemies by\ntouching them.";
+      description.text = "Run to win! Control the gravity stone to win 50 points. Steal they stone from your enemies by\ntouching them.";
       abilities.text = "Gravity swap";
     }
 	
