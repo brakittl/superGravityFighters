@@ -341,25 +341,25 @@ public class player : MonoBehaviour{
       // swap gravity orientation
   		if(!poisoned){
   			// up
-  			if((Input.GetButtonDown("Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up){
+  			if((Input.GetAxis("Controller " + player_number + " Right Stick Y Axis") > -0.9f || Input.GetButtonDown("Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up){
   				Gravity(orientation.up, transform.localEulerAngles.y, 180f);
           gravitySwapCount++;
           sound.PlayOneShot(gravitySwap, gravVolume);
         }
   			// down
-  			if((Input.GetButtonDown("Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S)) && player_orientation != orientation.down){
+  			if((Input.GetAxis("Controller " + player_number + " Right Stick Y Axis") < 0.9f || (Input.GetButtonDown("Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S)) && player_orientation != orientation.down){
   				Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
           gravitySwapCount++;
           sound.PlayOneShot(gravitySwap, gravVolume);
         }
   			// left
-  			if((Input.GetButtonDown("Controller " + player_number + " X Button") || Input.GetKey(KeyCode.A)) && player_orientation != orientation.left){
+  			if((Input.GetAxis("Controller " + player_number + " Right Stick X Axis") < -0.9f || (Input.GetButtonDown("Controller " + player_number + " X Button") || Input.GetKey(KeyCode.A)) && player_orientation != orientation.left){
   				Gravity(orientation.left, 0f, -90f);
           gravitySwapCount++;
           sound.PlayOneShot(gravitySwap, gravVolume);
         }
   			// right
-  			if((Input.GetButtonDown("Controller " + player_number + " B Button") || Input.GetKey(KeyCode.D)) && player_orientation != orientation.right){
+  			if(((Input.GetAxis("Controller " + player_number + " Right Stick X Axis") > 0.9f || Input.GetButtonDown("Controller " + player_number + " B Button") || Input.GetKey(KeyCode.D)) && player_orientation != orientation.right){
   				Gravity(orientation.right, 0f, 90f);
           gravitySwapCount++;
           sound.PlayOneShot(gravitySwap, gravVolume);

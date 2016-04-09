@@ -120,6 +120,16 @@ public class map_select : MonoBehaviour {
       left_arrow_sr.color = white;
     }
 
+    if(Input.GetButtonDown("Controller 1 B Button")
+      || Input.GetButtonDown("Controller 2 B Button")
+      || Input.GetButtonDown("Controller 3 B Button")
+      || Input.GetButtonDown("Controller 4 B Button")
+      || Input.GetKeyDown(KeyCode.B)
+      || Input.GetKeyDown(KeyCode.Escape))
+    {
+      SceneManager.LoadScene("_character_select");
+    }
+
     if(Input.GetKeyDown(KeyCode.Return) ||
        Input.GetButtonDown("Controller 1 Start Button") ||
        Input.GetButtonDown("Controller 2 Start Button") ||
