@@ -41,7 +41,7 @@ public class Level : MonoBehaviour {
     { "CAUTIOUS","least border swaps" },
     { "AIRBORNE","most time in air" },
     { "GROUNDED","least airtime" },
-    { "GREED","most bullets picked up" },
+    { "HOARDER","most bullets picked up" },
     { "POVERTY","least bullets picked up" },
     { "ASTRONAUT","most gravity swaps" },
     { "STEADY","least gravity swaps" },
@@ -56,7 +56,7 @@ public class Level : MonoBehaviour {
     { "ATHLETE","most distance traveled" },
     { "CAMPER","least distance traveled" },
     { "WHOOPS","most suicides" },
-    { "PARTICIPATION","you had fun :)" },
+    { "PARTICIPANT","you had fun :)" },
   };
 
   void Start(){
@@ -231,10 +231,10 @@ public class Level : MonoBehaviour {
             }
           }
 
-          first = numPlayers >= 1 ? activePlayers[0].gameObject : null;
-          second = numPlayers >= 2 ? activePlayers[1].gameObject : null;
-          third = numPlayers >= 3 ? activePlayers[2].gameObject : null;
-          fourth = numPlayers >= 4 ? activePlayers[3].gameObject : null;
+          first = numPlayers >= 1 ? activePlayers[numPlayers-1].gameObject : null;
+          second = numPlayers >= 2 ? activePlayers[0].gameObject : null;
+          third = numPlayers >= 3 ? activePlayers[1].gameObject : null;
+          fourth = numPlayers >= 4 ? activePlayers[2].gameObject : null;
 
           AwardMedals();
 
@@ -309,17 +309,61 @@ public class Level : MonoBehaviour {
       else if(gamemode == GameMode.REVERSE_TAG){
         if(ranking.Count > 0){
           // point limit reached, end the game
+          List<player> activePlayers = new List<player>();
+          if (PlayerPrefs.GetString("P1") != "none")
+          {
+            activePlayers.Add(player1.GetComponent<player>());
+          }
+          if (PlayerPrefs.GetString("P2") != "none")
+          {
+            activePlayers.Add(player2.GetComponent<player>());
+          }
+          if (PlayerPrefs.GetString("P3") != "none")
+          {
+            activePlayers.Add(player3.GetComponent<player>());
+          }
+          if (PlayerPrefs.GetString("P4") != "none")
+          {
+            activePlayers.Add(player4.GetComponent<player>());
+          }
 
-          first = numPlayers >= 1 ? ranking[0].gameObject : null;
-          /*
+          // sort by rt_points, ties broken by longest continuous hold
+          for (int i = 0; i < numPlayers; i++)
+          {
+            for (int j = i + 1; j < numPlayers; j++)
+            {
+              if (activePlayers[i].rt_points < activePlayers[j].rt_points)
+              {
+                player temp = activePlayers[i];
+                activePlayers[i] = activePlayers[j];
+                activePlayers[j] = temp;
+              }
+              else if (activePlayers[i].rt_points == activePlayers[j].rt_points)
+              {
+                if (activePlayers[i].rt_longest_continuous_hold < activePlayers[j].rt_longest_continuous_hold)
+                {
+                  player temp = activePlayers[i];
+                  activePlayers[i] = activePlayers[j];
+                  activePlayers[j] = temp;
+                }
+              }
+            }
+          }
+
+          first = numPlayers >= 1 ? activePlayers[0].gameObject : null;
           second = numPlayers >= 2 ? activePlayers[1].gameObject : null;
           third = numPlayers >= 3 ? activePlayers[2].gameObject : null;
           fourth = numPlayers >= 4 ? activePlayers[3].gameObject : null;
-          */
+          
 
           AwardMedals();
 
           DisplayResults();
+
+          foreach (player p in activePlayers)
+          {
+            p.gameOver = true;
+          }
 
           GameObject.Find("colliders").SetActive(false);
           podium.SetActive(true);
