@@ -346,7 +346,7 @@ public class player : MonoBehaviour{
         }
   			// down
 
-  			if((Input.GetAxis("Controller " + player_number + " Right Stick Y Axis") > 0.9f || Input.GetButtonDown("Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S)) && player_orientation != orientation.down) {
+  			if((Input.GetAxis("Controller " + player_number + " Right Stick Y Axis") > 0.9f || Input.GetButtonDown("Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S)) && player_orientation != orientation.down){
   				Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
           gravitySwapCount++;
           sound.PlayOneShot(gravitySwap, gravVolume);

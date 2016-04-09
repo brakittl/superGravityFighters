@@ -117,8 +117,7 @@ public class character_select : MonoBehaviour {
     else{
 
       // return to join screen
-      if(Input.GetButtonDown("Controller " + player + " B Button") ||
-         Input.GetButtonDown("Controller " + player + " Back Button") ||
+      if(Input.GetButtonDown("Controller " + player + " Back Button") ||
          Input.GetKeyDown(KeyCode.B)){
         Unconfirm();
       }
