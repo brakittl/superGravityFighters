@@ -382,6 +382,7 @@ public class player : MonoBehaviour{
           
           // attack
           if((Input.GetButtonDown("Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.Space)) && Time.time > nextFire){
+                    numSwordSwipes++;
   				  Block();
   			  }
           
@@ -1058,18 +1059,15 @@ public class player : MonoBehaviour{
   		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
   		foreach(GameObject p in players){
   			player other = (player)p.GetComponent(typeof(player));
-  			
         if(bulletAttack && other.bullet_instance == collideObject){
-          other.numBulletHits++;
-          if(this.name != other.name){
-            other.playersKilled.Add(this.gameObject.name);
-          }
-          else{
-            suicides++;
-          }
-  			}
+              other.numBulletHits++;
+              if(this.name != other.name)
+                other.playersKilled.Add(this.gameObject.name);
+              else
+                suicides++;
+  	    }
 
-  			else if(!bulletAttack && (other.slash == collideObject || other.down_slash == collideObject || other.up_slash == collideObject || other.side_slash == collideObject)){
+  			else if(!bulletAttack && other.shield == collideObject){
   				other.playersKilled.Add(this.gameObject.name);
           other.numSwordHits++;
   			}
