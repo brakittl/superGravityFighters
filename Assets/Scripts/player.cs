@@ -321,11 +321,9 @@ public class player : MonoBehaviour{
 
     
       if(Input.GetButtonDown("Controller " + player_number + " Start Button") && !Level.S.pause){
-        //Time.timeScale = 0;
         Level.S.pause = true;
       }
       else if(Input.GetButtonDown("Controller " + player_number + " Start Button") && Level.S.pause){
-        //Time.timeScale = 1;
         Level.S.pause = false;
       }
 
@@ -375,28 +373,21 @@ public class player : MonoBehaviour{
 
           // shoot
           //if((Input.GetButtonDown("Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.LeftShift)) && Time.time > nextFire && numBullets > 0)
-          if((Input.GetButtonDown("Controller " + player_number + " Right Bumper") &&
+          /*if((Input.GetButtonDown("Controller " + player_number + " Right Bumper") &&
               Input.GetButtonDown("Controller " + player_number + " Left Bumper") ||
               Input.GetKeyDown(KeyCode.LeftShift)) && Time.time > nextFire){
           	Shoot();
-          }
+          }*/
           
           // attack
-          //if((Input.GetAxis("Controller " + player_number + " Right Trigger") >= 0.9 || Input.GetKey(KeyCode.Space)) && Time.time > nextFire)
-          else if((Input.GetButtonDown("Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.Space)) && Time.time > nextFire){
-  				  Attack();
+          if((Input.GetButtonDown("Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.Space)) && Time.time > nextFire){
+  				  Block();
   			  }
           
           // block
-          //if((Input.GetAxis("Controller " + player_number + " Left Trigger") >= 0.9 || Input.GetKey(KeyCode.Q)) && Time.time > nextFire)
           else if((Input.GetButtonDown("Controller " + player_number + " Left Bumper") || Input.GetKey(KeyCode.Q)) && Time.time > nextFire){
-            Block();
+            Shoot();
   			  }
-    			
-          // super slash for shits and gigs
-    			//if(Input.GetButtonDown("Controller " + player_number + " Left Bumper") || Input.GetKey(KeyCode.F)){
-    			//	SuperSlash();
-    			//}
 
   			}
   		}
@@ -1203,6 +1194,25 @@ public class player : MonoBehaviour{
   			down_slash.GetComponent<BoxCollider2D>().enabled = false;
 
       }
+      
+      else if(col.tag == "shield" && !respawn && !dead)
+        {
+            print("shield attack");
+            if (player_animator.GetBool("block") || player_animator.GetBool("attack"))
+            {
+                if (swipeBlock)
+                {
+                    swipeBlockStart = Time.time;
+                    sound.PlayOneShot(block);
+                    body.AddForce(transform.right * -1 * 0.1f, ForceMode2D.Impulse);
+                    numBlocks++;
+                }
+                swipeBlock = false;
+                return;
+            }
+            FindKiller(col.gameObject, false);
+            KillPlayer();
+        }
       
       else if(col.tag == "extraBullets" && !player_animator.GetBool("attack")){
         numBullets++;
