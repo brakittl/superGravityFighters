@@ -10,7 +10,7 @@ public class character_select_manager : MonoBehaviour {
   public GameObject ready_text;
 
   public List<string> player_prefab_names = new List<string>(){
-    "red_player", "yellow_player", "green_player", "blue_player", "purple_player", "black_player"
+    "red_player", "orange_player", "yellow_player", "green_player", "blue_player", "purple_player", "black_player"
   };
 
   public Dictionary<string, int> selected_character = new Dictionary<string, int>(){
