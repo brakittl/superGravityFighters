@@ -6,12 +6,12 @@ using UnityEngine.UI;
 
 public enum GameMode{ NONE, SURVIVAL, DEATHMATCH, REVERSE_TAG };
 
-public class Level : MonoBehaviour {
+public class level : MonoBehaviour {
 
   public bool isMap;
   public GameObject podium;
 
-  public static Level S;
+  public static level S;
   public GameMode gamemode; // You can use this for selecting the GameMode right from the Map Screen
   public int rt_point_limit = 50;
 
@@ -98,11 +98,11 @@ public class Level : MonoBehaviour {
 			else if(PlayerPrefs.GetString("GameMode") == "REVERSE_TAG"){
 				gamemode = GameMode.REVERSE_TAG;
 			} 
-			else Debug.Log("INCORRECT GAMEMODE STRING PASSED IN FROM PLAYERPREFS. CHECK LEVEL SCRIPT");
+			else Debug.Log("INCORRECT GAMEMODE STRING PASSED IN FROM PLAYERPREFS. CHECK level SCRIPT");
 		}
 		else{
-			// Debug.Log("GAMEMODE ALREADY SET FROM LEVEL SCRIPT. CURRENT GAMEMODE: " + gamemode);
-			// Debug.Log("TO LET GAMEMODE BE SET THRU LEVEL SELECT, MAKE SURE LEVEL SCRIPT'S GAMEMODE IS NONE");
+			// Debug.Log("GAMEMODE ALREADY SET FROM level SCRIPT. CURRENT GAMEMODE: " + gamemode);
+			// Debug.Log("TO LET GAMEMODE BE SET THRU level SELECT, MAKE SURE level SCRIPT'S GAMEMODE IS NONE");
 		}
 
     // ==[players]============================================================
