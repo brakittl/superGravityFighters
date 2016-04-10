@@ -392,14 +392,10 @@ public class Level : MonoBehaviour {
   }
     
   IEnumerator Pause(Vector3 pos, Vector3 killerPos){
-    //yield return new WaitForSeconds(0.05f);
     Time.timeScale = 0.1f;
-    Vector3 cubePos = pos, rot = transform.rotation.eulerAngles;
-    cubePos.y = pos.y - 3f;
-        
-        print("angle between characters " + Vector3.Angle(killerPos, pos));
-        rot.z = 90 - Vector3.Angle(pos, killerPos);
-        print("z value rotation " + rot.z);
+    Vector3 rot = transform.rotation.eulerAngles;
+  
+    rot.z = 180 - Mathf.Atan2(killerPos.y - pos.y, killerPos.x - pos.x) * 180 / Mathf.PI;
     streak = Instantiate(killStreak, pos, Quaternion.Euler(rot)) as GameObject;
     
     yield return new WaitForSeconds(0.03f);

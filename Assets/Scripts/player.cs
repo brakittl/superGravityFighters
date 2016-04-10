@@ -1066,22 +1066,28 @@ public class player : MonoBehaviour{
   // ===========================================================================
 
   	public void FindKiller(GameObject collideObject, bool bulletAttack){
+        Vector3 killerPos = new Vector3(0,0,0);
   		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
   		foreach(GameObject p in players){
   			player other = (player)p.GetComponent(typeof(player));
-        if(bulletAttack && other.bullet_instance == collideObject){
-              other.numBulletHits++;
-              if(this.name != other.name)
-                other.playersKilled.Add(this.gameObject.name);
-              else
-                suicides++;
-  	    }
+            if(bulletAttack && other.bullet_instance == collideObject){
+                other.numBulletHits++;
+                killerPos = other.transform.position;
+                if (this.name != other.name)
+                  other.playersKilled.Add(this.gameObject.name);
+                else
+                    suicides++;
+                    
+  	        }
 
-  			else if(!bulletAttack && other.shield == collideObject){
-  				other.playersKilled.Add(this.gameObject.name);
-          other.numSwordHits++;
-  			}
+  	        else if(!bulletAttack && other.shield == collideObject){
+  		        other.playersKilled.Add(this.gameObject.name);
+                other.numSwordHits++;
+                killerPos = other.transform.position;
+
+              }
   		}
+        KillPlayer(killerPos);
   	}
 
   	public void KillPlayer(Vector3 killerPos){
@@ -1206,7 +1212,6 @@ public class player : MonoBehaviour{
                 return;
             }
             FindKiller(col.gameObject, false);
-            KillPlayer(col.transform.position);
         }
       
       else if(col.tag == "extraBullets" && !player_animator.GetBool("attack")){
