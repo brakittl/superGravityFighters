@@ -1084,7 +1084,7 @@ public class player : MonoBehaviour{
   		}
   	}
 
-  	public void KillPlayer(){
+  	public void KillPlayer(Vector3 killerPos){
       
       sound.PlayOneShot(death);
       respawn = true;
@@ -1093,7 +1093,7 @@ public class player : MonoBehaviour{
   	  up_slash.GetComponent<BoxCollider2D>().enabled = false;
   	  down_slash.GetComponent<BoxCollider2D>().enabled = false;
       lives--;
-      level.S.KillPause(transform.position);
+      level.S.KillPause(transform.position, killerPos);
 
       // turn off poison
       poisoned = false;
@@ -1117,7 +1117,7 @@ public class player : MonoBehaviour{
 
   	IEnumerator Wait(){
 
-        //Time.timeScale = 0.1f;
+        Time.timeScale = 0.1f;
         yield return new WaitForSeconds(0.3f);
 
         Vector3 pos = transform.position;
@@ -1206,7 +1206,7 @@ public class player : MonoBehaviour{
                 return;
             }
             FindKiller(col.gameObject, false);
-            KillPlayer();
+            KillPlayer(col.transform.position);
         }
       
       else if(col.tag == "extraBullets" && !player_animator.GetBool("attack")){

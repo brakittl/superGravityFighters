@@ -378,40 +378,32 @@ public class level : MonoBehaviour {
     return respawnPoints[i];
   }
 
-  public GameObject blackSquare;
-  GameObject topWall, bottomWall, leftWall, rightWall;
+  public GameObject killStreak;
+  GameObject streak;
   public bool pause = false, running = false;
   // int runAgain = 0;
   //public List<Vector3> positions = new List<Vector3>();
 
-  public void KillPause(Vector3 playerPos){
+  public void KillPause(Vector3 playerPos, Vector3 killerPos){
     if(!running){
       running = true;
-      StartCoroutine(Pause(playerPos));
+      StartCoroutine(Pause(playerPos, killerPos));
     }
   }
     
-  IEnumerator Pause(Vector3 pos){
+  IEnumerator Pause(Vector3 pos, Vector3 killerPos){
     //yield return new WaitForSeconds(0.05f);
     Time.timeScale = 0.1f;
     Vector3 cubePos = pos, rot = transform.rotation.eulerAngles;
-        print(cubePos);
     cubePos.y = pos.y - 3f;
-        print(cubePos);
-    bottomWall = Instantiate(blackSquare, cubePos, transform.rotation) as GameObject;
-    cubePos.y = pos.y + 3f;
-    topWall = Instantiate(blackSquare, cubePos, transform.rotation) as GameObject;
-    cubePos.x = pos.x - 3f;
-    rot.z = 90;
-    leftWall = Instantiate(blackSquare, cubePos, Quaternion.Euler(rot)) as GameObject;
-    cubePos.x = pos.x + 3f;
-    rightWall = Instantiate(blackSquare, cubePos, Quaternion.Euler(rot)) as GameObject;
+        
+        print("angle between characters " + Vector3.Angle(killerPos, pos));
+        rot.z = 90 - Vector3.Angle(pos, killerPos);
+        print("z value rotation " + rot.z);
+    streak = Instantiate(killStreak, pos, Quaternion.Euler(rot)) as GameObject;
     
     yield return new WaitForSeconds(0.03f);
-    Destroy(topWall);
-    Destroy(bottomWall);
-    Destroy(leftWall);
-    Destroy(rightWall);
+    Destroy(streak);
     Time.timeScale = 1;
 
     running = false;

@@ -1,15 +1,26 @@
 fileFormatVersion: 2
 guid: bda0c0160cf0249eaa24af99f14e000a
-<<<<<<< HEAD
-timeCreated: 1459829396
-=======
-timeCreated: 1459728095
->>>>>>> 96deec4fe90634115bf32f3a78669ce91355466f
+timeCreated: 1460329562
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
   defaultReferences:
-  - blackSquare: {fileID: 146142, guid: eb282afcec7130c42890e4abcf422ba7, type: 2}
+  - podium: {instanceID: 0}
+  - player1: {instanceID: 0}
+  - player2: {instanceID: 0}
+  - player3: {instanceID: 0}
+  - player4: {instanceID: 0}
+  - first: {instanceID: 0}
+  - second: {instanceID: 0}
+  - third: {instanceID: 0}
+  - fourth: {instanceID: 0}
+  - PostGameOb: {instanceID: 0}
+  - PostGameUI: {instanceID: 0}
+  - gravity_stone: {instanceID: 0}
+  - gold: {instanceID: 0}
+  - silver: {instanceID: 0}
+  - bronze: {instanceID: 0}
+  - killStreak: {fileID: 148494, guid: b5476252ed02e32408a8bef6004515d4, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
