@@ -25,7 +25,6 @@ public class Bullet : MonoBehaviour{
             if (!other.dead && !other.respawn && !other.invincible)
             {
                 other.FindKiller(this.gameObject, true);
-                other.KillPlayer();
                 Destroy(this.gameObject);
             }
         }

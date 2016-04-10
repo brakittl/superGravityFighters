@@ -1,9 +1,13 @@
 fileFormatVersion: 2
 guid: 937f9717ef11a4a02926a6b801a36cbb
-timeCreated: 1459487247
+timeCreated: 1460327988
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: appear_0
+    21300002: appear_1
+    21300004: appear_2
+    21300006: appear_3
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -38,7 +42,7 @@ TextureImporter:
   rGBM: 0
   compressionQuality: 50
   allowsAlphaSplitting: 0
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -49,7 +53,79 @@ TextureImporter:
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
-    sprites: []
+    sprites:
+    - name: appear_0
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 129
+        width: 38
+        height: 43
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -14, y: 21.5}
+        - {x: -19, y: 15.5}
+        - {x: -19, y: -11.5}
+        - {x: -15, y: -21.5}
+        - {x: 16, y: -21.5}
+        - {x: 19, y: -15.5}
+        - {x: 19, y: 11.5}
+        - {x: 17, y: 21.5}
+    - name: appear_1
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 87
+        width: 39
+        height: 41
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -18.5, y: 20.5}
+        - {x: -19.5, y: 19.5}
+        - {x: -19.5, y: -18.5}
+        - {x: -17.5, y: -20.5}
+        - {x: 18.5, y: -20.5}
+        - {x: 19.5, y: -18.5}
+        - {x: 19.5, y: 20.5}
+    - name: appear_2
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 0
+        width: 35
+        height: 41
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -13.5, y: 20.5}
+        - {x: -17.5, y: 19.5}
+        - {x: -17.5, y: -20.5}
+        - {x: 17.5, y: -20.5}
+        - {x: 17.5, y: 19.5}
+        - {x: 9.5, y: 20.5}
+    - name: appear_3
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 43
+        width: 39
+        height: 42
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -16.5, y: 21}
+        - {x: -19.5, y: 20}
+        - {x: -19.5, y: -21}
+        - {x: 11.5, y: -21}
+        - {x: 19.5, y: -16}
+        - {x: 19.5, y: 11}
+        - {x: 14.5, y: 21}
     outline: []
   spritePackingTag: 
   userData: 
