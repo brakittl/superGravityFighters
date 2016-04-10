@@ -26,7 +26,7 @@ public class player : MonoBehaviour{
   	public float rt_total_time = 0; // total time holding the "gem"
   	public float rt_longest_continuous_hold = 0; // longest time holding the "gem" without losing it
   	
-    //point limit is in Level script, call with Level.S.rt_point_limit
+    //point limit is in level script, call with level.S.rt_point_limit
 
   	// orientation
   	public enum orientation{up, down, left, right};
@@ -143,8 +143,8 @@ public class player : MonoBehaviour{
 
     void SetPlayerNumber(int sent_number){
       player_number = sent_number;
-      // print(Level.S.respawnPoints[sent_number - 1]);
-      // transform.position = Level.S.findRespawn();
+      // print(level.S.respawnPoints[sent_number - 1]);
+      // transform.position = level.S.findRespawn();
     }
 
   // ==[start]==================================================================
@@ -221,7 +221,7 @@ public class player : MonoBehaviour{
         rt_text_GO = GameObject.Find(rt_string);
         rt_text = rt_text_GO.GetComponent<Text>();
 
-        if(Level.S.gamemode != GameMode.REVERSE_TAG){
+        if(level.S.gamemode != GameMode.REVERSE_TAG){
           rt_text_GO.SetActive(false);
         }
         else{
@@ -234,7 +234,7 @@ public class player : MonoBehaviour{
           string heart_string = "ui/p" + player_number.ToString() + "/" + player_number.ToString() + "_" + (i + 1).ToString();
           GameObject current_heart = GameObject.Find(heart_string);
           if(current_heart != null){
-            if(Level.S.gamemode == GameMode.SURVIVAL){
+            if(level.S.gamemode == GameMode.SURVIVAL){
               current_heart.GetComponent<Image>().sprite = get_sprite_by_name(hearts_skulls, player_color.ToLower() + "_heart");
             }
             else{
@@ -265,16 +265,16 @@ public class player : MonoBehaviour{
       }
 
       // reverse tag point count check
-      if(Level.S.gamemode == GameMode.REVERSE_TAG){
-        if(rt_points >= Level.S.rt_point_limit){
-          Level.S.ranking.Add(this);
+      if(level.S.gamemode == GameMode.REVERSE_TAG){
+        if(rt_points >= level.S.rt_point_limit){
+          level.S.ranking.Add(this);
         }
       }
 
       // deathmatch kill count of 10
-      if(Level.S.gamemode == GameMode.DEATHMATCH){
+      if(level.S.gamemode == GameMode.DEATHMATCH){
         if(playersKilled.Capacity >= 10){
-          Level.S.ranking.Add(this);
+          level.S.ranking.Add(this);
         }
       }
 
@@ -286,7 +286,7 @@ public class player : MonoBehaviour{
         bullet_text.text = "x " + numBullets.ToString();
 
         // survival ui
-        if(Level.S.gamemode == GameMode.SURVIVAL){
+        if(level.S.gamemode == GameMode.SURVIVAL){
           for(int i = 1; i <= lives; ++i){
             hearts[i - 1].SetActive(true);
           }
@@ -296,7 +296,7 @@ public class player : MonoBehaviour{
         }
 
         // deathmatch ui
-        else if(Level.S.gamemode == GameMode.DEATHMATCH){
+        else if(level.S.gamemode == GameMode.DEATHMATCH){
           int i = 0;
           foreach(string player_string in playersKilled){
             char[] delimiters = {'_'};
@@ -311,7 +311,7 @@ public class player : MonoBehaviour{
         }
 
         // reverse tag ui
-        else if(Level.S.gamemode == GameMode.REVERSE_TAG){
+        else if(level.S.gamemode == GameMode.REVERSE_TAG){
           rt_text.text = rt_points.ToString();
           rt_text.color = colors[player_color.ToLower()];
         }
@@ -322,11 +322,11 @@ public class player : MonoBehaviour{
       // =======================================================================
 
     
-      if(Input.GetButtonDown("Controller " + player_number + " Start Button") && !Level.S.pause){
-        Level.S.pause = true;
+      if(Input.GetButtonDown("Controller " + player_number + " Start Button") && !level.S.pause){
+        level.S.pause = true;
       }
-      else if(Input.GetButtonDown("Controller " + player_number + " Start Button") && Level.S.pause){
-        Level.S.pause = false;
+      else if(Input.GetButtonDown("Controller " + player_number + " Start Button") && level.S.pause){
+        level.S.pause = false;
       }
 
       // ==[gravity swap]=======================================================
@@ -372,7 +372,7 @@ public class player : MonoBehaviour{
 
   		// if alive, allow attack, shoot, and block action
   		if(!dead){
-  			if(Level.S.gamemode != GameMode.REVERSE_TAG){
+  			if(level.S.gamemode != GameMode.REVERSE_TAG){
 
           // shoot
           //if((Input.GetButtonDown("Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.LeftShift)) && Time.time > nextFire && numBullets > 0)
@@ -1099,7 +1099,7 @@ public class player : MonoBehaviour{
   	  up_slash.GetComponent<BoxCollider2D>().enabled = false;
   	  down_slash.GetComponent<BoxCollider2D>().enabled = false;
       lives--;
-      Level.S.KillPause(transform.position, killerPos);
+      level.S.KillPause(transform.position, killerPos);
 
       // turn off poison
       poisoned = false;
@@ -1128,25 +1128,25 @@ public class player : MonoBehaviour{
 
         Vector3 pos = transform.position;
   		transform.position = offscreen;
-        if(Level.S.gamemode == GameMode.SURVIVAL)
+        if(level.S.gamemode == GameMode.SURVIVAL)
             Instantiate(extraBullet, pos, transform.rotation);
       Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
       player_orientation = orientation.down;
 
       yield return new WaitForSeconds(1f);
 
-        transform.position = Level.S.findRespawn();
+        transform.position = level.S.findRespawn();
   		transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
       body.velocity = new Vector2(0f, 0f);
       player_orientation = orientation.down;
       player_animator.Play("Appear");
   		
-      if(lives == 0 && (Level.S.gamemode == GameMode.SURVIVAL)){
+      if(lives == 0 && (level.S.gamemode == GameMode.SURVIVAL)){
         //halo.SetActive(true);
         dead = true;
         transform.position = offscreen;
         deathTime = Time.time;
-        Level.S.ranking.Add(this);
+        level.S.ranking.Add(this);
         Debug.Log("dead player");
       }
       
