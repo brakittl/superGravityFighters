@@ -83,11 +83,11 @@ public class player : MonoBehaviour{
   	Vector3 offscreen = new Vector3(-1000, -1000, -1000);  
 
   	// poison
-  	float poisonSpeed = 0.75f, poisonJump = 8f, poisonTime, poisonRate = 10;
+  	//float poisonSpeed = 0.75f, poisonJump = 8f, poisonTime, poisonRate = 10;
   	public int poisonButtonTaps = 10, curButtonTaps;
   	public bool poisoned = false;
-  	bool playerContact = false;
-  	player playerInContact = null;
+  	//bool playerContact = false;
+  	//player playerInContact = null;
 
     // tracking statistics
     public int gravitySwapCount = 0, totalPoisoned = 0, numBulletShots = 0,
@@ -100,7 +100,9 @@ public class player : MonoBehaviour{
 
     // blocking
     bool swipeBlock = true;
-    float swipeBlockStart = 0f, swipeBlockTime = 0.25f;
+    public bool invincible = false;
+    float swipeBlockStart = 0f, swipeBlockTime = 0.25f, 
+        invincibleStart = 0f, invincibleTime = 1f;
     float delay = 0;
 
     // ui
@@ -395,7 +397,7 @@ public class player : MonoBehaviour{
   		}
 
   		// if dead, allow poison action
-  		else{
+  		/*else{
 
         GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.5f); //Ghost Body
         
@@ -408,7 +410,7 @@ public class player : MonoBehaviour{
   				Attack();
   			}
 
-  		}
+  		}*/
 
       // ==[movement bools]=====================================================
       // =======================================================================
@@ -572,7 +574,7 @@ public class player : MonoBehaviour{
   		}
 
   		// if has been attacked by Ghost
-  		if(poisoned){
+  		/*if(poisoned){
 
   			// reduce jump and speed
   			thrust = poisonJump;
@@ -596,12 +598,17 @@ public class player : MonoBehaviour{
   				curButtonTaps = 0;
           poisonGO.SetActive(false);
   			}
-  		}
+  		}*/
 
       if(!swipeBlock && Time.time - swipeBlockStart > swipeBlockTime){
         swipeBlock = true;
         body.velocity = new Vector2(0f, 0f);
       }
+
+      if(invincible && Time.time > invincibleStart)
+        {
+            invincible = false;
+        }
   	}
 
   	void FixedUpdate(){
@@ -1028,7 +1035,10 @@ public class player : MonoBehaviour{
   	}
 
   	void Block(){
+
       nextFire = Time.time + fireRate;
+        invincibleStart = Time.time + invincibleTime;
+        invincible = true;
       player_animator.Play("Block");
   		player_animator.SetBool("block", true);
   		shield_animator.Play("Shield");
@@ -1094,12 +1104,12 @@ public class player : MonoBehaviour{
       numBullets = 1;
 
       player_animator.Play("Death");
-      if(Time.time - lastDeath > longestLife){
+        print("deathAnimation");
+
+      if(Time.time - lastDeath > longestLife)
         longestLife = (int)((Time.time - lastDeath) *100);
-      }
-      if(Time.time - lastDeath < shortestLife){
+      if(Time.time - lastDeath < shortestLife)
         shortestLife = (int)((Time.time - lastDeath) * 100);
-      }
       lastDeath = Time.time;
         
       body.velocity = new Vector2(0f, 0f);
@@ -1107,10 +1117,11 @@ public class player : MonoBehaviour{
   	}
 
   	IEnumerator Wait(){
-  		
-      yield return new WaitForSeconds(0.3f);
 
-      Vector3 pos = transform.position;
+        //Time.timeScale = 0.1f;
+        yield return new WaitForSeconds(0.3f);
+
+        Vector3 pos = transform.position;
   		transform.position = offscreen;
       Instantiate(extraBullet, pos, transform.rotation);
       Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
@@ -1118,7 +1129,7 @@ public class player : MonoBehaviour{
 
       yield return new WaitForSeconds(1f);
 
-  		transform.position = Level.S.findRespawn();
+        transform.position = Level.S.findRespawn();
   		transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
       body.velocity = new Vector2(0f, 0f);
       player_orientation = orientation.down;
@@ -1147,7 +1158,7 @@ public class player : MonoBehaviour{
   // ==[collisions and triggers]================================================
   // ===========================================================================
 
-  	void OnCollisionEnter2D(Collision2D coll){
+  	/*void OnCollisionEnter2D(Collision2D coll){
   		GameObject other = coll.gameObject;
   		if(other.tag == "Player" && other.name != this.gameObject.name){
   			playerContact = true;
@@ -1160,11 +1171,11 @@ public class player : MonoBehaviour{
   			playerContact = false;
   			playerInContact = null;
   		}
-  	}
+  	}*/
       
   	void OnTriggerEnter2D(Collider2D col){
       
-      if(col.tag == "slash" && !respawn && !dead){
+      /*if(col.tag == "slash" && !respawn && !dead && !invincible){
         player p = col.transform.parent.GetComponent<player>();
         if(p.dead){
           if(!poisoned){
@@ -1193,11 +1204,10 @@ public class player : MonoBehaviour{
   			up_slash.GetComponent<BoxCollider2D>().enabled = false;
   			down_slash.GetComponent<BoxCollider2D>().enabled = false;
 
-      }
+      }*/
       
-      else if(col.tag == "shield" && !respawn && !dead)
+      if(col.tag == "shield" && !respawn && !dead && !invincible)
         {
-            print("shield attack");
             if (player_animator.GetBool("block") || player_animator.GetBool("attack"))
             {
                 if (swipeBlock)
