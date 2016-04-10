@@ -1104,7 +1104,6 @@ public class player : MonoBehaviour{
       numBullets = 1;
 
       player_animator.Play("Death");
-        print("deathAnimation");
 
       if(Time.time - lastDeath > longestLife)
         longestLife = (int)((Time.time - lastDeath) *100);
@@ -1123,7 +1122,8 @@ public class player : MonoBehaviour{
 
         Vector3 pos = transform.position;
   		transform.position = offscreen;
-      Instantiate(extraBullet, pos, transform.rotation);
+        if(Level.S.gamemode == GameMode.SURVIVAL)
+            Instantiate(extraBullet, pos, transform.rotation);
       Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
       player_orientation = orientation.down;
 
@@ -1157,21 +1157,6 @@ public class player : MonoBehaviour{
 
   // ==[collisions and triggers]================================================
   // ===========================================================================
-
-  	/*void OnCollisionEnter2D(Collision2D coll){
-  		GameObject other = coll.gameObject;
-  		if(other.tag == "Player" && other.name != this.gameObject.name){
-  			playerContact = true;
-  			playerInContact = (player)other.GetComponent(typeof(player));
-  		}
-  	}
-
-  	void OnCollisionExit2D(Collision2D coll){
-  		if(coll.gameObject.tag == "Player" && coll.gameObject.name != this.gameObject.name){
-  			playerContact = false;
-  			playerInContact = null;
-  		}
-  	}*/
       
   	void OnTriggerEnter2D(Collider2D col){
       
