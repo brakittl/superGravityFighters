@@ -1087,10 +1087,10 @@ public class player : MonoBehaviour{
 
               }
   		}
-        KillPlayer(killerPos);
+        KillPlayer();
   	}
 
-  	public void KillPlayer(Vector3 killerPos){
+  	public void KillPlayer(){
       
       sound.PlayOneShot(death);
       respawn = true;
@@ -1099,7 +1099,7 @@ public class player : MonoBehaviour{
   	  up_slash.GetComponent<BoxCollider2D>().enabled = false;
   	  down_slash.GetComponent<BoxCollider2D>().enabled = false;
       lives--;
-      level.S.KillPause(transform.position, killerPos);
+      level.S.KillPause(transform.position);
 
       // turn off poison
       poisoned = false;
@@ -1197,7 +1197,7 @@ public class player : MonoBehaviour{
 
       }*/
       
-      if(col.tag == "shield" && !respawn && !dead && !invincible)
+      if(col.tag == "shield" && !respawn && !dead)
         {
             if (player_animator.GetBool("block") || player_animator.GetBool("attack"))
             {
@@ -1205,13 +1205,15 @@ public class player : MonoBehaviour{
                 {
                     swipeBlockStart = Time.time;
                     sound.PlayOneShot(block);
-                    body.AddForce(transform.right * -1 * 0.1f, ForceMode2D.Impulse);
+                    body.AddForce(transform.right * -1 * 0.02f, ForceMode2D.Impulse);
                     numBlocks++;
                 }
                 swipeBlock = false;
                 return;
             }
-            FindKiller(col.gameObject, false);
+            if (!invincible)
+                FindKiller(col.gameObject, false);
+            
         }
       
       else if(col.tag == "extraBullets" && !player_animator.GetBool("attack")){

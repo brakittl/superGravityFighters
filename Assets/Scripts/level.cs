@@ -384,18 +384,19 @@ public class level : MonoBehaviour {
   // int runAgain = 0;
   //public List<Vector3> positions = new List<Vector3>();
 
-  public void KillPause(Vector3 playerPos, Vector3 killerPos){
+  public void KillPause(Vector3 playerPos){
     if(!running){
       running = true;
-      StartCoroutine(Pause(playerPos, killerPos));
+      StartCoroutine(Pause(playerPos));
     }
   }
     
-  IEnumerator Pause(Vector3 pos, Vector3 killerPos){
+  IEnumerator Pause(Vector3 pos){
     Time.timeScale = 0.1f;
     Vector3 rot = transform.rotation.eulerAngles;
-  
-    rot.z = 180 - Mathf.Atan2(killerPos.y - pos.y, killerPos.x - pos.x) * 180 / Mathf.PI;
+
+        //rot.z = 180 - Mathf.Atan2(killerPos.y - pos.y, killerPos.x - pos.x) * 180 / Mathf.PI;
+        rot.z = Random.Range(0, 90);
     streak = Instantiate(killStreak, pos, Quaternion.Euler(rot)) as GameObject;
     
     yield return new WaitForSeconds(0.03f);
