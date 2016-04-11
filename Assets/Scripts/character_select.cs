@@ -90,7 +90,7 @@ public class character_select : MonoBehaviour {
       if(Input.GetButtonDown(mac + "Controller " + player + " B Button") ||
          Input.GetButtonDown(mac + "Controller " + player + " Back Button") ||
          Input.GetKeyDown(KeyCode.B)){
-        SceneManager.LoadScene("_scene_title");
+        SceneManager.LoadScene("_title");
       }      
 
     }
@@ -120,6 +120,7 @@ public class character_select : MonoBehaviour {
 
       // unjoin game
       if(Input.GetButtonDown(mac + "Controller " + player + " Back Button") ||
+        Input.GetButtonDown(mac + "Controller " + player + " B Button") ||
          Input.GetKeyDown(KeyCode.B)){
         Unjoin();
       }
@@ -128,7 +129,7 @@ public class character_select : MonoBehaviour {
 
     else{
 
-      // return to join screen
+      // return to character select
       if(Input.GetButtonDown(mac + "Controller " + player + " Back Button") ||
          Input.GetKeyDown(KeyCode.B)){
         Unconfirm();
