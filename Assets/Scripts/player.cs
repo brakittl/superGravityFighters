@@ -570,7 +570,7 @@ public class player : MonoBehaviour{
   		}
 
   		if(!player_animator.GetBool("block")){
-  			shield.GetComponent<CircleCollider2D>().enabled = false;
+  			shield.GetComponent<PolygonCollider2D>().enabled = false;
   		}
 
   		// if has been attacked by Ghost
