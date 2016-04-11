@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public enum GameMode{ NONE, SURVIVAL, DEATHMATCH, REVERSE_TAG };
 
 public class level : MonoBehaviour {
+  public string mac = "";
 
   public bool isMap;
   public GameObject podium;
@@ -67,7 +68,19 @@ public class level : MonoBehaviour {
   };
 
   void Start(){
-    if(SceneManager.GetActiveScene().name == "_city"
+    // Mac Check
+    if (Application.platform == RuntimePlatform.OSXEditor
+      || Application.platform == RuntimePlatform.OSXPlayer
+      || Application.platform == RuntimePlatform.OSXPlayer)
+    {
+      mac = "Mac ";
+    }
+    else
+    {
+      mac = "";
+    }
+
+    if (SceneManager.GetActiveScene().name == "_city"
       || SceneManager.GetActiveScene().name == "_forest"
       || SceneManager.GetActiveScene().name == "_galaxy"
       || SceneManager.GetActiveScene().name == "_desert"
@@ -175,22 +188,22 @@ public class level : MonoBehaviour {
     }
 
     if(gameOver){
-      if(!player1Ready && Input.GetButtonDown("Controller 1 A Button")){
+      if(!player1Ready && Input.GetButtonDown(mac + "Controller 1 A Button")){
         player1Ready = true;
         SetReady(1);
         readyCount++;
       }
-      if(!player2Ready && Input.GetButtonDown("Controller 2 A Button")){
+      if(!player2Ready && Input.GetButtonDown(mac + "Controller 2 A Button")){
         player2Ready = true;
         SetReady(2);
         readyCount++;
       }
-      if(!player3Ready && Input.GetButtonDown("Controller 3 A Button")){
+      if(!player3Ready && Input.GetButtonDown(mac + "Controller 3 A Button")){
         player3Ready = true;
         SetReady(3);
         readyCount++;
       }
-      if(!player4Ready && Input.GetButtonDown("Controller 4 A Button")){
+      if(!player4Ready && Input.GetButtonDown(mac + "Controller 4 A Button")){
         player4Ready = true;
         SetReady(4);
         readyCount++;

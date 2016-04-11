@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
 public class character_select : MonoBehaviour {
+  public string mac = "";
 
   public int player;
   public Vector3 start_position;
@@ -32,6 +33,17 @@ public class character_select : MonoBehaviour {
   bool axis_in_use;
 
 	void Start(){
+    // Mac Check
+    if (Application.platform == RuntimePlatform.OSXEditor
+      || Application.platform == RuntimePlatform.OSXPlayer
+      || Application.platform == RuntimePlatform.OSXPlayer)
+    {
+      mac = "Mac ";
+    }
+    else
+    {
+      mac = "";
+    }
 
     joined = false;
     selected = false;
@@ -49,7 +61,7 @@ public class character_select : MonoBehaviour {
 	
 	void Update(){
 
-    if(System.Math.Abs(Input.GetAxis("Controller " + player + " Left Stick X Axis")) < 0.9f){
+    if(System.Math.Abs(Input.GetAxis(mac + "Controller " + player + " Left Stick X Axis")) < 0.9f){
       axis_in_use = false;
     }
 
@@ -69,14 +81,14 @@ public class character_select : MonoBehaviour {
     if(!joined){
 
       // join game
-      if(Input.GetButtonDown("Controller " + player + " X Button") ||
+      if(Input.GetButtonDown(mac + "Controller " + player + " X Button") ||
          Input.GetKeyDown(KeyCode.X)){
         Join();
       }
 
       // join game
-      if(Input.GetButtonDown("Controller " + player + " B Button") ||
-         Input.GetButtonDown("Controller " + player + " Back Button") ||
+      if(Input.GetButtonDown(mac + "Controller " + player + " B Button") ||
+         Input.GetButtonDown(mac + "Controller " + player + " Back Button") ||
          Input.GetKeyDown(KeyCode.B)){
         SceneManager.LoadScene("_scene_Menu");
       }      
@@ -87,27 +99,27 @@ public class character_select : MonoBehaviour {
     else if(joined && !selected){
 
       // change color right
-      if(Input.GetButtonDown("Controller " + player + " Right Bumper") ||
-         (!axis_in_use && Input.GetAxis("Controller " + player + " Left Stick X Axis") >= 0.95f) ||
+      if(Input.GetButtonDown(mac + "Controller " + player + " Right Bumper") ||
+         (!axis_in_use && Input.GetAxis(mac + "Controller " + player + " Left Stick X Axis") >= 0.95f) ||
          Input.GetKeyDown(KeyCode.RightArrow)){
         Cycle(1);
       }
 
       // change color left
-      if(Input.GetButtonDown("Controller " + player + " Left Bumper") ||
-         (!axis_in_use && Input.GetAxis("Controller " + player + " Left Stick X Axis") <= -0.95f) ||
+      if(Input.GetButtonDown(mac + "Controller " + player + " Left Bumper") ||
+         (!axis_in_use && Input.GetAxis(mac + "Controller " + player + " Left Stick X Axis") <= -0.95f) ||
          Input.GetKeyDown(KeyCode.LeftArrow)){
         Cycle(-1);
       }
 
       // confirm color
-      if(Input.GetButtonDown("Controller " + player + " A Button") ||
+      if(Input.GetButtonDown(mac + "Controller " + player + " A Button") ||
          Input.GetKeyDown(KeyCode.A)){
         Confirm();
       }
 
       // unjoin game
-      if(Input.GetButtonDown("Controller " + player + " Back Button") ||
+      if(Input.GetButtonDown(mac + "Controller " + player + " Back Button") ||
          Input.GetKeyDown(KeyCode.B)){
         Unjoin();
       }
@@ -117,7 +129,7 @@ public class character_select : MonoBehaviour {
     else{
 
       // return to join screen
-      if(Input.GetButtonDown("Controller " + player + " Back Button") ||
+      if(Input.GetButtonDown(mac + "Controller " + player + " Back Button") ||
          Input.GetKeyDown(KeyCode.B)){
         Unconfirm();
       }

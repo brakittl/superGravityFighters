@@ -9,6 +9,8 @@ public class player : MonoBehaviour{
   // ==[variables]==============================================================
   // ===========================================================================
 
+    public string mac = "";
+
     // endgame
     public bool gameOver;
 
@@ -151,6 +153,17 @@ public class player : MonoBehaviour{
   // ===========================================================================
 
   	void Start(){
+      // Mac Check
+      if (Application.platform == RuntimePlatform.OSXEditor
+        || Application.platform == RuntimePlatform.OSXPlayer
+        || Application.platform == RuntimePlatform.OSXPlayer)
+      {
+        mac = "Mac ";
+      }
+      else
+      {
+        mac = "";
+      }
 
       // initialize variables
       gameOver = false;
@@ -322,10 +335,10 @@ public class player : MonoBehaviour{
       // =======================================================================
 
     
-      if(Input.GetButtonDown("Controller " + player_number + " Start Button") && !level.S.pause){
+      if(Input.GetButtonDown(mac + "Controller " + player_number + " Start Button") && !level.S.pause){
         level.S.pause = true;
       }
-      else if(Input.GetButtonDown("Controller " + player_number + " Start Button") && level.S.pause){
+      else if(Input.GetButtonDown(mac + "Controller " + player_number + " Start Button") && level.S.pause){
         level.S.pause = false;
       }
 
@@ -341,26 +354,26 @@ public class player : MonoBehaviour{
       // swap gravity orientation
   		if(!poisoned && !dead){
   			// up
-  			if((Input.GetAxis("Controller " + player_number + " Right Stick Y Axis") < -0.4f || Input.GetButtonDown("Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up){
+  			if((Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis") < -0.4f || Input.GetButtonDown(mac + "Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up){
   				Gravity(orientation.up, transform.localEulerAngles.y, 180f);
           gravitySwapCount++;
           sound.PlayOneShot(gravitySwap, gravVolume);
         }
   			// down
 
-  			if((Input.GetAxis("Controller " + player_number + " Right Stick Y Axis") > 0.4f || Input.GetButtonDown("Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S)) && player_orientation != orientation.down){
+  			if((Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis") > 0.4f || Input.GetButtonDown(mac + "Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S)) && player_orientation != orientation.down){
   				Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
           gravitySwapCount++;
           sound.PlayOneShot(gravitySwap, gravVolume);
         }
   			// left
-  			if((Input.GetAxis("Controller " + player_number + " Right Stick X Axis") < -0.4f || Input.GetButtonDown("Controller " + player_number + " X Button") || Input.GetKey(KeyCode.A)) && player_orientation != orientation.left){
+  			if((Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis") < -0.4f || Input.GetButtonDown(mac + "Controller " + player_number + " X Button") || Input.GetKey(KeyCode.A)) && player_orientation != orientation.left){
   				Gravity(orientation.left, 0f, -90f);
           gravitySwapCount++;
           sound.PlayOneShot(gravitySwap, gravVolume);
         }
   			// right
-  			if((Input.GetAxis("Controller " + player_number + " Right Stick X Axis") > 0.4f || Input.GetButtonDown("Controller " + player_number + " B Button") || Input.GetKey(KeyCode.D)) && player_orientation != orientation.right){
+  			if((Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis") > 0.4f || Input.GetButtonDown(mac + "Controller " + player_number + " B Button") || Input.GetKey(KeyCode.D)) && player_orientation != orientation.right){
   				Gravity(orientation.right, 0f, 90f);
           gravitySwapCount++;
           sound.PlayOneShot(gravitySwap, gravVolume);
@@ -375,21 +388,21 @@ public class player : MonoBehaviour{
   			if(level.S.gamemode != GameMode.REVERSE_TAG){
 
           // shoot
-          //if((Input.GetButtonDown("Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.LeftShift)) && Time.time > nextFire && numBullets > 0)
-          /*if((Input.GetButtonDown("Controller " + player_number + " Right Bumper") &&
-              Input.GetButtonDown("Controller " + player_number + " Left Bumper") ||
+          //if((Input.GetButtonDown(mac + "Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.LeftShift)) && Time.time > nextFire && numBullets > 0)
+          /*if((Input.GetButtonDown(mac + "Controller " + player_number + " Right Bumper") &&
+              Input.GetButtonDown(mac + "Controller " + player_number + " Left Bumper") ||
               Input.GetKeyDown(KeyCode.LeftShift)) && Time.time > nextFire){
           	Shoot();
           }*/
           
           // attack
-          if((Input.GetAxis("Controller " + player_number + " Right Trigger") > 0.25f || Input.GetButtonDown("Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.Space)) && Time.time > nextFire){
+          if((Input.GetAxis(mac + "Controller " + player_number + " Right Trigger") > 0.25f || Input.GetButtonDown(mac + "Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.Space)) && Time.time > nextFire){
                     numSwordSwipes++;
   				  Block();
   			  }
           
           // block
-          else if((Input.GetAxis("Controller " + player_number + " Left Trigger") > 0.25f || Input.GetButtonDown("Controller " + player_number + " Left Bumper") || Input.GetKey(KeyCode.Q)) && Time.time > nextFire){
+          else if((Input.GetAxis(mac + "Controller " + player_number + " Left Trigger") > 0.25f || Input.GetButtonDown(mac + "Controller " + player_number + " Left Bumper") || Input.GetKey(KeyCode.Q)) && Time.time > nextFire){
             Shoot();
   			  }
 
@@ -402,11 +415,11 @@ public class player : MonoBehaviour{
         GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.5f); //Ghost Body
         
         // poison
-        // if((Input.GetAxis("Controller " + player_number + " Right Bumper") >= 0.9 || Input.GetKey(KeyCode.LeftShift)) && Time.time > poisonTime){
+        // if((Input.GetAxis(mac + "Controller " + player_number + " Right Bumper") >= 0.9 || Input.GetKey(KeyCode.LeftShift)) && Time.time > poisonTime){
         // 	Poison();
         // }
 
-        if((Input.GetButtonDown("Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.LeftShift)) && Time.time > poisonTime){
+        if((Input.GetButtonDown(mac + "Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.LeftShift)) && Time.time > poisonTime){
   				Attack();
   			}
 
@@ -437,7 +450,7 @@ public class player : MonoBehaviour{
   		move_down = false;
 
   		// move right
-  		if(Input.GetAxis("Controller " + player_number + " Left Stick X Axis") >= 0.9f || Input.GetKey(KeyCode.RightArrow)){
+  		if(Input.GetAxis(mac + "Controller " + player_number + " Left Stick X Axis") >= 0.9f || Input.GetKey(KeyCode.RightArrow)){
         
         moving = true;
   			
@@ -461,7 +474,7 @@ public class player : MonoBehaviour{
   		}
 
   		// move left
-  		if(Input.GetAxis("Controller " + player_number + " Left Stick X Axis") <= -0.9f || Input.GetKey(KeyCode.LeftArrow)){
+  		if(Input.GetAxis(mac + "Controller " + player_number + " Left Stick X Axis") <= -0.9f || Input.GetKey(KeyCode.LeftArrow)){
         
         moving = true;
   			
@@ -485,7 +498,7 @@ public class player : MonoBehaviour{
   		}
 
   		// move up
-  		if(Input.GetAxis("Controller " + player_number + " Left Stick Y Axis") <= -0.9f || Input.GetKey(KeyCode.UpArrow)){
+  		if(Input.GetAxis(mac + "Controller " + player_number + " Left Stick Y Axis") <= -0.9f || Input.GetKey(KeyCode.UpArrow)){
         
         moving = true;
   			
@@ -509,7 +522,7 @@ public class player : MonoBehaviour{
   		}
 
   		// move down
-  		if(Input.GetAxis("Controller " + player_number + " Left Stick Y Axis") >= 0.9f || Input.GetKey(KeyCode.DownArrow)){
+  		if(Input.GetAxis(mac + "Controller " + player_number + " Left Stick Y Axis") >= 0.9f || Input.GetKey(KeyCode.DownArrow)){
         
         moving = true;
   			
@@ -582,10 +595,10 @@ public class player : MonoBehaviour{
 
   			// remove poison with button tap
   			if((Input.GetKeyDown(KeyCode.LeftShift) || 
-            Input.GetButtonDown("Controller " + player_number + " A Button") ||
-            Input.GetButtonDown("Controller " + player_number + " B Button") || 
-            Input.GetButtonDown("Controller " + player_number + " X Button") || 
-            Input.GetButtonDown("Controller " + player_number + " Y Button")) && !dead){
+            Input.GetButtonDown(mac + "Controller " + player_number + " A Button") ||
+            Input.GetButtonDown(mac + "Controller " + player_number + " B Button") || 
+            Input.GetButtonDown(mac + "Controller " + player_number + " X Button") || 
+            Input.GetButtonDown(mac + "Controller " + player_number + " Y Button")) && !dead){
   				curButtonTaps++;
           poisonGO.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, (1 - 0.1f * curButtonTaps));
   			}
