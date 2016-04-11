@@ -908,8 +908,48 @@ public class level : MonoBehaviour {
 
         // Most Steals
         // Least Steals
+        lowDuplicate = false; highDuplicate = false;
+        high = 0;
+        low = 0;
+        float mostSteals = activePlayers[high].steals;
+        float leastSteals = mostSteals;
+        for (int i = high + 1; i < numPlayers; i++)
+        {
+          float current = activePlayers[i].steals;
+          if (current > mostSteals)
+          {
+            high = i;
+            mostSteals = current;
+            highDuplicate = false;
+          }
+          else if (current < leastSteals)
+          {
+            low = i;
+            leastSteals = current;
+            lowDuplicate = false;
+          }
+          else if (current == mostSteals)
+          {
+            highDuplicate = true;
+          }
+          else if (current == leastSteals)
+          {
+            lowDuplicate = true;
+          }
+        }
+        if (!highDuplicate) activePlayers[high].medals.Add("THUG LIFE");
+        if (!lowDuplicate) activePlayers[low].medals.Add("JUST A GOOD PERSON");
 
         // First Touch
+        low = 0;
+        for (int i = low; i < numPlayers; i++)
+        {
+          if (activePlayers[low].firstTouch)
+          {
+            activePlayers[low].medals.Add("FIRST TOUCH");
+            break;
+          }
+        }
       }
 
       // Participant: had fun (couldn't find an award for them)
