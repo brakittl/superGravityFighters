@@ -1042,7 +1042,7 @@ public class player : MonoBehaviour{
       player_animator.Play("Block");
   		player_animator.SetBool("block", true);
   		shield_animator.Play("Shield");
-  		shield.GetComponent<CircleCollider2D>().enabled = true;
+  		// shield.GetComponent<CircleCollider2D>().enabled = true;
   	}
 
     void SuperSlash(){
@@ -1141,6 +1141,7 @@ public class player : MonoBehaviour{
   		transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
       body.velocity = new Vector2(0f, 0f);
       player_orientation = orientation.down;
+      level.S.alive_players.Insert(0, gameObject);
       player_animator.Play("Appear");
   		
       if(lives == 0 && (level.S.gamemode == GameMode.SURVIVAL)){
