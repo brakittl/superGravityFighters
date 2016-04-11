@@ -6,7 +6,7 @@ public class ReverseTag : MonoBehaviour {
 	//Amount of time that should pass before player gets a point
 	public float time_until_point;
 
-	public bool attached_to_player;
+	public bool attached_to_player, beenTouched = false;
 	float time_before_points;
 	float invincibility_time; // Time when gem switches players that the player gets to keep the gem at the least
 	public float total_current_time_with_player;
@@ -36,12 +36,25 @@ public class ReverseTag : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D col) {
-		if (col.gameObject != transform.parent && (col.gameObject.tag == "Player") && (invincibility_time <= 0)) {
+		if (col.gameObject != transform.parent && (col.gameObject.tag == "Player") && (invincibility_time <= 0))
+        {
+            GameObject g = GameObject.Find(col.name);
+            player other = g.GetComponent<player>();
+
+            if (!attached_to_player && !beenTouched)
+            {
+                beenTouched = true;
+                other.firstTouch = true;
+            }
+
+
 			attached_to_player = true;
 			ResetTimers();
 			transform.position = col.transform.position;
 			this.transform.parent = col.gameObject.transform;
-		}
+            
+            other.steals++;
+        }
 
 	}
 
