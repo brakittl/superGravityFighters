@@ -1111,6 +1111,8 @@ public class player : MonoBehaviour{
 
       player_animator.Play("Death");
 
+      level.S.alive_players.Remove(gameObject);
+
       if(Time.time - lastDeath > longestLife)
         longestLife = (int)((Time.time - lastDeath) *100);
       if(Time.time - lastDeath < shortestLife)

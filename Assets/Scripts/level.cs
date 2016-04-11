@@ -35,6 +35,9 @@ public class level : MonoBehaviour {
   public Sprite gold, silver, bronze;
   public List<Vector3> podiumPositions = new List<Vector3>(){ new Vector3(-1.48f, 5f, 0f), new Vector3(-0.35f, 10f, 0f), new Vector3(0.98f, 15f, 0f), new Vector3(1.82f, 20f, 0f) };
 
+  public List<GameObject> alive_players;
+  public Vector3 target_position;
+
   public Dictionary<string, string> medals = new Dictionary<string, string>(){
     { "SKY DIVER","longest consecutive airtime" },
     { "TELEPORTER","most border teleports" },
@@ -113,10 +116,10 @@ public class level : MonoBehaviour {
     // =========================================================================
 
 
-    // PlayerPrefs.SetString("P1", "orange_player");
-    // PlayerPrefs.SetString("P2", "none");
-    // PlayerPrefs.SetString("P3", "none");
-    // PlayerPrefs.SetString("P4", "green_player");
+    PlayerPrefs.SetString("P1", "red_player");
+    PlayerPrefs.SetString("P2", "black_player");
+    PlayerPrefs.SetString("P3", "yellow_player");
+    PlayerPrefs.SetString("P4", "green_player");
 
     PlayerPrefs.SetString("Player Name", "Foobar");
 
@@ -130,24 +133,28 @@ public class level : MonoBehaviour {
         player1 = Instantiate(Resources.Load("__Prefabs/_players/" + PlayerPrefs.GetString("P1")), returnPosition(0), Quaternion.Euler(rot)) as GameObject;
         player1.SendMessage("SetPlayerNumber", 1);
         numPlayers++;
+        alive_players.Insert(0, player1);
       }
       // p2
       if(PlayerPrefs.GetString("P2") != "none"){
         player2 = Instantiate(Resources.Load("__Prefabs/_players/" + PlayerPrefs.GetString("P2")), returnPosition(1), Quaternion.Euler(rot)) as GameObject;
         player2.SendMessage("SetPlayerNumber", 2);
         numPlayers++;
+        alive_players.Insert(0, player2);
       }
       // p3
       if(PlayerPrefs.GetString("P3") != "none"){
         player3 = Instantiate(Resources.Load("__Prefabs/_players/" + PlayerPrefs.GetString("P3")), returnPosition(2), Quaternion.Euler(rot)) as GameObject;
         player3.SendMessage("SetPlayerNumber", 3);
         numPlayers++;
+        alive_players.Insert(0, player3);
       }
       // p4
       if(PlayerPrefs.GetString("P4") != "none"){
         player4 = Instantiate(Resources.Load("__Prefabs/_players/" + PlayerPrefs.GetString("P4")), returnPosition(3), Quaternion.Euler(rot)) as GameObject;
         player4.SendMessage("SetPlayerNumber", 4);
         numPlayers++;
+        alive_players.Insert(0, player4);
       }
     }
 
@@ -198,6 +205,11 @@ public class level : MonoBehaviour {
       }
     }
     else{
+
+
+      MoveCamera();
+
+
       if(gamemode == GameMode.SURVIVAL){
         // check number of dead players
         int deadCount = 0;
@@ -873,6 +885,9 @@ public class level : MonoBehaviour {
   }
 
   void DisplayResults(){
+
+    gameObject.transform.position = new Vector3(0f, 0f, 0f);
+
     if (PostGameOb != null) PostGameOb.SetActive(true);
     //if(PostGameUI != null) PostGameUI.enabled = true;
 
@@ -986,6 +1001,23 @@ public class level : MonoBehaviour {
     place.FindChild("info2").GetComponent<Text>().text = info2;
     place.FindChild("medal3").GetComponent<Text>().text = medal3;
     place.FindChild("info3").GetComponent<Text>().text = info3;
+  }
+
+  void MoveCamera(){
+
+    float centroid_x = 0;
+    float centroid_y = 0;
+    float count = 0;
+
+    foreach(GameObject player in alive_players){
+      centroid_x += player.transform.position.x;
+      centroid_y += player.transform.position.y;
+      ++count;
+    }
+
+    target_position = new Vector3(centroid_x / count, centroid_y / count, -10f);
+    gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, target_position, 1.5f * Time.deltaTime);
+
   }
 
   void SetReady(int controller){
