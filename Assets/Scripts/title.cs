@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class title : MonoBehaviour {
 
+  public string mac = "";
+
   int i;
 
   public List<Text> menu_objects;
@@ -17,6 +19,17 @@ public class title : MonoBehaviour {
 
 	// Use this for initialization
 	void Start(){
+    // Mac Check
+    if (Application.platform == RuntimePlatform.OSXEditor
+      || Application.platform == RuntimePlatform.OSXPlayer
+      || Application.platform == RuntimePlatform.OSXPlayer)
+    {
+      mac = "Mac ";
+    }
+    else
+    {
+      mac = "";
+    }
 
     i = 0;
     axis_held = false;
@@ -30,7 +43,7 @@ public class title : MonoBehaviour {
 	void Update(){
 
     if(Input.GetKeyDown(KeyCode.UpArrow) ||
-       (!axis_held && Input.GetAxis("Controller 1 Left Stick Y Axis") <= -0.9f)){
+       (!axis_held && Input.GetAxis(mac + "Controller 1 Left Stick Y Axis") <= -0.9f)){
       --i;
       if(i < 0){
         i = menu_objects.Count - 1;
@@ -39,7 +52,7 @@ public class title : MonoBehaviour {
     }
 
     else if(Input.GetKeyDown(KeyCode.DownArrow) ||
-            (!axis_held && Input.GetAxis("Controller 1 Left Stick Y Axis") >= 0.9f)){
+            (!axis_held && Input.GetAxis(mac + "Controller 1 Left Stick Y Axis") >= 0.9f)){
       ++i;
       if(i >= menu_objects.Count){
         i = 0;
@@ -47,10 +60,10 @@ public class title : MonoBehaviour {
       axis_held = true;
     }
 
-    if(Input.GetButtonDown("Controller 1 A Button") ||
-       Input.GetButtonDown("Controller 2 A Button") ||
-       Input.GetButtonDown("Controller 3 A Button") ||
-       Input.GetButtonDown("Controller 4 A Button") ||
+    if(Input.GetButtonDown(mac + "Controller 1 A Button") ||
+       Input.GetButtonDown(mac + "Controller 2 A Button") ||
+       Input.GetButtonDown(mac + "Controller 3 A Button") ||
+       Input.GetButtonDown(mac + "Controller 4 A Button") ||
        Input.GetKeyDown(KeyCode.Return)){
 
       if(i == 0){
@@ -59,7 +72,7 @@ public class title : MonoBehaviour {
 
     }
 
-    if(Input.GetAxisRaw("Controller 1 Left Stick Y Axis") == 0){
+    if(Input.GetAxisRaw(mac + "Controller 1 Left Stick Y Axis") == 0){
       axis_held = false;
     }
 

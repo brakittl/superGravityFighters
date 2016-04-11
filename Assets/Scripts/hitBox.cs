@@ -11,6 +11,7 @@ public class hitBox : MonoBehaviour {
   public Dictionary<int, PolygonCollider2D> spriteColliders;
   public bool _processing ;
   public int size;
+  public bool shield;
    
   public int _frame ;
   
@@ -24,6 +25,9 @@ public class hitBox : MonoBehaviour {
           spriteColliders [_frame].enabled = false;
           _frame = value;
           spriteColliders [_frame].enabled = true;
+          if(shield && size > 1){
+            spriteColliders[0].enabled = false;
+          }
         }
         else{
           _processing = true;
@@ -45,7 +49,12 @@ public class hitBox : MonoBehaviour {
   }
    
   private void OnEnable(){
-   spriteColliders [Frame].enabled = true;
+    if(shield && Frame == 0){
+      spriteColliders [Frame].enabled = false;
+    }
+    else{
+      spriteColliders [Frame].enabled = true;
+    }
   }
    
   private void OnDisable(){

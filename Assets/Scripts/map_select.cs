@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class map_select : MonoBehaviour {
 
+  public string mac = "";
+
   int game_mode;
   int map;
 
@@ -26,6 +28,17 @@ public class map_select : MonoBehaviour {
 
 	// Use this for initialization
 	void Start(){
+    // Mac Check
+    if (Application.platform == RuntimePlatform.OSXEditor
+      || Application.platform == RuntimePlatform.OSXPlayer
+      || Application.platform == RuntimePlatform.OSXPlayer)
+    {
+      mac = "Mac ";
+    }
+    else
+    {
+      mac = "";
+    }
 
     game_mode = 0;
     map = 0;
@@ -40,7 +53,7 @@ public class map_select : MonoBehaviour {
 	void Update(){
 
     if(Input.GetKeyDown(KeyCode.RightArrow) ||
-       (!axis_held_x && Input.GetAxis("Controller 1 Left Stick X Axis") >= 0.95f)){
+       (!axis_held_x && Input.GetAxis(mac + "Controller 1 Left Stick X Axis") >= 0.95f)){
       
       axis_held_x = true;
 
@@ -66,7 +79,7 @@ public class map_select : MonoBehaviour {
     }
 
     else if(Input.GetKeyDown(KeyCode.LeftArrow) ||
-            (!axis_held_x && Input.GetAxis("Controller 1 Left Stick X Axis") <= -0.95f)){
+            (!axis_held_x && Input.GetAxis(mac + "Controller 1 Left Stick X Axis") <= -0.95f)){
       
       axis_held_x = true;
 
@@ -92,7 +105,7 @@ public class map_select : MonoBehaviour {
     }
 
     else if(Input.GetKeyDown(KeyCode.UpArrow) ||
-            (!axis_held_y && Input.GetAxis("Controller 1 Left Stick Y Axis") <= -0.9f)){
+            (!axis_held_y && Input.GetAxis(mac + "Controller 1 Left Stick Y Axis") <= -0.9f)){
       
       axis_held_y = true;
 
@@ -104,7 +117,7 @@ public class map_select : MonoBehaviour {
     }
 
     else if(Input.GetKeyDown(KeyCode.DownArrow) ||
-            (!axis_held_y && Input.GetAxis("Controller 1 Left Stick Y Axis") >= 0.9f)){
+            (!axis_held_y && Input.GetAxis(mac + "Controller 1 Left Stick Y Axis") >= 0.9f)){
       
       axis_held_y = true;
 
@@ -120,10 +133,10 @@ public class map_select : MonoBehaviour {
       left_arrow_sr.color = white;
     }
 
-    if(Input.GetButtonDown("Controller 1 B Button")
-      || Input.GetButtonDown("Controller 2 B Button")
-      || Input.GetButtonDown("Controller 3 B Button")
-      || Input.GetButtonDown("Controller 4 B Button")
+    if(Input.GetButtonDown(mac + "Controller 1 B Button")
+      || Input.GetButtonDown(mac + "Controller 2 B Button")
+      || Input.GetButtonDown(mac + "Controller 3 B Button")
+      || Input.GetButtonDown(mac + "Controller 4 B Button")
       || Input.GetKeyDown(KeyCode.B)
       || Input.GetKeyDown(KeyCode.Escape))
     {
@@ -131,10 +144,10 @@ public class map_select : MonoBehaviour {
     }
 
     if(Input.GetKeyDown(KeyCode.Return) ||
-       Input.GetButtonDown("Controller 1 Start Button") ||
-       Input.GetButtonDown("Controller 2 Start Button") ||
-       Input.GetButtonDown("Controller 3 Start Button") ||
-       Input.GetButtonDown("Controller 4 Start Button") ){
+       Input.GetButtonDown(mac + "Controller 1 Start Button") ||
+       Input.GetButtonDown(mac + "Controller 2 Start Button") ||
+       Input.GetButtonDown(mac + "Controller 3 Start Button") ||
+       Input.GetButtonDown(mac + "Controller 4 Start Button") ){
 
       if(game_mode == 0){
         PlayerPrefs.SetString("GameMode", "SURVIVAL");
@@ -166,12 +179,12 @@ public class map_select : MonoBehaviour {
 
     }
 
-    if(Input.GetAxisRaw("Controller 1 Left Stick Y Axis") == 0)
+    if(Input.GetAxisRaw(mac + "Controller 1 Left Stick Y Axis") == 0)
     {
       axis_held_y = false;
     }
 
-    if (Input.GetAxisRaw("Controller 1 Left Stick X Axis") == 0)
+    if (Input.GetAxisRaw(mac + "Controller 1 Left Stick X Axis") == 0)
     {
       axis_held_x = false;
     }

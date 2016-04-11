@@ -9,6 +9,8 @@ public class player : MonoBehaviour{
   // ==[variables]==============================================================
   // ===========================================================================
 
+    public string mac = "";
+
     // endgame
     public bool gameOver;
 
@@ -151,6 +153,17 @@ public class player : MonoBehaviour{
   // ===========================================================================
 
   	void Start(){
+      // Mac Check
+      if (Application.platform == RuntimePlatform.OSXEditor
+        || Application.platform == RuntimePlatform.OSXPlayer
+        || Application.platform == RuntimePlatform.OSXPlayer)
+      {
+        mac = "Mac ";
+      }
+      else
+      {
+        mac = "";
+      }
 
       // initialize variables
       gameOver = false;
@@ -164,14 +177,7 @@ public class player : MonoBehaviour{
       ColorUtility.TryParseHtmlString("#2c5d99", out blue);
       ColorUtility.TryParseHtmlString("#854db5", out purple);
       ColorUtility.TryParseHtmlString("#ebebeb", out black);
-      colors = new Dictionary<string, Color>(){
-        { "red", red},
-        { "orange", orange},
-        { "yellow", yellow},
-        { "green", green},
-        { "blue", blue},
-        { "purple", purple},
-        { "black", black},
+      colors = new Dictionary<string, Color>(){{ "red", red},{ "orange", orange},{ "yellow", yellow},{ "green", green},{ "blue", blue},{ "purple", purple},{ "black", black},
       };
 
       // get components
@@ -260,7 +266,7 @@ public class player : MonoBehaviour{
       
       // gameOver check to disable character control
       if(gameOver){
-      if (!dead) deathTime = Time.time;
+      if(!dead) deathTime = Time.time;
         return;
       }
 
@@ -322,10 +328,10 @@ public class player : MonoBehaviour{
       // =======================================================================
 
     
-      if(Input.GetButtonDown("Controller " + player_number + " Start Button") && !level.S.pause){
+      if(Input.GetButtonDown(mac + "Controller " + player_number + " Start Button") && !level.S.pause){
         level.S.pause = true;
       }
-      else if(Input.GetButtonDown("Controller " + player_number + " Start Button") && level.S.pause){
+      else if(Input.GetButtonDown(mac + "Controller " + player_number + " Start Button") && level.S.pause){
         level.S.pause = false;
       }
 
@@ -341,26 +347,26 @@ public class player : MonoBehaviour{
       // swap gravity orientation
   		if(!poisoned && !dead){
   			// up
-  			if((Input.GetAxis("Controller " + player_number + " Right Stick Y Axis") < -0.9f || Input.GetButtonDown("Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up){
+  			if((Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis") < -0.4f || Input.GetButtonDown(mac + "Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up){
   				Gravity(orientation.up, transform.localEulerAngles.y, 180f);
           gravitySwapCount++;
           sound.PlayOneShot(gravitySwap, gravVolume);
         }
   			// down
 
-  			if((Input.GetAxis("Controller " + player_number + " Right Stick Y Axis") > 0.9f || Input.GetButtonDown("Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S)) && player_orientation != orientation.down){
+  			if((Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis") > 0.4f || Input.GetButtonDown(mac + "Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S)) && player_orientation != orientation.down){
   				Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
           gravitySwapCount++;
           sound.PlayOneShot(gravitySwap, gravVolume);
         }
   			// left
-  			if((Input.GetAxis("Controller " + player_number + " Right Stick X Axis") < -0.9f || Input.GetButtonDown("Controller " + player_number + " X Button") || Input.GetKey(KeyCode.A)) && player_orientation != orientation.left){
+  			if((Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis") < -0.4f || Input.GetButtonDown(mac + "Controller " + player_number + " X Button") || Input.GetKey(KeyCode.A)) && player_orientation != orientation.left){
   				Gravity(orientation.left, 0f, -90f);
           gravitySwapCount++;
           sound.PlayOneShot(gravitySwap, gravVolume);
         }
   			// right
-  			if((Input.GetAxis("Controller " + player_number + " Right Stick X Axis") > 0.9f || Input.GetButtonDown("Controller " + player_number + " B Button") || Input.GetKey(KeyCode.D)) && player_orientation != orientation.right){
+  			if((Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis") > 0.4f || Input.GetButtonDown(mac + "Controller " + player_number + " B Button") || Input.GetKey(KeyCode.D)) && player_orientation != orientation.right){
   				Gravity(orientation.right, 0f, 90f);
           gravitySwapCount++;
           sound.PlayOneShot(gravitySwap, gravVolume);
@@ -375,21 +381,21 @@ public class player : MonoBehaviour{
   			if(level.S.gamemode != GameMode.REVERSE_TAG){
 
           // shoot
-          //if((Input.GetButtonDown("Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.LeftShift)) && Time.time > nextFire && numBullets > 0)
-          /*if((Input.GetButtonDown("Controller " + player_number + " Right Bumper") &&
-              Input.GetButtonDown("Controller " + player_number + " Left Bumper") ||
+          //if((Input.GetButtonDown(mac + "Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.LeftShift)) && Time.time > nextFire && numBullets > 0)
+          /*if((Input.GetButtonDown(mac + "Controller " + player_number + " Right Bumper") &&
+              Input.GetButtonDown(mac + "Controller " + player_number + " Left Bumper") ||
               Input.GetKeyDown(KeyCode.LeftShift)) && Time.time > nextFire){
           	Shoot();
           }*/
           
           // attack
-          if((Input.GetButtonDown("Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.Space)) && Time.time > nextFire){
+          if((Input.GetAxis(mac + "Controller " + player_number + " Right Trigger") > 0.25f || Input.GetButtonDown(mac + "Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.Space)) && Time.time > nextFire){
                     numSwordSwipes++;
   				  Block();
   			  }
           
           // block
-          else if((Input.GetButtonDown("Controller " + player_number + " Left Bumper") || Input.GetKey(KeyCode.Q)) && Time.time > nextFire){
+          else if((Input.GetAxis(mac + "Controller " + player_number + " Left Trigger") > 0.25f || Input.GetButtonDown(mac + "Controller " + player_number + " Left Bumper") || Input.GetKey(KeyCode.Q)) && Time.time > nextFire){
             Shoot();
   			  }
 
@@ -402,11 +408,11 @@ public class player : MonoBehaviour{
         GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.5f); //Ghost Body
         
         // poison
-        // if((Input.GetAxis("Controller " + player_number + " Right Bumper") >= 0.9 || Input.GetKey(KeyCode.LeftShift)) && Time.time > poisonTime){
+        // if((Input.GetAxis(mac + "Controller " + player_number + " Right Bumper") >= 0.9 || Input.GetKey(KeyCode.LeftShift)) && Time.time > poisonTime){
         // 	Poison();
         // }
 
-        if((Input.GetButtonDown("Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.LeftShift)) && Time.time > poisonTime){
+        if((Input.GetButtonDown(mac + "Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.LeftShift)) && Time.time > poisonTime){
   				Attack();
   			}
 
@@ -437,7 +443,7 @@ public class player : MonoBehaviour{
   		move_down = false;
 
   		// move right
-  		if(Input.GetAxis("Controller " + player_number + " Left Stick X Axis") >= 0.9f || Input.GetKey(KeyCode.RightArrow)){
+  		if(Input.GetAxis(mac + "Controller " + player_number + " Left Stick X Axis") >= 0.9f || Input.GetKey(KeyCode.RightArrow)){
         
         moving = true;
   			
@@ -461,7 +467,7 @@ public class player : MonoBehaviour{
   		}
 
   		// move left
-  		if(Input.GetAxis("Controller " + player_number + " Left Stick X Axis") <= -0.9f || Input.GetKey(KeyCode.LeftArrow)){
+  		if(Input.GetAxis(mac + "Controller " + player_number + " Left Stick X Axis") <= -0.9f || Input.GetKey(KeyCode.LeftArrow)){
         
         moving = true;
   			
@@ -485,7 +491,7 @@ public class player : MonoBehaviour{
   		}
 
   		// move up
-  		if(Input.GetAxis("Controller " + player_number + " Left Stick Y Axis") <= -0.9f || Input.GetKey(KeyCode.UpArrow)){
+  		if(Input.GetAxis(mac + "Controller " + player_number + " Left Stick Y Axis") <= -0.9f || Input.GetKey(KeyCode.UpArrow)){
         
         moving = true;
   			
@@ -509,7 +515,7 @@ public class player : MonoBehaviour{
   		}
 
   		// move down
-  		if(Input.GetAxis("Controller " + player_number + " Left Stick Y Axis") >= 0.9f || Input.GetKey(KeyCode.DownArrow)){
+  		if(Input.GetAxis(mac + "Controller " + player_number + " Left Stick Y Axis") >= 0.9f || Input.GetKey(KeyCode.DownArrow)){
         
         moving = true;
   			
@@ -570,7 +576,7 @@ public class player : MonoBehaviour{
   		}
 
   		if(!player_animator.GetBool("block")){
-  			shield.GetComponent<CircleCollider2D>().enabled = false;
+  			shield.GetComponent<PolygonCollider2D>().enabled = false;
   		}
 
   		// if has been attacked by Ghost
@@ -582,10 +588,10 @@ public class player : MonoBehaviour{
 
   			// remove poison with button tap
   			if((Input.GetKeyDown(KeyCode.LeftShift) || 
-            Input.GetButtonDown("Controller " + player_number + " A Button") ||
-            Input.GetButtonDown("Controller " + player_number + " B Button") || 
-            Input.GetButtonDown("Controller " + player_number + " X Button") || 
-            Input.GetButtonDown("Controller " + player_number + " Y Button")) && !dead){
+            Input.GetButtonDown(mac + "Controller " + player_number + " A Button") ||
+            Input.GetButtonDown(mac + "Controller " + player_number + " B Button") || 
+            Input.GetButtonDown(mac + "Controller " + player_number + " X Button") || 
+            Input.GetButtonDown(mac + "Controller " + player_number + " Y Button")) && !dead){
   				curButtonTaps++;
           poisonGO.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, (1 - 0.1f * curButtonTaps));
   			}
@@ -605,8 +611,7 @@ public class player : MonoBehaviour{
         body.velocity = new Vector2(0f, 0f);
       }
 
-      if(invincible && Time.time > invincibleStart)
-        {
+      if(invincible && Time.time > invincibleStart){
             invincible = false;
         }
   	}
@@ -673,7 +678,7 @@ public class player : MonoBehaviour{
 
   		// apply jump
   		if(move_up && grounded == 1 && (delay < 0)){
-  			Jump();
+  			//Jump();
   		}
   		else if(grounded == 1 && (player_orientation == orientation.up || player_orientation == orientation.down)){
   			body.velocity = new Vector2(body.velocity.x, 0);
@@ -1039,10 +1044,10 @@ public class player : MonoBehaviour{
       nextFire = Time.time + fireRate;
         invincibleStart = Time.time + invincibleTime;
         invincible = true;
-      player_animator.Play("Block");
+      player_animator.Play("Attack");
   		player_animator.SetBool("block", true);
   		shield_animator.Play("Shield");
-  		shield.GetComponent<CircleCollider2D>().enabled = true;
+  		// shield.GetComponent<CircleCollider2D>().enabled = true;
   	}
 
     void SuperSlash(){
@@ -1066,28 +1071,28 @@ public class player : MonoBehaviour{
   // ===========================================================================
 
   	public void FindKiller(GameObject collideObject, bool bulletAttack){
-        Vector3 killerPos = new Vector3(0,0,0);
+      Vector3 killerPos = new Vector3(0,0,0);
   		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
   		foreach(GameObject p in players){
   			player other = (player)p.GetComponent(typeof(player));
-            if(bulletAttack && other.bullet_instance == collideObject){
-                other.numBulletHits++;
-                killerPos = other.transform.position;
-                if (this.name != other.name)
-                  other.playersKilled.Add(this.gameObject.name);
-                else
-                    suicides++;
-                    
-  	        }
+        if(bulletAttack && other.bullet_instance == collideObject){
+          other.numBulletHits++;
+          killerPos = other.transform.position;
+          if(this.name != other.name){
+            other.playersKilled.Add(this.gameObject.name);
+          }
+          else{
+            suicides++;
+          }  
+        }
 
-  	        else if(!bulletAttack && other.shield == collideObject){
-  		        other.playersKilled.Add(this.gameObject.name);
-                other.numSwordHits++;
-                killerPos = other.transform.position;
-
-              }
+        else if(!bulletAttack && other.shield == collideObject){
+	        other.playersKilled.Add(this.gameObject.name);
+          other.numSwordHits++;
+          killerPos = other.transform.position;
+        }
   		}
-        KillPlayer();
+      KillPlayer();
   	}
 
   	public void KillPlayer(){
@@ -1110,6 +1115,8 @@ public class player : MonoBehaviour{
       numBullets = 1;
 
       player_animator.Play("Death");
+
+      level.S.alive_players.Remove(gameObject);
 
       if(Time.time - lastDeath > longestLife)
         longestLife = (int)((Time.time - lastDeath) *100);
@@ -1139,6 +1146,7 @@ public class player : MonoBehaviour{
   		transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
       body.velocity = new Vector2(0f, 0f);
       player_orientation = orientation.down;
+      level.S.alive_players.Insert(0, gameObject);
       player_animator.Play("Appear");
   		
       if(lives == 0 && (level.S.gamemode == GameMode.SURVIVAL)){
@@ -1197,24 +1205,22 @@ public class player : MonoBehaviour{
 
       }*/
       
-      if(col.tag == "shield" && !respawn && !dead)
-        {
-            if (player_animator.GetBool("block") || player_animator.GetBool("attack"))
-            {
-                if (swipeBlock)
-                {
-                    swipeBlockStart = Time.time;
-                    sound.PlayOneShot(block);
-                    body.AddForce(transform.right * -1 * 0.02f, ForceMode2D.Impulse);
-                    numBlocks++;
-                }
-                swipeBlock = false;
-                return;
-            }
-            if (!invincible)
-                FindKiller(col.gameObject, false);
-            
+      if(col.tag == "shield" && !respawn && !dead){
+        if(player_animator.GetBool("block") || player_animator.GetBool("attack")){
+          if(swipeBlock){
+            swipeBlockStart = Time.time;
+            sound.PlayOneShot(block);
+            body.AddForce(transform.right * -1 * 0.02f, ForceMode2D.Impulse);
+            numBlocks++;
+          }
+          swipeBlock = false;
+          return;
         }
+        if(!invincible){
+          FindKiller(col.gameObject, false);
+        }
+            
+      }
       
       else if(col.tag == "extraBullets" && !player_animator.GetBool("attack")){
         numBullets++;

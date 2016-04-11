@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class character_select_manager : MonoBehaviour {
 
+  public string mac = "";
+
   public GameObject ready;
   public GameObject ready_text;
 
@@ -34,16 +36,31 @@ public class character_select_manager : MonoBehaviour {
     return false;
   }
 
+  void Start()
+  {
+    // Mac Check
+    if (Application.platform == RuntimePlatform.OSXEditor
+      || Application.platform == RuntimePlatform.OSXPlayer
+      || Application.platform == RuntimePlatform.OSXPlayer)
+    {
+      mac = "Mac ";
+    }
+    else
+    {
+      mac = "";
+    }
+  }
+
   void Update(){
 
     ready.SetActive(all_players_ready());
     ready_text.SetActive(all_players_ready());
 
     if(all_players_ready()){
-      if(Input.GetButtonUp("Controller 1 Start Button")
-      || Input.GetButtonUp("Controller 2 Start Button")
-      || Input.GetButtonUp("Controller 3 Start Button")
-      || Input.GetButtonUp("Controller 4 Start Button")){
+      if(Input.GetButtonUp(mac + "Controller 1 Start Button")
+      || Input.GetButtonUp(mac + "Controller 2 Start Button")
+      || Input.GetButtonUp(mac + "Controller 3 Start Button")
+      || Input.GetButtonUp(mac + "Controller 4 Start Button")){
         for(int i = 1; i <= 4; i++){
           if(selected_character["P" + i] >= 0){
             PlayerPrefs.SetString("P" + i, player_prefab_names[selected_character["P" + i]]);
