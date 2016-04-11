@@ -95,7 +95,8 @@ public class player : MonoBehaviour{
     public int gravitySwapCount = 0, totalPoisoned = 0, numBulletShots = 0,
     numBulletHits = 0, numSwordSwipes = 0, numSwordHits = 0, numBlocks = 0,
     steps = 0, longestLife = 0, shortestLife = 1000000, bulletPickUps = 0,
-    airTime = 0, longestAirTime = 0, borderSwaps = 0, suicides = 0;
+    airTime = 0, longestAirTime = 0, borderSwaps = 0, suicides = 0, steals = 0;
+    public bool firstTouch = false;
     float lastDeath, curAirTime;
   	public List<String> playersKilled;
     bool moving = false, airStart = false;
