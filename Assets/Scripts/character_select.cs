@@ -90,7 +90,7 @@ public class character_select : MonoBehaviour {
       if(Input.GetButtonDown(mac + "Controller " + player + " B Button") ||
          Input.GetButtonDown(mac + "Controller " + player + " Back Button") ||
          Input.GetKeyDown(KeyCode.B)){
-        SceneManager.LoadScene("_scene_Menu");
+        SceneManager.LoadScene("_scene_title");
       }      
 
     }
