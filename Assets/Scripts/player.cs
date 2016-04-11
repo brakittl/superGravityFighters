@@ -177,14 +177,7 @@ public class player : MonoBehaviour{
       ColorUtility.TryParseHtmlString("#2c5d99", out blue);
       ColorUtility.TryParseHtmlString("#854db5", out purple);
       ColorUtility.TryParseHtmlString("#ebebeb", out black);
-      colors = new Dictionary<string, Color>(){
-        { "red", red},
-        { "orange", orange},
-        { "yellow", yellow},
-        { "green", green},
-        { "blue", blue},
-        { "purple", purple},
-        { "black", black},
+      colors = new Dictionary<string, Color>(){{ "red", red},{ "orange", orange},{ "yellow", yellow},{ "green", green},{ "blue", blue},{ "purple", purple},{ "black", black},
       };
 
       // get components
@@ -273,7 +266,7 @@ public class player : MonoBehaviour{
       
       // gameOver check to disable character control
       if(gameOver){
-      if (!dead) deathTime = Time.time;
+      if(!dead) deathTime = Time.time;
         return;
       }
 
@@ -618,8 +611,7 @@ public class player : MonoBehaviour{
         body.velocity = new Vector2(0f, 0f);
       }
 
-      if(invincible && Time.time > invincibleStart)
-        {
+      if(invincible && Time.time > invincibleStart){
             invincible = false;
         }
   	}
@@ -1052,7 +1044,7 @@ public class player : MonoBehaviour{
       nextFire = Time.time + fireRate;
         invincibleStart = Time.time + invincibleTime;
         invincible = true;
-      player_animator.Play("Block");
+      player_animator.Play("Attack");
   		player_animator.SetBool("block", true);
   		shield_animator.Play("Shield");
   		// shield.GetComponent<CircleCollider2D>().enabled = true;
@@ -1079,28 +1071,28 @@ public class player : MonoBehaviour{
   // ===========================================================================
 
   	public void FindKiller(GameObject collideObject, bool bulletAttack){
-        Vector3 killerPos = new Vector3(0,0,0);
+      Vector3 killerPos = new Vector3(0,0,0);
   		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
   		foreach(GameObject p in players){
   			player other = (player)p.GetComponent(typeof(player));
-            if(bulletAttack && other.bullet_instance == collideObject){
-                other.numBulletHits++;
-                killerPos = other.transform.position;
-                if (this.name != other.name)
-                  other.playersKilled.Add(this.gameObject.name);
-                else
-                    suicides++;
-                    
-  	        }
+        if(bulletAttack && other.bullet_instance == collideObject){
+          other.numBulletHits++;
+          killerPos = other.transform.position;
+          if(this.name != other.name){
+            other.playersKilled.Add(this.gameObject.name);
+          }
+          else{
+            suicides++;
+          }  
+        }
 
-  	        else if(!bulletAttack && other.shield == collideObject){
-  		        other.playersKilled.Add(this.gameObject.name);
-                other.numSwordHits++;
-                killerPos = other.transform.position;
-
-              }
+        else if(!bulletAttack && other.shield == collideObject){
+	        other.playersKilled.Add(this.gameObject.name);
+          other.numSwordHits++;
+          killerPos = other.transform.position;
+        }
   		}
-        KillPlayer();
+      KillPlayer();
   	}
 
   	public void KillPlayer(){
@@ -1213,24 +1205,22 @@ public class player : MonoBehaviour{
 
       }*/
       
-      if(col.tag == "shield" && !respawn && !dead)
-        {
-            if (player_animator.GetBool("block") || player_animator.GetBool("attack"))
-            {
-                if (swipeBlock)
-                {
-                    swipeBlockStart = Time.time;
-                    sound.PlayOneShot(block);
-                    body.AddForce(transform.right * -1 * 0.02f, ForceMode2D.Impulse);
-                    numBlocks++;
-                }
-                swipeBlock = false;
-                return;
-            }
-            if (!invincible)
-                FindKiller(col.gameObject, false);
-            
+      if(col.tag == "shield" && !respawn && !dead){
+        if(player_animator.GetBool("block") || player_animator.GetBool("attack")){
+          if(swipeBlock){
+            swipeBlockStart = Time.time;
+            sound.PlayOneShot(block);
+            body.AddForce(transform.right * -1 * 0.02f, ForceMode2D.Impulse);
+            numBlocks++;
+          }
+          swipeBlock = false;
+          return;
         }
+        if(!invincible){
+          FindKiller(col.gameObject, false);
+        }
+            
+      }
       
       else if(col.tag == "extraBullets" && !player_animator.GetBool("attack")){
         numBullets++;
