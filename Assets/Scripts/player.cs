@@ -341,26 +341,26 @@ public class player : MonoBehaviour{
       // swap gravity orientation
   		if(!poisoned && !dead){
   			// up
-  			if((Input.GetAxis("Controller " + player_number + " Right Stick Y Axis") < -0.9f || Input.GetButtonDown("Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up){
+  			if((Input.GetAxis("Controller " + player_number + " Right Stick Y Axis") < -0.4f || Input.GetButtonDown("Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up){
   				Gravity(orientation.up, transform.localEulerAngles.y, 180f);
           gravitySwapCount++;
           sound.PlayOneShot(gravitySwap, gravVolume);
         }
   			// down
 
-  			if((Input.GetAxis("Controller " + player_number + " Right Stick Y Axis") > 0.9f || Input.GetButtonDown("Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S)) && player_orientation != orientation.down){
+  			if((Input.GetAxis("Controller " + player_number + " Right Stick Y Axis") > 0.4f || Input.GetButtonDown("Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S)) && player_orientation != orientation.down){
   				Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
           gravitySwapCount++;
           sound.PlayOneShot(gravitySwap, gravVolume);
         }
   			// left
-  			if((Input.GetAxis("Controller " + player_number + " Right Stick X Axis") < -0.9f || Input.GetButtonDown("Controller " + player_number + " X Button") || Input.GetKey(KeyCode.A)) && player_orientation != orientation.left){
+  			if((Input.GetAxis("Controller " + player_number + " Right Stick X Axis") < -0.4f || Input.GetButtonDown("Controller " + player_number + " X Button") || Input.GetKey(KeyCode.A)) && player_orientation != orientation.left){
   				Gravity(orientation.left, 0f, -90f);
           gravitySwapCount++;
           sound.PlayOneShot(gravitySwap, gravVolume);
         }
   			// right
-  			if((Input.GetAxis("Controller " + player_number + " Right Stick X Axis") > 0.9f || Input.GetButtonDown("Controller " + player_number + " B Button") || Input.GetKey(KeyCode.D)) && player_orientation != orientation.right){
+  			if((Input.GetAxis("Controller " + player_number + " Right Stick X Axis") > 0.4f || Input.GetButtonDown("Controller " + player_number + " B Button") || Input.GetKey(KeyCode.D)) && player_orientation != orientation.right){
   				Gravity(orientation.right, 0f, 90f);
           gravitySwapCount++;
           sound.PlayOneShot(gravitySwap, gravVolume);
@@ -383,13 +383,13 @@ public class player : MonoBehaviour{
           }*/
           
           // attack
-          if((Input.GetButtonDown("Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.Space)) && Time.time > nextFire){
+          if((Input.GetAxis("Controller " + player_number + " Right Trigger") > 0.25f || Input.GetButtonDown("Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.Space)) && Time.time > nextFire){
                     numSwordSwipes++;
   				  Block();
   			  }
           
           // block
-          else if((Input.GetButtonDown("Controller " + player_number + " Left Bumper") || Input.GetKey(KeyCode.Q)) && Time.time > nextFire){
+          else if((Input.GetAxis("Controller " + player_number + " Left Trigger") > 0.25f || Input.GetButtonDown("Controller " + player_number + " Left Bumper") || Input.GetKey(KeyCode.Q)) && Time.time > nextFire){
             Shoot();
   			  }
 
@@ -673,7 +673,7 @@ public class player : MonoBehaviour{
 
   		// apply jump
   		if(move_up && grounded == 1 && (delay < 0)){
-  			Jump();
+  			//Jump();
   		}
   		else if(grounded == 1 && (player_orientation == orientation.up || player_orientation == orientation.down)){
   			body.velocity = new Vector2(body.velocity.x, 0);

@@ -115,11 +115,12 @@ public class level : MonoBehaviour {
     // ==[players]============================================================
     // =========================================================================
 
-
+    /*
     PlayerPrefs.SetString("P1", "red_player");
     PlayerPrefs.SetString("P2", "black_player");
     PlayerPrefs.SetString("P3", "yellow_player");
     PlayerPrefs.SetString("P4", "green_player");
+    */
 
     PlayerPrefs.SetString("Player Name", "Foobar");
 
