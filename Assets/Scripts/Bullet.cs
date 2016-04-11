@@ -6,17 +6,13 @@ public class Bullet : MonoBehaviour{
   public float reflectMultiplier = 1.25f;
   void OnTriggerEnter2D(Collider2D col){
         
-        if (col.tag == "slash")
+        if (col.tag == "slash" || col.tag == "shield")
         {
             GetComponent<Rigidbody2D>().velocity = -GetComponent<Rigidbody2D>().velocity * reflectMultiplier;
         }
         else if (col.tag == "ground" || col.tag == "bullet")
         {
             Destroy(this.gameObject);
-        }
-        else if (col.tag == "shield")
-        {
-           GetComponent<Rigidbody2D>().velocity = -GetComponent<Rigidbody2D>().velocity * reflectMultiplier;
         }
         else if (col.tag == "Player")
         {

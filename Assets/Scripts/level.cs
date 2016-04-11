@@ -76,7 +76,7 @@ public class level : MonoBehaviour {
 
     S = this;
 
-    if(isMap){
+        if (isMap){
       podium = GameObject.Find("Podium");
       if (podium != null) podium.SetActive(false);
       PostGameOb = GameObject.Find("PostGameCanvas");
@@ -120,8 +120,8 @@ public class level : MonoBehaviour {
 
     if(isMap){
 
-      // p1
-      numPlayers = 0;
+            // p1
+            numPlayers = 0;
       if(PlayerPrefs.GetString("P1") != "none"){
         player1 = Instantiate(Resources.Load("__Prefabs/_players/" + PlayerPrefs.GetString("P1")), returnPosition(0), Quaternion.Euler(rot)) as GameObject;
         player1.SendMessage("SetPlayerNumber", 1);
@@ -381,30 +381,53 @@ public class level : MonoBehaviour {
   public GameObject killStreak;
   GameObject streak;
   public bool pause = false, running = false;
-  // int runAgain = 0;
-  //public List<Vector3> positions = new List<Vector3>();
 
-  public void KillPause(Vector3 playerPos){
+
+    bool cameraShake = false;
+    public void KillPause(Vector3 playerPos){
     if(!running){
       running = true;
       StartCoroutine(Pause(playerPos));
     }
   }
-    
+
   IEnumerator Pause(Vector3 pos){
     Time.timeScale = 0.1f;
-    Vector3 rot = transform.rotation.eulerAngles;
+    Vector3 rot = transform.rotation.eulerAngles, originalPos = transform.position;
 
-        //rot.z = 180 - Mathf.Atan2(killerPos.y - pos.y, killerPos.x - pos.x) * 180 / Mathf.PI;
-        rot.z = Random.Range(0, 90);
-    streak = Instantiate(killStreak, pos, Quaternion.Euler(rot)) as GameObject;
+    rot.z = Random.Range(0, 90);
+    if(gamemode == GameMode.SURVIVAL)
+        streak = Instantiate(killStreak, pos, Quaternion.Euler(rot)) as GameObject;
     
-    yield return new WaitForSeconds(0.03f);
+    
+    CameraShake();
+    yield return new WaitForSeconds(0.005f);
+    transform.position = originalPos;
+    CameraShake();
+    yield return new WaitForSeconds(0.005f);
+    transform.position = originalPos;
+    CameraShake();
+    yield return new WaitForSeconds(0.005f);
+    transform.position = originalPos;
+    CameraShake();
+    yield return new WaitForSeconds(0.005f);
+    transform.position = originalPos;
+    CameraShake();
+    transform.position = originalPos;
+
     Destroy(streak);
     Time.timeScale = 1;
-
     running = false;
   }
+
+    float shakeIntensity = 0.15f;
+    void CameraShake()
+    {
+        Vector3 pos = transform.position;
+        pos.x = Random.Range(-shakeIntensity, shakeIntensity);
+        pos.y = Random.Range(-shakeIntensity, shakeIntensity);
+        transform.position = pos;
+    }
 
   public Vector3 findRespawn(){
     
