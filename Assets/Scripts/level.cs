@@ -64,7 +64,8 @@ public class level : MonoBehaviour {
     { "THUG LIFE","most steals" },
     { "JUST A GOOD PERSON","least steals" },
     { "IRON GRIP","longest single possession" },
-    { "BUTTERFINGERS","shortest single possession" }
+    { "BUTTERFINGERS","shortest single possession" },
+    { "QUICKDRAW","first possession" }
   };
 
   void Start(){
@@ -946,7 +947,7 @@ public class level : MonoBehaviour {
         {
           if (activePlayers[low].firstTouch)
           {
-            activePlayers[low].medals.Add("FIRST TOUCH");
+            activePlayers[low].medals.Add("QUICKDRAW");
             break;
           }
         }
