@@ -178,7 +178,14 @@ public class player : MonoBehaviour{
       ColorUtility.TryParseHtmlString("#2c5d99", out blue);
       ColorUtility.TryParseHtmlString("#854db5", out purple);
       ColorUtility.TryParseHtmlString("#ebebeb", out black);
-      colors = new Dictionary<string, Color>(){{ "red", red},{ "orange", orange},{ "yellow", yellow},{ "green", green},{ "blue", blue},{ "purple", purple},{ "black", black},
+      colors = new Dictionary<string, Color>(){
+        {"red", red},
+        {"orange", orange},
+        {"yellow", yellow},
+        {"green", green},
+        {"blue", blue},
+        {"purple", purple},
+        {"black", black},
       };
 
       // get components
@@ -306,10 +313,12 @@ public class player : MonoBehaviour{
         else if(level.S.gamemode == GameMode.DEATHMATCH){
           int i = 0;
           foreach(string player_string in playersKilled){
-            char[] delimiters = {'_'};
-            string[] splits = player_string.Split(delimiters);
+            Debug.Log(player_string);
+            // char[] delimiters = {'_'};
+            // string[] splits = player_string.Split(delimiters);
             hearts[i].SetActive(true);
-            hearts[i].GetComponent<Image>().sprite = get_sprite_by_name(hearts_skulls, splits[0] + "_skull");
+            // hearts[i].GetComponent<Image>().sprite = get_sprite_by_name(hearts_skulls, splits[0] + "_skull");
+            hearts[i].GetComponent<Image>().sprite = get_sprite_by_name(hearts_skulls, player_color.ToLower() + "_skull");
             ++i;
           }
           for(; i < 10; ++i){
@@ -1072,13 +1081,13 @@ public class player : MonoBehaviour{
   // ===========================================================================
 
   	public void FindKiller(GameObject collideObject, bool bulletAttack){
-      Vector3 killerPos = new Vector3(0,0,0);
+      // Vector3 killerPos = new Vector3(0,0,0);
   		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
   		foreach(GameObject p in players){
   			player other = (player)p.GetComponent(typeof(player));
         if(bulletAttack && other.bullet_instance == collideObject){
           other.numBulletHits++;
-          killerPos = other.transform.position;
+          // killerPos = other.transform.position;
           if(this.name != other.name){
             other.playersKilled.Add(this.gameObject.name);
           }
@@ -1090,7 +1099,7 @@ public class player : MonoBehaviour{
         else if(!bulletAttack && other.shield == collideObject){
 	        other.playersKilled.Add(this.gameObject.name);
           other.numSwordHits++;
-          killerPos = other.transform.position;
+          // killerPos = other.transform.position;
         }
   		}
       KillPlayer();
@@ -1105,7 +1114,7 @@ public class player : MonoBehaviour{
   	  up_slash.GetComponent<BoxCollider2D>().enabled = false;
   	  down_slash.GetComponent<BoxCollider2D>().enabled = false;
       lives--;
-      level.S.KillPause(transform.position);
+      level.S.KillPause(transform.position, colors[player_color.ToLower()]);
 
       // turn off poison
       poisoned = false;
@@ -1131,19 +1140,20 @@ public class player : MonoBehaviour{
 
   	IEnumerator Wait(){
 
-        Time.timeScale = 0.1f;
-        yield return new WaitForSeconds(0.3f);
+      Time.timeScale = 0.1f;
+      yield return new WaitForSeconds(0.3f);
 
-        Vector3 pos = transform.position;
+      Vector3 pos = transform.position;
   		transform.position = offscreen;
-        if(level.S.gamemode == GameMode.SURVIVAL)
-            Instantiate(extraBullet, pos, transform.rotation);
+      if(level.S.gamemode == GameMode.SURVIVAL){
+        Instantiate(extraBullet, pos, transform.rotation);
+      }
       Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
       player_orientation = orientation.down;
 
       yield return new WaitForSeconds(1f);
 
-        transform.position = level.S.findRespawn();
+      transform.position = level.S.findRespawn();
   		transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
       body.velocity = new Vector2(0f, 0f);
       player_orientation = orientation.down;

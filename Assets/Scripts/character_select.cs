@@ -36,12 +36,10 @@ public class character_select : MonoBehaviour {
     // Mac Check
     if (Application.platform == RuntimePlatform.OSXEditor
       || Application.platform == RuntimePlatform.OSXPlayer
-      || Application.platform == RuntimePlatform.OSXPlayer)
-    {
+      || Application.platform == RuntimePlatform.OSXPlayer){
       mac = "Mac ";
     }
-    else
-    {
+    else{
       mac = "";
     }
 
