@@ -368,26 +368,38 @@ public class player : MonoBehaviour{
   			if((Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis") < -0.4f || Input.GetButtonDown(mac + "Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up){
   				Gravity(orientation.up, transform.localEulerAngles.y, 180f);
           gravitySwapCount++;
-          sound.PlayOneShot(gravitySwap, gravVolume);
+          if(PlayerPrefs.GetFloat("sfx") != 0){
+            sound.PlayOneShot(gravitySwap, gravVolume);
+          }
+
         }
   			// down
 
   			if((Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis") > 0.4f || Input.GetButtonDown(mac + "Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S)) && player_orientation != orientation.down){
   				Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
           gravitySwapCount++;
-          sound.PlayOneShot(gravitySwap, gravVolume);
+          if(PlayerPrefs.GetFloat("sfx") != 0){
+            sound.PlayOneShot(gravitySwap, gravVolume);
+          }
+
         }
   			// left
   			if((Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis") < -0.4f || Input.GetButtonDown(mac + "Controller " + player_number + " X Button") || Input.GetKey(KeyCode.A)) && player_orientation != orientation.left){
   				Gravity(orientation.left, 0f, -90f);
           gravitySwapCount++;
-          sound.PlayOneShot(gravitySwap, gravVolume);
+          if(PlayerPrefs.GetFloat("sfx") != 0){
+            sound.PlayOneShot(gravitySwap, gravVolume);
+          }
+
         }
   			// right
   			if((Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis") > 0.4f || Input.GetButtonDown(mac + "Controller " + player_number + " B Button") || Input.GetKey(KeyCode.D)) && player_orientation != orientation.right){
   				Gravity(orientation.right, 0f, 90f);
           gravitySwapCount++;
-          sound.PlayOneShot(gravitySwap, gravVolume);
+          if(PlayerPrefs.GetFloat("sfx") != 0){
+            sound.PlayOneShot(gravitySwap, gravVolume);
+          }
+
         }
   		}
 
@@ -555,6 +567,8 @@ public class player : MonoBehaviour{
   			}
 
   		}
+
+      TabletopMovementShift();
 
       // ==[resets]=============================================================
       // =======================================================================
@@ -865,7 +879,7 @@ public class player : MonoBehaviour{
 
   		Vector2 below = transform.TransformDirection(new Vector2(0F, -length_ray_updw));
 
-  		LayerMask ignoreplayer_layerMask = ~(LayerMask.NameToLayer("Player") | LayerMask.NameToLayer("Border") | LayerMask.NameToLayer("TagBall"));
+  		LayerMask ignoreplayer_layerMask = ~(LayerMask.NameToLayer("Player") | LayerMask.NameToLayer("Border") | LayerMask.NameToLayer("TagBall") | LayerMask.NameToLayer("Attack"));
   		ignoreplayer_layerMask = ~ignoreplayer_layerMask;
 
   		if(player_orientation == orientation.up || player_orientation == orientation.down){ 
@@ -961,7 +975,10 @@ public class player : MonoBehaviour{
 
   		if(!player_animator.GetBool("attack") && !respawn && !player_animator.GetBool("crouched")){
 
-        sound.PlayOneShot(swordSlash);
+        if(PlayerPrefs.GetFloat("sfx") != 0){
+          sound.PlayOneShot(swordSlash);
+        }
+
         numSwordSwipes++; // statistics count
         nextFire = Time.time + fireRate;
         player_animator.SetBool("attack", true);
@@ -999,7 +1016,10 @@ public class player : MonoBehaviour{
   	void Shoot(){
 
       if(numBullets > 0){
-    		sound.PlayOneShot(gunshot);
+    		if(PlayerPrefs.GetFloat("sfx") != 0){
+          sound.PlayOneShot(gunshot);
+        }
+
     		nextFire = Time.time + fireRate;
     		numBulletShots++;
     		numBullets--;
@@ -1128,7 +1148,10 @@ public class player : MonoBehaviour{
 
   	public void KillPlayer(){
       
-      sound.PlayOneShot(death);
+      if(PlayerPrefs.GetFloat("sfx") != 0){
+        sound.PlayOneShot(death);
+      }
+
       respawn = true;
       slash.GetComponent<BoxCollider2D>().enabled = false;
   	  side_slash.GetComponent<BoxCollider2D>().enabled = false;
@@ -1206,42 +1229,46 @@ public class player : MonoBehaviour{
       
   	void OnTriggerEnter2D(Collider2D col){
       
-      /*if(col.tag == "slash" && !respawn && !dead && !invincible){
-        player p = col.transform.parent.GetComponent<player>();
-        if(p.dead){
-          if(!poisoned){
-            p.totalPoisoned++;
-          }
-          Poison();
-          p.poisonTime = Time.time + poisonRate;
-          return;
-        }
+      // if(col.tag == "slash" && !respawn && !dead && !invincible){
+      //   player p = col.transform.parent.GetComponent<player>();
+      //   if(p.dead){
+      //     if(!poisoned){
+      //       p.totalPoisoned++;
+      //     }
+      //     Poison();
+      //     p.poisonTime = Time.time + poisonRate;
+      //     return;
+      //   }
 
-        if(player_animator.GetBool("block") || player_animator.GetBool("attack")){
-          if(swipeBlock){
-            swipeBlockStart = Time.time;
-            sound.PlayOneShot(block);
-            body.AddForce(transform.right * -1 * 0.1f, ForceMode2D.Impulse);
-            numBlocks++;
-          }
-          swipeBlock = false;
-  	      return;
-        }
+      //   if(player_animator.GetBool("block") || player_animator.GetBool("attack")){
+      //     if(swipeBlock){
+      //       swipeBlockStart = Time.time;
+      //       if(PlayerPrefs.GetFloat("sfx") != 0){
+      //         sound.PlayOneShot(block);
+      //       }
 
-  			FindKiller(col.gameObject, false);
-  			KillPlayer();
-  			slash.GetComponent<BoxCollider2D>().enabled = false;
-  			side_slash.GetComponent<BoxCollider2D>().enabled = false;
-  			up_slash.GetComponent<BoxCollider2D>().enabled = false;
-  			down_slash.GetComponent<BoxCollider2D>().enabled = false;
+      //       body.AddForce(transform.right * -1 * 0.1f, ForceMode2D.Impulse);
+      //       numBlocks++;
+      //     }
+      //     swipeBlock = false;
+      //     return;
+      //   }
 
-      }*/
+      //   FindKiller(col.gameObject, false);
+      //   KillPlayer();
+      //   slash.GetComponent<BoxCollider2D>().enabled = false;
+      //   side_slash.GetComponent<BoxCollider2D>().enabled = false;
+      //   up_slash.GetComponent<BoxCollider2D>().enabled = false;
+      //   down_slash.GetComponent<BoxCollider2D>().enabled = false;
+      // }
       
       if(col.tag == "shield" && !respawn && !dead){
         if(player_animator.GetBool("block") || player_animator.GetBool("attack")){
           if(swipeBlock){
             swipeBlockStart = Time.time;
-            sound.PlayOneShot(block);
+            if(PlayerPrefs.GetFloat("sfx") != 0){
+              sound.PlayOneShot(block);
+            }
             body.AddForce(transform.right * -1 * 0.02f, ForceMode2D.Impulse);
             numBlocks++;
           }
@@ -1260,6 +1287,30 @@ public class player : MonoBehaviour{
         Destroy(col.gameObject);
       }
     }
+
+
+  void TabletopMovementShift(){
+    if(PlayerPrefs.GetString("screen") == "TABLETOP"){
+
+      if(player_number == 1){
+        return;
+      }
+      
+      else if(player_number == 2){
+
+      }
+
+      else if(player_number == 3){
+
+      }
+
+      else if(player_number == 4){
+
+      }
+
+    }
+
+  }
 
 
 }
