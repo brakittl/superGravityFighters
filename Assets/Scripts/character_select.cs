@@ -16,12 +16,14 @@ public class character_select : MonoBehaviour {
   
   public GameObject join_set;
   public GameObject select_set;
-  public GameObject return_set;
+  // public GameObject return_set;
   public GameObject podium;
 
   public GameObject join_button;
   public GameObject confirm_button;
   public GameObject cancel_button;
+  public GameObject controls_layout;
+  public GameObject ready_text;
 
   int prefab_number = 0;
   GameObject player_object;
@@ -47,8 +49,8 @@ public class character_select : MonoBehaviour {
     selected = false;
     axis_in_use = false;
 
-    if(player > Input.GetJoystickNames().Length){
-    // if(player > 1){
+    // if(player > Input.GetJoystickNames().Length){
+    if(player > 1){
       this.gameObject.SetActive(false);
       join_button.SetActive(false);
     }
@@ -165,8 +167,9 @@ public class character_select : MonoBehaviour {
       select_set.SetActive(false);
       confirm_button.SetActive(false);
       podium.SetActive(false);
-      return_set.SetActive(true);
+      // return_set.SetActive(true);
       cancel_button.SetActive(true);
+      controls_layout.SetActive(true);
       player_object.GetComponent<player>().player_number = player;
       manager.GetComponent<character_select_manager>().selected_character["P" + player] = prefab_number;
     }
@@ -176,8 +179,9 @@ public class character_select : MonoBehaviour {
     Show(false);
     selected = false;
     Join();
-    return_set.SetActive(false);
+    // return_set.SetActive(false);
     cancel_button.SetActive(false);
+    controls_layout.SetActive(false);
     manager.GetComponent<character_select_manager>().selected_character["P" + player] = -1;
   }
 

@@ -400,7 +400,7 @@ public class player : MonoBehaviour{
           
           // attack
           if((Input.GetAxis(mac + "Controller " + player_number + " Right Trigger") > 0.25f || Input.GetButtonDown(mac + "Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.Space)) && Time.time > nextFire){
-                    numSwordSwipes++;
+            numSwordSwipes++;
   				  Block();
   			  }
           
