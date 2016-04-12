@@ -25,6 +25,13 @@ public class character_select : MonoBehaviour {
   public GameObject controls_layout;
   public GameObject ready_text;
 
+  public Sprite red_line;
+  public Sprite white_line;
+
+  public int borders_touched = 0;
+
+  public GameObject[] borders;
+
   int prefab_number = 0;
   GameObject player_object;
 
@@ -33,6 +40,8 @@ public class character_select : MonoBehaviour {
   bool joined;
   bool selected;
   bool axis_in_use;
+
+  public bool tutorial;
 
 	void Start(){
     // Mac Check
@@ -49,13 +58,20 @@ public class character_select : MonoBehaviour {
     selected = false;
     axis_in_use = false;
 
-    // if(player > Input.GetJoystickNames().Length){
-    if(player > 1){
+    if(player > Input.GetJoystickNames().Length){
+    // if(player > 1){
       this.gameObject.SetActive(false);
       join_button.SetActive(false);
     }
 
     resize = new Vector3(1f, 1f, 1f);
+
+    if(PlayerPrefs.GetFloat("tutorial") == 0){
+      tutorial = false;
+    }
+    else{
+      tutorial = true;
+    }
 	
 	}
 	
@@ -129,6 +145,10 @@ public class character_select : MonoBehaviour {
 
     else{
 
+      if(tutorial && borders_touched >= 4){
+        WallsTouched();
+      }
+
       // return to character select
       if(Input.GetButtonDown(mac + "Controller " + player + " Back Button") ||
          Input.GetKeyDown(KeyCode.B)){
@@ -169,9 +189,14 @@ public class character_select : MonoBehaviour {
       podium.SetActive(false);
       // return_set.SetActive(true);
       cancel_button.SetActive(true);
-      controls_layout.SetActive(true);
       player_object.GetComponent<player>().player_number = player;
-      manager.GetComponent<character_select_manager>().selected_character["P" + player] = prefab_number;
+      if(!tutorial){
+        ready_text.SetActive(true);
+        manager.GetComponent<character_select_manager>().selected_character["P" + player] = prefab_number;
+      }
+      else{
+        controls_layout.SetActive(true);
+      }
     }
   }
 
@@ -182,7 +207,21 @@ public class character_select : MonoBehaviour {
     // return_set.SetActive(false);
     cancel_button.SetActive(false);
     controls_layout.SetActive(false);
+    ready_text.SetActive(false);
     manager.GetComponent<character_select_manager>().selected_character["P" + player] = -1;
+    borders_touched = 0;
+
+    foreach(GameObject border in borders){
+      border.GetComponent<character_select_border>().touched = !tutorial;
+      border.GetComponent<SpriteRenderer>().sprite = white_line;
+    }
+
+  }
+
+  void WallsTouched(){
+    manager.GetComponent<character_select_manager>().selected_character["P" + player] = prefab_number;
+    ready_text.SetActive(true);
+    controls_layout.SetActive(false);
   }
 
   void Show(bool value){

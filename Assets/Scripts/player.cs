@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class player : MonoBehaviour{
 
@@ -131,6 +132,8 @@ public class player : MonoBehaviour{
     Color black = new Color();
     public Dictionary<string, Color> colors;
 
+    bool is_character_select;
+
   // ==[helper functions]=======================================================
   // ===========================================================================
 
@@ -157,13 +160,18 @@ public class player : MonoBehaviour{
       // Mac Check
       if (Application.platform == RuntimePlatform.OSXEditor
         || Application.platform == RuntimePlatform.OSXPlayer
-        || Application.platform == RuntimePlatform.OSXPlayer)
-      {
+        || Application.platform == RuntimePlatform.OSXPlayer){
         mac = "Mac ";
       }
-      else
-      {
+      else{
         mac = "";
+      }
+
+      if(SceneManager.GetActiveScene().name == "_character_select"){
+        is_character_select = true;
+      }
+      else{
+        is_character_select = false;
       }
 
       // initialize variables
@@ -705,11 +713,11 @@ public class player : MonoBehaviour{
 
   	bool checkSides(){
 
-		float bc_offset_x = GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
-		float bc_offset_y = GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
+  		float bc_offset_x = GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
+  		float bc_offset_y = GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
 
-		float player_length = GetComponent<BoxCollider2D>().size.x * transform.localScale.x;
-		// float player_height = GetComponent<BoxCollider2D>().size.y * transform.localScale.y;
+  		float player_length = GetComponent<BoxCollider2D>().size.x * transform.localScale.x;
+  		// float player_height = GetComponent<BoxCollider2D>().size.y * transform.localScale.y;
 
   		// due to the box collider's position being off (due to rotation and offset), also need to "rotate" the ray		
       switch (player_orientation){
@@ -787,11 +795,15 @@ public class player : MonoBehaviour{
   	}
       
   	bool checkGround(){
+
+      // if(is_character_select){
+      //   return true;
+      // }
 	
-		float bc_offset_x = GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
-		float bc_offset_y = GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
-		float player_length = GetComponent<BoxCollider2D>().size.x * transform.localScale.x;
-		float player_height = GetComponent<BoxCollider2D>().size.y * transform.localScale.y;
+  		float bc_offset_x = GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
+  		float bc_offset_y = GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
+  		float player_length = GetComponent<BoxCollider2D>().size.x * transform.localScale.x;
+  		float player_height = GetComponent<BoxCollider2D>().size.y * transform.localScale.y;
 
   		// due to the box collider's position being off (due to rotation and offset), also need to "rotate" the ray		
       switch (player_orientation){
@@ -841,6 +853,15 @@ public class player : MonoBehaviour{
   		}
 
   		float length_ray_updw = (player_height / 2) + (player_height * .2F);
+
+      if(is_character_select){
+        if(player_orientation == orientation.up || player_orientation == orientation.down){
+          length_ray_updw -= 0.04f;
+        }
+        else{
+          length_ray_updw -= 0.038f;
+        }
+      }
 
   		Vector2 below = transform.TransformDirection(new Vector2(0F, -length_ray_updw));
 
@@ -1239,5 +1260,6 @@ public class player : MonoBehaviour{
         Destroy(col.gameObject);
       }
     }
+
 
 }
