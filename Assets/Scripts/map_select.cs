@@ -31,12 +31,10 @@ public class map_select : MonoBehaviour {
     // Mac Check
     if (Application.platform == RuntimePlatform.OSXEditor
       || Application.platform == RuntimePlatform.OSXPlayer
-      || Application.platform == RuntimePlatform.OSXPlayer)
-    {
+      || Application.platform == RuntimePlatform.OSXPlayer){
       mac = "Mac ";
     }
-    else
-    {
+    else{
       mac = "";
     }
 
@@ -61,7 +59,8 @@ public class map_select : MonoBehaviour {
       if(map >= map_game_objects.Count){
         map = 0;
       }
-      right_arrow_sr.color = red;
+      
+      // right_arrow_sr.color = red;
       
       map_name.text = map_game_objects[map].name.ToUpper();
       map_name.color = white;
@@ -87,7 +86,8 @@ public class map_select : MonoBehaviour {
       if(map < 0){
         map = map_game_objects.Count - 1;
       }
-      left_arrow_sr.color = red;
+
+      // left_arrow_sr.color = red;
       
       map_name.text = map_game_objects[map].name.ToUpper();
       map_name.color = white;
@@ -138,16 +138,12 @@ public class map_select : MonoBehaviour {
       || Input.GetButtonDown(mac + "Controller 3 B Button")
       || Input.GetButtonDown(mac + "Controller 4 B Button")
       || Input.GetKeyDown(KeyCode.B)
-      || Input.GetKeyDown(KeyCode.Escape))
-    {
+      || Input.GetKeyDown(KeyCode.Escape)){
       SceneManager.LoadScene("_character_select");
     }
 
     if(Input.GetKeyDown(KeyCode.Return) ||
-       Input.GetButtonDown(mac + "Controller 1 Start Button") ||
-       Input.GetButtonDown(mac + "Controller 2 Start Button") ||
-       Input.GetButtonDown(mac + "Controller 3 Start Button") ||
-       Input.GetButtonDown(mac + "Controller 4 Start Button") ){
+       Input.GetButtonDown(mac + "Controller 1 Start Button") ){
 
       if(game_mode == 0){
         PlayerPrefs.SetString("GameMode", "SURVIVAL");
@@ -179,13 +175,11 @@ public class map_select : MonoBehaviour {
 
     }
 
-    if(Input.GetAxisRaw(mac + "Controller 1 Left Stick Y Axis") == 0)
-    {
+    if(Input.GetAxisRaw(mac + "Controller 1 Left Stick Y Axis") == 0){
       axis_held_y = false;
     }
 
-    if (Input.GetAxisRaw(mac + "Controller 1 Left Stick X Axis") == 0)
-    {
+    if (Input.GetAxisRaw(mac + "Controller 1 Left Stick X Axis") == 0){
       axis_held_x = false;
     }
 
@@ -196,11 +190,11 @@ public class map_select : MonoBehaviour {
 
     if(game_mode == 0){
       description.text = "Survive to win! Last man standing wins after 10 lives. Come back as a ghost and poison your nemisis if you lose all 10 lives.";
-      abilities.text = "Gravity swap\nSlash\n1 bullet per life";
+      abilities.text = "Gravity swap\nBurst attack\n1 bullet per life";
     }
     else if(game_mode == 1){
       description.text = "Kill to win! Be the first player to score 10 kills. Continue to fight with infinite lives, and become the gravity swap champion.";
-      abilities.text = "Gravity swap\nSlash\n1 bullet per life";
+      abilities.text = "Gravity swap\nBurst attack\n1 bullet per life";
     }
     else{
       description.text = "Run to win! Control the gravity stone to win 50 points. Steal they stone from your enemies by\ntouching them.";
