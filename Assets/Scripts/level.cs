@@ -967,6 +967,7 @@ public class level : MonoBehaviour {
       alive_players.Remove(player);
     }
     gameObject.transform.position = new Vector3(0f, 0f, 0f);
+    camera_shaking = true;
 
     if(PostGameOb != null){
       PostGameOb.SetActive(true);
