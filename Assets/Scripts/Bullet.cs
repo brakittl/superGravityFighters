@@ -13,7 +13,8 @@ public class Bullet : MonoBehaviour{
     }
 
   void OnTriggerEnter2D(Collider2D col){
-    
+
+        print(col.name);
     if(col.tag == "slash" || col.tag == "shield"){
       GetComponent<Rigidbody2D>().velocity = -GetComponent<Rigidbody2D>().velocity * reflectMultiplier;
     }
