@@ -1123,7 +1123,7 @@ public class player : MonoBehaviour{
   // ==[death helper functions]=================================================
   // ===========================================================================
 
-  	public void FindKiller(GameObject collideObject, bool bulletAttack, string killer_color){
+  	public void FindKiller(GameObject collideObject, bool bulletAttack){
       // Vector3 killerPos = new Vector3(0,0,0);
   		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
   		foreach(GameObject p in players){
@@ -1145,6 +1145,10 @@ public class player : MonoBehaviour{
           // killerPos = other.transform.position;
         }
   		}
+
+      string killer_color = this.gameObject.GetComponent<player>().player_color;
+
+
       KillPlayer(killer_color);
   	}
 
@@ -1278,7 +1282,7 @@ public class player : MonoBehaviour{
           return;
         }
         if(!invincible){
-          FindKiller(col.gameObject, false, player_color);
+          FindKiller(col.gameObject, false);
         }
             
       }
