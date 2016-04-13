@@ -11,9 +11,7 @@ public class character_select_manager : MonoBehaviour {
   public GameObject ready;
   public GameObject ready_text;
 
-  public List<string> player_prefab_names = new List<string>(){
-    "red_player", "yellow_player", "green_player", "blue_player", "purple_player", "black_player"
-  };
+  string[] player_prefab_names = new string[] {"black_player", "blue_player", "green_player",  "purple_player", "red_player", "yellow_player"};
 
   public Dictionary<string, int> selected_character = new Dictionary<string, int>(){
     {"P1", -2},
@@ -82,11 +80,17 @@ public class character_select_manager : MonoBehaviour {
         for(int i = 1; i <= 4; i++){
           if(ready_character["P" + i] >= 0){
             PlayerPrefs.SetString("P" + i, player_prefab_names[ready_character["P" + i]]);
+                        
           }
           else{
             PlayerPrefs.SetString("P" + i, "none");
           }
         }
+
+        foreach(string p_string in player_prefab_names)
+                {
+                    print(p_string);
+                }
 
         SceneManager.LoadScene("_map_game_select");
       }
@@ -104,12 +108,10 @@ public class character_select_manager : MonoBehaviour {
       }
     }
 
-    if(ready_count > 1){
-      return true;
-      print(PlayerPrefs.GetString("P1"));
-      print(PlayerPrefs.GetString("P2"));
-      print(PlayerPrefs.GetString("P3"));
-      print(PlayerPrefs.GetString("P4"));
+    if(ready_count > 1)
+        {
+            
+            return true;
     }
 
     else{

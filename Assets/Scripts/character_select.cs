@@ -32,7 +32,7 @@ public class character_select : MonoBehaviour {
 
   public GameObject[] borders;
 
-  int prefab_number = 0;
+  public int prefab_number = 0;
   GameObject player_object;
 
   Color character_color = new Color(1, 1, 1, 1);
