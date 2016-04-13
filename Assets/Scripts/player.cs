@@ -1145,10 +1145,10 @@ public class player : MonoBehaviour{
           // killerPos = other.transform.position;
         }
   		}
-      KillPlayer();
+      KillPlayer(player_color);
   	}
 
-  	public void KillPlayer(){
+  	public void KillPlayer(string killer_color){
       
       if(PlayerPrefs.GetFloat("sfx") != 0){
         sound.PlayOneShot(death);
@@ -1160,7 +1160,7 @@ public class player : MonoBehaviour{
   	  up_slash.GetComponent<BoxCollider2D>().enabled = false;
   	  down_slash.GetComponent<BoxCollider2D>().enabled = false;
       lives--;
-      level.S.KillPause(transform.position, colors[player_color.ToLower()]);
+      level.S.KillPause(transform.position, colors[killer_color.ToLower()]);
 
       // turn off poison
       poisoned = false;
