@@ -196,7 +196,7 @@ public class player : MonoBehaviour{
         {"blue", blue},
         {"purple", purple},
         {"black", black},
-        {"black_ui", black},
+        {"black_ui", black_ui},
       };
 
       // get components
@@ -341,7 +341,7 @@ public class player : MonoBehaviour{
         else if(level.S.gamemode == GameMode.REVERSE_TAG){
           rt_text.text = rt_points.ToString();
           rt_text.color = colors[player_color.ToLower()];
-          if(player_color.ToLower() == "black"){
+          if(player_color == "Black"){
             rt_text.color = colors[player_color.ToLower() + "_ui"];
           }
         }
