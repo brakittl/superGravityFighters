@@ -77,8 +77,6 @@ public class ReverseTag : MonoBehaviour {
 		pulse_instance_1 = Instantiate(pulse, transform.parent.transform.position, Quaternion.Euler(new Vector3(0,0,0))) as GameObject;
 		pulse_instance_1.transform.parent = transform.parent;
 		pulse_instance_1.GetComponent<SpriteRenderer>().sprite =  Resources.Load<Sprite>("general/pulse_" + transform.parent.GetComponent<player>().player_color.ToLower());
-		print(transform.parent.GetComponent<player>().player_color.ToLower());
-		print(Resources.Load<Sprite>("general/pulse_" + transform.parent.GetComponent<player>().player_color.ToLower()));
 	}
 
 }
