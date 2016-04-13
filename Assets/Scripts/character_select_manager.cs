@@ -106,6 +106,10 @@ public class character_select_manager : MonoBehaviour {
 
     if(ready_count > 1){
       return true;
+      print(PlayerPrefs.GetString("P1"));
+      print(PlayerPrefs.GetString("P2"));
+      print(PlayerPrefs.GetString("P3"));
+      print(PlayerPrefs.GetString("P4"));
     }
 
     else{
