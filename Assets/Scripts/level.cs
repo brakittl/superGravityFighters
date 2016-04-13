@@ -15,6 +15,8 @@ public class level : MonoBehaviour {
   public static level S;
   public GameMode gamemode; // You can use this for selecting the GameMode right from the Map Screen
   public int rt_point_limit = 50;
+  public float timeLimit = 120;
+  public float gameTime;
 
   public GameObject player1, player2, player3, player4;
   public GameObject first, second, third, fourth;
@@ -77,6 +79,9 @@ public class level : MonoBehaviour {
   };
 
   void Start(){
+
+	gameTime = 0;
+
     // Mac Check
     if(Application.platform == RuntimePlatform.OSXEditor ||
        Application.platform == RuntimePlatform.OSXPlayer ||
@@ -187,6 +192,7 @@ public class level : MonoBehaviour {
   }
 
   void Update(){
+		gameTime += Time.deltaTime;
     // disable all control if current scene is not a map
     if(!isMap){
       return;
@@ -258,7 +264,8 @@ public class level : MonoBehaviour {
           Debug.Log(p);
           deadCount++;
         }
-        if(numPlayers - deadCount <= 1){
+
+        if(numPlayers - deadCount <= 1 || OverTimeLimit()){
           Debug.Log("GAMEOVER COUNT");
           gameOver = true;
 
@@ -310,7 +317,7 @@ public class level : MonoBehaviour {
         }
       }
       else if(gamemode == GameMode.DEATHMATCH){
-        if(ranking.Capacity > 0){
+        if(ranking.Capacity > 0 || OverTimeLimit()){
           gameOver = true;
 
           // killcount reached, end the game
@@ -369,9 +376,8 @@ public class level : MonoBehaviour {
         }
       }
       else if(gamemode == GameMode.REVERSE_TAG){
-        if(ranking.Count > 0){
+        if(ranking.Count > 0 || OverTimeLimit()){
           gameOver = true;
-
           // point limit reached, end the game
           List<player> activePlayers = new List<player>();
           if(PlayerPrefs.GetString("P1") != "none"){
@@ -1151,5 +1157,10 @@ public class level : MonoBehaviour {
       PostGameOb.transform.Find("4place").FindChild("readyText").GetComponent<Text>().enabled = false;
     }
   }
+
+	bool OverTimeLimit()
+	{
+		return(gameTime > timeLimit);
+	}
 
 }

@@ -5,6 +5,7 @@ public class MapBorder : MonoBehaviour {
 
 	void OnTriggerExit2D(Collider2D other) {
 		if (other.tag == "bullet"){
+            GameObject.Find(other.name).GetComponent<Bullet>().borderSwaps++;
 			if ((other.transform.position.y > (GetComponent<BoxCollider2D>().transform.position.y + (GetComponent<BoxCollider2D>().size.y / 2)))){
 				other.transform.position = new Vector3(other.transform.position.x, ((GetComponent<BoxCollider2D>().offset.y - (GetComponent<BoxCollider2D>().size.y / 2) + 0.1F)), 0);
 			}

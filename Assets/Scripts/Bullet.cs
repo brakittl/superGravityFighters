@@ -4,7 +4,14 @@ using System.Collections;
 public class Bullet : MonoBehaviour{
   
   public float reflectMultiplier = 1.25f;
+  public int borderSwaps = 0;
   
+    void Update()
+    {
+        if(borderSwaps > 10)
+            Destroy(this.gameObject);
+    }
+
   void OnTriggerEnter2D(Collider2D col){
     
     if(col.tag == "slash" || col.tag == "shield"){

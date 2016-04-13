@@ -72,7 +72,7 @@ public class player : MonoBehaviour{
 
   	// sounds
   	AudioSource sound;
-  	public AudioClip gunshot, block, death, swordSlash, gravitySwap;
+  	public AudioClip gunshot, block, death, swordSlash, gravitySwap, shieldPulse;
     float gravVolume = 0.1f;
 
     // bullet information
@@ -91,8 +91,6 @@ public class player : MonoBehaviour{
   	//float poisonSpeed = 0.75f, poisonJump = 8f, poisonTime, poisonRate = 10;
   	public int poisonButtonTaps = 10, curButtonTaps;
   	public bool poisoned = false;
-  	//bool playerContact = false;
-  	//player playerInContact = null;
 
     // tracking statistics
     public int gravitySwapCount = 0, totalPoisoned = 0, numBulletShots = 0,
@@ -782,7 +780,7 @@ public class player : MonoBehaviour{
   			break;
   		}
 
-  		float length_ray_leftright = (player_length * 1.1F);
+  		float length_ray_leftright = (player_length * .9F);
 
   		Vector2 left = transform.TransformDirection(new Vector2(length_ray_leftright, 0));
   		// Vector2 right = transform.TransformDirection(new Vector2(-length_ray_leftright, 0));
@@ -1093,6 +1091,8 @@ public class player : MonoBehaviour{
   	}
 
   	void Block(){
+        if (PlayerPrefs.GetFloat("sfx") != 0)
+            sound.PlayOneShot(shieldPulse);
 
       nextFire = Time.time + fireRate;
         invincibleStart = Time.time + invincibleTime;
