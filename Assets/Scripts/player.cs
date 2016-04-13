@@ -129,6 +129,7 @@ public class player : MonoBehaviour{
     Color green = new Color();
     Color blue = new Color();
     Color purple = new Color();
+    Color black_ui = new Color();
     Color black = new Color();
     public Dictionary<string, Color> colors;
 
@@ -185,7 +186,8 @@ public class player : MonoBehaviour{
       ColorUtility.TryParseHtmlString("#45a349", out green);
       ColorUtility.TryParseHtmlString("#2c5d99", out blue);
       ColorUtility.TryParseHtmlString("#854db5", out purple);
-      ColorUtility.TryParseHtmlString("#ebebeb", out black);
+      ColorUtility.TryParseHtmlString("#3f3f45", out black);
+      ColorUtility.TryParseHtmlString("#ebebeb", out black_ui);
       colors = new Dictionary<string, Color>(){
         {"red", red},
         {"orange", orange},
@@ -194,6 +196,7 @@ public class player : MonoBehaviour{
         {"blue", blue},
         {"purple", purple},
         {"black", black},
+        {"black_ui", black},
       };
 
       // get components
@@ -338,6 +341,9 @@ public class player : MonoBehaviour{
         else if(level.S.gamemode == GameMode.REVERSE_TAG){
           rt_text.text = rt_points.ToString();
           rt_text.color = colors[player_color.ToLower()];
+          if(player_color.ToLower() == "black"){
+            rt_text.color = colors[player_color.ToLower() + "_ui"];
+          }
         }
 
       }
