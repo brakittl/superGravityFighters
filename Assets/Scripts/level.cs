@@ -44,7 +44,7 @@ public class level : MonoBehaviour {
   GameObject streak;
   public bool pause = false, running = false;
 
-  float shakeIntensity = 0.15f;
+  float shakeIntensity = 0.2f;
   bool camera_shaking = false;
 
   public Dictionary<string, string> medals = new Dictionary<string, string>(){
@@ -427,35 +427,40 @@ public class level : MonoBehaviour {
   public void KillPause(Vector3 playerPos, Color player_color){
     if(!running){
       running = true;
-      StartCoroutine(Pause(playerPos, player_color));
+            camera_shaking = true;
+            StartCoroutine(Pause(playerPos, player_color));
     }
   }
 
   IEnumerator Pause(Vector3 pos, Color player_color){
     Time.timeScale = 0.1f;
-    Vector3 rot = transform.rotation.eulerAngles, originalPos = transform.position;
+    Vector3 rot = transform.rotation.eulerAngles, originalPos = gameObject.transform.position;
 
     rot.z = Random.Range(0, 90);
     if(gamemode == GameMode.SURVIVAL){
       streak = Instantiate(killStreak, pos, Quaternion.Euler(rot)) as GameObject;
       streak.GetComponent<Renderer>().material.color = player_color;
     }
-    
-    camera_shaking = true;
+
+        print("original camera pos " + originalPos);
     CameraShake();
     yield return new WaitForSeconds(0.005f);
-    transform.position = originalPos;
+    gameObject.transform.position = originalPos;
+
     CameraShake();
     yield return new WaitForSeconds(0.005f);
-    transform.position = originalPos;
+    gameObject.transform.position = originalPos;
+
     CameraShake();
     yield return new WaitForSeconds(0.005f);
-    transform.position = originalPos;
+    gameObject.transform.position = originalPos;
+
     CameraShake();
     yield return new WaitForSeconds(0.005f);
-    transform.position = originalPos;
+    gameObject.transform.position = originalPos;
+
     CameraShake();
-    transform.position = originalPos;
+    gameObject.transform.position = originalPos;
     camera_shaking = false;
 
     Destroy(streak);
@@ -464,10 +469,12 @@ public class level : MonoBehaviour {
   }
   
   void CameraShake(){
-    Vector3 pos = transform.position;
-    pos.x = Random.Range(-shakeIntensity, shakeIntensity);
-    pos.y = Random.Range(-shakeIntensity, shakeIntensity);
-    transform.position = pos;
+    Vector3 pos = gameObject.transform.position;
+    pos.x = Random.Range(pos.x - shakeIntensity, pos.x + shakeIntensity);
+    pos.y = Random.Range(pos.y - shakeIntensity, pos.y + shakeIntensity);
+        print(pos);
+    gameObject.transform.position = pos;
+        print("camera shake move " + gameObject.transform.position);
   }
 
   public Vector3 findRespawn(){
@@ -966,7 +973,7 @@ public class level : MonoBehaviour {
     foreach(GameObject player in alive_players){
       alive_players.Remove(player);
     }
-    gameObject.transform.position = new Vector3(0f, 0f, 0f);
+    gameObject.transform.position = new Vector3(0f, 0f, -10f);
     camera_shaking = true;
 
     if(PostGameOb != null){
