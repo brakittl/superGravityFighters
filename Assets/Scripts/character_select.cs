@@ -144,19 +144,15 @@ public class character_select : MonoBehaviour {
     }
 
     else{
-
       if(tutorial && borders_touched >= 4){
         WallsTouched();
       }
-
       // return to character select
       if(Input.GetButtonDown(mac + "Controller " + player + " Back Button") ||
          Input.GetKeyDown(KeyCode.B)){
         Unconfirm();
       }
-
     }
-
 	}
 
   void Join(){
@@ -168,6 +164,7 @@ public class character_select : MonoBehaviour {
     podium.SetActive(true);
     Show(true);
     manager.GetComponent<character_select_manager>().selected_character["P" + player] = -1;
+    manager.GetComponent<character_select_manager>().ready_character["P" + player] = -1;
   }
 
   void Unjoin(){
@@ -179,6 +176,7 @@ public class character_select : MonoBehaviour {
     confirm_button.SetActive(false);
     podium.SetActive(false);
     manager.GetComponent<character_select_manager>().selected_character["P" + player] = -2;
+    manager.GetComponent<character_select_manager>().ready_character["P" + player] = -2;
   }
 
   void Confirm(){
@@ -187,12 +185,12 @@ public class character_select : MonoBehaviour {
       select_set.SetActive(false);
       confirm_button.SetActive(false);
       podium.SetActive(false);
-      // return_set.SetActive(true);
       cancel_button.SetActive(true);
       player_object.GetComponent<player>().player_number = player;
+      manager.GetComponent<character_select_manager>().selected_character["P" + player] = prefab_number;
       if(!tutorial){
         ready_text.SetActive(true);
-        manager.GetComponent<character_select_manager>().selected_character["P" + player] = prefab_number;
+        manager.GetComponent<character_select_manager>().ready_character["P" + player] = prefab_number;
       }
       else{
         controls_layout.SetActive(true);
@@ -204,11 +202,11 @@ public class character_select : MonoBehaviour {
     Show(false);
     selected = false;
     Join();
-    // return_set.SetActive(false);
     cancel_button.SetActive(false);
     controls_layout.SetActive(false);
     ready_text.SetActive(false);
     manager.GetComponent<character_select_manager>().selected_character["P" + player] = -1;
+    manager.GetComponent<character_select_manager>().ready_character["P" + player] = -1;
     borders_touched = 0;
 
     foreach(GameObject border in borders){
@@ -219,7 +217,7 @@ public class character_select : MonoBehaviour {
   }
 
   void WallsTouched(){
-    manager.GetComponent<character_select_manager>().selected_character["P" + player] = prefab_number;
+    manager.GetComponent<character_select_manager>().ready_character["P" + player] = prefab_number;
     ready_text.SetActive(true);
     controls_layout.SetActive(false);
   }

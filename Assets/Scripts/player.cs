@@ -24,12 +24,11 @@ public class player : MonoBehaviour{
   	public bool dead = false;
     public float deathTime = 0;
 
-
-	// gamemode specific info: rt (reverse tag)
-	public int rt_points = 0;
-	public float rt_total_time = 0; // total time holding the "gem"
-	public float rt_longest_continuous_hold = 0; // longest time holding the "gem" without losing it
-	public float hit_by_pulse_times = 0;
+  	// gamemode specific info: rt (reverse tag)
+  	public int rt_points = 0;
+  	public float rt_total_time = 0; // total time holding the "gem"
+  	public float rt_longest_continuous_hold = 0; // longest time holding the "gem" without losing it
+  	public float hit_by_pulse_times = 0;
 
   	
     //point limit is in level script, call with level.S.rt_point_limit
@@ -781,7 +780,7 @@ public class player : MonoBehaviour{
   			break;
   		}
 
-  		float length_ray_leftright = (player_length * 1.1F);
+  		float length_ray_leftright = (player_length * .9F);
 
   		Vector2 left = transform.TransformDirection(new Vector2(length_ray_leftright, 0));
   		// Vector2 right = transform.TransformDirection(new Vector2(-length_ray_leftright, 0));

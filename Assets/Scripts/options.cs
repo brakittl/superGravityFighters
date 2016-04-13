@@ -129,7 +129,7 @@ public class options : MonoBehaviour {
     }
 
     if(Input.GetAxisRaw(mac + "Controller 1 Left Stick X Axis") == 0){
-      axis_held_y = false;
+      axis_held_x = false;
     }
 
     foreach(Text menu_GO in menu_objects){
