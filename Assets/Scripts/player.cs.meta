@@ -1,10 +1,34 @@
 fileFormatVersion: 2
 guid: 5ccff2d6ce21b44e28a165d0220e6ffd
-timeCreated: 1460483064
+timeCreated: 1460579742
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - slash_animator: {instanceID: 0}
+  - side_slash_animator: {instanceID: 0}
+  - up_slash_animator: {instanceID: 0}
+  - down_slash_animator: {instanceID: 0}
+  - shield_animator: {instanceID: 0}
+  - slash: {instanceID: 0}
+  - side_slash: {instanceID: 0}
+  - up_slash: {instanceID: 0}
+  - down_slash: {instanceID: 0}
+  - shield: {instanceID: 0}
+  - poisonGO: {instanceID: 0}
+  - halo: {instanceID: 0}
+  - gunshot: {instanceID: 0}
+  - block: {instanceID: 0}
+  - death: {instanceID: 0}
+  - swordSlash: {instanceID: 0}
+  - gravitySwap: {instanceID: 0}
+  - shieldPulse: {fileID: 8300000, guid: be444ec608c12fe4c9a40d97536da242, type: 3}
+  - bullet: {instanceID: 0}
+  - extraBullet: {instanceID: 0}
+  - bullet_image: {instanceID: 0}
+  - rt_text_GO: {instanceID: 0}
+  - bullet_text: {instanceID: 0}
+  - rt_text: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
