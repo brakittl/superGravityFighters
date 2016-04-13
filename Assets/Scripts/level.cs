@@ -37,7 +37,7 @@ public class level : MonoBehaviour {
   public Vector3 stone_position;
 
   public Sprite gold, silver, bronze;
-  public List<Vector3> podiumPositions = new List<Vector3>(){ new Vector3(-1.48f, 5f, 0f), new Vector3(-0.35f, 10f, 0f), new Vector3(0.98f, 15f, 0f), new Vector3(1.82f, 20f, 0f) };
+  List<Vector3> podiumPositions = new List<Vector3>(){ new Vector3(-1.56f, 30f, 0f), new Vector3(-0.29f, 15f, 0f), new Vector3(0.98f, 10f, 0f), new Vector3(2.22f, 5f, 0f) };
 
   public List<GameObject> alive_players;
   public Vector3 target_position;
@@ -264,7 +264,11 @@ public class level : MonoBehaviour {
           Debug.Log(p);
           deadCount++;
         }
-		if(numPlayers - deadCount <= 1 || OverTimeLimit()){
+
+        if(numPlayers - deadCount <= 1 || OverTimeLimit()){
+          Debug.Log("GAMEOVER COUNT");
+          gameOver = true;
+
           // one player left, end the game
           List<player> activePlayers = new List<player>();
           if(PlayerPrefs.GetString("P1") != "none"){
@@ -280,6 +284,16 @@ public class level : MonoBehaviour {
             Debug.Log(PlayerPrefs.GetString("P4"));
             activePlayers.Add(player4.GetComponent<player>());
           }
+
+          foreach (player p in activePlayers)
+          {
+            p.gameOver = true;
+          }
+
+          GameObject.Find("ui").SetActive(false);
+          GameObject.Find("border").SetActive(false);
+          GameObject.Find("colliders").SetActive(false);
+          podium.SetActive(true);
 
           // sort by deathTime
           for (int i = 0; i < numPlayers; i++){
@@ -300,19 +314,12 @@ public class level : MonoBehaviour {
           AwardMedals();
 
           DisplayResults();
-
-          foreach (player p in activePlayers){
-            p.gameOver = true;
-          }
-
-          GameObject.Find("colliders").SetActive(false);
-          podium.SetActive(true);
-
-          gameOver = true;
         }
       }
-	else if(gamemode == GameMode.DEATHMATCH){
-		if(ranking.Capacity > 0 || OverTimeLimit()){
+      else if(gamemode == GameMode.DEATHMATCH){
+        if(ranking.Capacity > 0 || OverTimeLimit()){
+          gameOver = true;
+
           // killcount reached, end the game
           List<player> activePlayers = new List<player>();
           if(PlayerPrefs.GetString("P1") != "none"){
@@ -327,6 +334,16 @@ public class level : MonoBehaviour {
           if(PlayerPrefs.GetString("P4") != "none"){
             activePlayers.Add(player4.GetComponent<player>());
           }
+
+          foreach (player p in activePlayers)
+          {
+            p.gameOver = true;
+          }
+
+          GameObject.Find("ui").SetActive(false);
+          GameObject.Find("border").SetActive(false);
+          GameObject.Find("colliders").SetActive(false);
+          podium.SetActive(true);
 
           // sort by kills, deaths for ties
           for (int i = 0; i < numPlayers; i++){
@@ -356,19 +373,11 @@ public class level : MonoBehaviour {
           AwardMedals();
 
           DisplayResults();
-
-          foreach (player p in activePlayers){
-            p.gameOver = true;
-          }
-
-          GameObject.Find("colliders").SetActive(false);
-          podium.SetActive(true);
-
-          gameOver = true;
         }
       }
-	else if(gamemode == GameMode.REVERSE_TAG){
-		if(ranking.Count > 0 || OverTimeLimit()){
+      else if(gamemode == GameMode.REVERSE_TAG){
+        if(ranking.Count > 0 || OverTimeLimit()){
+          gameOver = true;
           // point limit reached, end the game
           List<player> activePlayers = new List<player>();
           if(PlayerPrefs.GetString("P1") != "none"){
@@ -384,8 +393,18 @@ public class level : MonoBehaviour {
             activePlayers.Add(player4.GetComponent<player>());
           }
 
+          foreach (player p in activePlayers)
+          {
+            p.gameOver = true;
+          }
+
+          GameObject.Find("ui").SetActive(false);
+          GameObject.Find("border").SetActive(false);
+          GameObject.Find("colliders").SetActive(false);
+          podium.SetActive(true);
+
           // sort by rt_points, ties broken by longest continuous hold
-          for(int i = 0; i < numPlayers; i++){
+          for (int i = 0; i < numPlayers; i++){
             for(int j = i + 1; j < numPlayers; j++){
               if(activePlayers[i].rt_points < activePlayers[j].rt_points){
                 player temp = activePlayers[i];
@@ -406,21 +425,10 @@ public class level : MonoBehaviour {
           second = numPlayers >= 2 ? activePlayers[1].gameObject : null;
           third = numPlayers >= 3 ? activePlayers[2].gameObject : null;
           fourth = numPlayers >= 4 ? activePlayers[3].gameObject : null;
-          
 
           AwardMedals();
 
           DisplayResults();
-
-          foreach (player p in activePlayers)
-          {
-            p.gameOver = true;
-          }
-
-          GameObject.Find("colliders").SetActive(false);
-          podium.SetActive(true);
-
-          gameOver = true;
         }
       }
     }
@@ -973,9 +981,7 @@ public class level : MonoBehaviour {
   void DisplayResults(){
 
     // stop moving camera
-    foreach(GameObject player in alive_players){
-      alive_players.Remove(player);
-    }
+    alive_players.Clear();
     gameObject.transform.position = new Vector3(0f, 0f, -10f);
     camera_shaking = true;
 
@@ -997,11 +1003,9 @@ public class level : MonoBehaviour {
     place4 = PostGameOb.transform.Find("4place");
 
     if(first != null){
-      float acc = first.GetComponent<player>().acceleration;
-      first.GetComponent<player>().acceleration = 0f;
-      place1.FindChild("trophy").GetComponent<Image>().sprite = gold;
+      first.GetComponent<player>().player_number *= -1;
       first.GetComponent<player>().Gravity(player.orientation.down, 0f, 0f);
-      first.GetComponent<player>().acceleration = acc;
+      place1.FindChild("trophy").GetComponent<Image>().sprite = gold;
       first.transform.localScale = new Vector3(1.2f, 1.2f, 0f);
       first.transform.position = podiumPositions[0];
       first.GetComponent<SpriteRenderer>().sortingOrder = 100;
@@ -1012,11 +1016,9 @@ public class level : MonoBehaviour {
     }
 
     if(second != null){
-      float acc = second.GetComponent<player>().acceleration;
-      second.GetComponent<player>().acceleration = 0f;
-      place2.FindChild("trophy").GetComponent<Image>().sprite = silver;
+      second.GetComponent<player>().player_number *= -1;
       second.GetComponent<player>().Gravity(player.orientation.down, 0f, 0f);
-      second.GetComponent<player>().acceleration = acc;
+      place2.FindChild("trophy").GetComponent<Image>().sprite = silver;
       second.transform.localScale = new Vector3(1.2f, 1.2f, 0f);
       second.transform.position = podiumPositions[1];
       second.GetComponent<SpriteRenderer>().sortingOrder = 100;
@@ -1027,14 +1029,11 @@ public class level : MonoBehaviour {
     }
 
     if(third != null){
-      float acc = third.GetComponent<player>().acceleration;
-      third.GetComponent<player>().acceleration = 0f;
-      place3.FindChild("trophy").GetComponent<Image>().sprite = bronze;
+      third.GetComponent<player>().player_number *= -1;
       third.GetComponent<player>().Gravity(player.orientation.down, 0f, 0f);
-      third.GetComponent<player>().acceleration = acc;
+      place3.FindChild("trophy").GetComponent<Image>().sprite = bronze;
       third.transform.localScale = new Vector3(1.2f, 1.2f, 0f);
       third.transform.position = podiumPositions[2];
-      third.GetComponent<player>().Gravity(player.orientation.down, 0f, 0f);
       third.GetComponent<SpriteRenderer>().sortingOrder = 100;
       setResultsUI(place3, third.GetComponent<player>(), third.GetComponent<player>().medals);
     }
@@ -1043,11 +1042,9 @@ public class level : MonoBehaviour {
     }
 
     if(fourth != null){
-      float acc = fourth.GetComponent<player>().acceleration;
-      fourth.GetComponent<player>().acceleration = 0f;
-      place4.FindChild("trophy").GetComponent<Image>().enabled = false;
+      fourth.GetComponent<player>().player_number *= -1;
       fourth.GetComponent<player>().Gravity(player.orientation.down, 0f, 0f);
-      fourth.GetComponent<player>().acceleration = acc;
+      place4.FindChild("trophy").GetComponent<Image>().enabled = false;
       fourth.transform.localScale = new Vector3(1.2f, 1.2f, 0f);
       fourth.transform.position = podiumPositions[3];
       fourth.GetComponent<SpriteRenderer>().sortingOrder = 100;
@@ -1071,25 +1068,30 @@ public class level : MonoBehaviour {
       place.FindChild("deathsText").GetComponent<Text>().text = "";
     }
 
-    int medalCount = earnedMedals.Count;
+    string medalString = (p.player_number * -1) + "'s Medals:";
+    foreach (string medal in earnedMedals)
+    {
+      medalString += " " + medal + " ";
+    }
+    Debug.Log(medalString);
 
-    if(medalCount > 0){
-      medal1 = earnedMedals[Random.Range(0, medalCount)];
+    if(earnedMedals.Count > 0){
+      medal1 = earnedMedals[Random.Range(0, earnedMedals.Count)];
       info1 = medals[medal1];
+      earnedMedals.Remove(medal1);
       medal1 += ":";
-      medalCount--;
     }
-    if(medalCount > 0){
-      medal2 = earnedMedals[Random.Range(0, medalCount)];
+    if(earnedMedals.Count > 0){
+      medal2 = earnedMedals[Random.Range(0, earnedMedals.Count)];
       info2 = medals[medal2];
+      earnedMedals.Remove(medal2);
       medal2 += ":";
-      medalCount--;
     }
-    if(medalCount > 0){
-      medal3 = earnedMedals[Random.Range(0, medalCount)];
+    if(earnedMedals.Count > 0){
+      medal3 = earnedMedals[Random.Range(0, earnedMedals.Count)];
       info3 = medals[medal3];
+      earnedMedals.Remove(medal3);
       medal3 += ":";
-      medalCount--;
     }
 
     place.FindChild("medal1").GetComponent<Text>().text = medal1;
@@ -1117,6 +1119,7 @@ public class level : MonoBehaviour {
   }
 
   void SetReady(int controller){
+    controller *= -1; // set opposite due to player's losing conrol of characters
     if(first.GetComponent<player>().player_number == controller){
       PostGameOb.transform.Find("1place").FindChild("AButton").GetComponent<Image>().enabled = false;
       PostGameOb.transform.Find("1place").FindChild("readyText").GetComponent<Text>().enabled = true;
@@ -1136,6 +1139,7 @@ public class level : MonoBehaviour {
   }
 
   void SetUnready(int controller){
+    controller *= -1; // FOR DISABLING THE PLAYER'S CONTROLS
     if(first.GetComponent<player>().player_number == controller){
       PostGameOb.transform.Find("1place").FindChild("AButton").GetComponent<Image>().enabled = true;
       PostGameOb.transform.Find("1place").FindChild("readyText").GetComponent<Text>().enabled = false;
