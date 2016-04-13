@@ -427,8 +427,8 @@ public class level : MonoBehaviour {
   public void KillPause(Vector3 playerPos, Color player_color){
     if(!running){
       running = true;
-            camera_shaking = true;
-            StartCoroutine(Pause(playerPos, player_color));
+      camera_shaking = true;
+      StartCoroutine(Pause(playerPos, player_color));
     }
   }
 
@@ -441,8 +441,7 @@ public class level : MonoBehaviour {
       streak = Instantiate(killStreak, pos, Quaternion.Euler(rot)) as GameObject;
       streak.GetComponent<Renderer>().material.color = player_color;
     }
-
-        print("original camera pos " + originalPos);
+    
     CameraShake();
     yield return new WaitForSeconds(0.005f);
     gameObject.transform.position = originalPos;
@@ -472,9 +471,7 @@ public class level : MonoBehaviour {
     Vector3 pos = gameObject.transform.position;
     pos.x = Random.Range(pos.x - shakeIntensity, pos.x + shakeIntensity);
     pos.y = Random.Range(pos.y - shakeIntensity, pos.y + shakeIntensity);
-        print(pos);
     gameObject.transform.position = pos;
-        print("camera shake move " + gameObject.transform.position);
   }
 
   public Vector3 findRespawn(){
