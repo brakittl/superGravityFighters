@@ -398,6 +398,7 @@ public class level : MonoBehaviour {
             p.gameOver = true;
           }
 
+          GameObject.FindGameObjectWithTag("TagBall").SetActive(false);
           GameObject.Find("ui").SetActive(false);
           GameObject.Find("border").SetActive(false);
           GameObject.Find("colliders").SetActive(false);
@@ -585,7 +586,7 @@ public class level : MonoBehaviour {
         activePlayers[high].medals.Add("TELEPORTER");
       }
       if(!lowDuplicate){
-        activePlayers[low].medals.Add("CAUTIOUS");
+        //activePlayers[low].medals.Add("CAUTIOUS");
       }
 
       // Airborne: most time in air
@@ -618,7 +619,7 @@ public class level : MonoBehaviour {
         activePlayers[high].medals.Add("AIRBORNE");
       }
       if(!lowDuplicate){
-        activePlayers[low].medals.Add("GROUNDED");
+        //activePlayers[low].medals.Add("GROUNDED");
       }
 
       // Astronaut: most gravity swaps
@@ -651,7 +652,7 @@ public class level : MonoBehaviour {
         activePlayers[high].medals.Add("ASTRONAUT");
       }
       if(!lowDuplicate){
-        activePlayers[low].medals.Add("STEADY");
+        //activePlayers[low].medals.Add("STEADY");
       }
 
       // Athlete: most distance traveled
@@ -684,7 +685,7 @@ public class level : MonoBehaviour {
         activePlayers[high].medals.Add("ATHLETE");
       }
       if(!lowDuplicate){
-        activePlayers[low].medals.Add("CAMPER");
+        //activePlayers[low].medals.Add("CAMPER");
       }
 
       //////////////////////// COMBAT ONLY MEDALS //////////////////////////////
@@ -722,15 +723,19 @@ public class level : MonoBehaviour {
           activePlayers[high].medals.Add("HOARDER");
         }
         if(!lowDuplicate){
-          activePlayers[low].medals.Add("POVERTY");
+          //activePlayers[low].medals.Add("POVERTY");
         }
 
         // Survivor: longest life
         duplicate = false;
         high = 0;
         int longestLife = activePlayers[high].longestLife;
+        if (longestLife == 0) longestLife = int.MaxValue;
         for (int i = high + 1; i < numPlayers; i++){
+          // set 0's to max because they neve died
           int current = activePlayers[i].longestLife;
+          if (current == 0) current = int.MaxValue;
+
           if(current > longestLife){
             high = i;
             longestLife = current;
@@ -923,7 +928,7 @@ public class level : MonoBehaviour {
           activePlayers[high].medals.Add("IRON GRIP");
         }
         if(!lowDuplicate){
-          activePlayers[low].medals.Add("BUTTERFINGERS");
+          //activePlayers[low].medals.Add("BUTTERFINGERS");
         }
 
         // Most Steals
@@ -956,7 +961,7 @@ public class level : MonoBehaviour {
           activePlayers[high].medals.Add("THUG LIFE");
         }
         if(!lowDuplicate){
-          activePlayers[low].medals.Add("JUST A GOOD PERSON");
+          //activePlayers[low].medals.Add("JUST A GOOD PERSON");
         }
 
         // First Touch
