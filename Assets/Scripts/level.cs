@@ -35,7 +35,7 @@ public class level : MonoBehaviour {
   public Vector3 stone_position;
 
   public Sprite gold, silver, bronze;
-  public List<Vector3> podiumPositions = new List<Vector3>(){ new Vector3(-1.48f, 5f, 0f), new Vector3(-0.35f, 10f, 0f), new Vector3(0.98f, 15f, 0f), new Vector3(1.82f, 20f, 0f) };
+  List<Vector3> podiumPositions = new List<Vector3>(){ new Vector3(-1.56f, 30f, 0f), new Vector3(-0.29f, 15f, 0f), new Vector3(0.98f, 10f, 0f), new Vector3(2.22f, 5f, 0f) };
 
   public List<GameObject> alive_players;
   public Vector3 target_position;
@@ -259,6 +259,9 @@ public class level : MonoBehaviour {
           deadCount++;
         }
         if(numPlayers - deadCount <= 1){
+          Debug.Log("GAMEOVER COUNT");
+          gameOver = true;
+
           // one player left, end the game
           List<player> activePlayers = new List<player>();
           if(PlayerPrefs.GetString("P1") != "none"){
@@ -274,6 +277,16 @@ public class level : MonoBehaviour {
             Debug.Log(PlayerPrefs.GetString("P4"));
             activePlayers.Add(player4.GetComponent<player>());
           }
+
+          foreach (player p in activePlayers)
+          {
+            p.gameOver = true;
+          }
+
+          GameObject.Find("ui").SetActive(false);
+          GameObject.Find("border").SetActive(false);
+          GameObject.Find("colliders").SetActive(false);
+          podium.SetActive(true);
 
           // sort by deathTime
           for (int i = 0; i < numPlayers; i++){
@@ -294,19 +307,12 @@ public class level : MonoBehaviour {
           AwardMedals();
 
           DisplayResults();
-
-          foreach (player p in activePlayers){
-            p.gameOver = true;
-          }
-
-          GameObject.Find("colliders").SetActive(false);
-          podium.SetActive(true);
-
-          gameOver = true;
         }
       }
       else if(gamemode == GameMode.DEATHMATCH){
         if(ranking.Capacity > 0){
+          gameOver = true;
+
           // killcount reached, end the game
           List<player> activePlayers = new List<player>();
           if(PlayerPrefs.GetString("P1") != "none"){
@@ -321,6 +327,16 @@ public class level : MonoBehaviour {
           if(PlayerPrefs.GetString("P4") != "none"){
             activePlayers.Add(player4.GetComponent<player>());
           }
+
+          foreach (player p in activePlayers)
+          {
+            p.gameOver = true;
+          }
+
+          GameObject.Find("ui").SetActive(false);
+          GameObject.Find("border").SetActive(false);
+          GameObject.Find("colliders").SetActive(false);
+          podium.SetActive(true);
 
           // sort by kills, deaths for ties
           for (int i = 0; i < numPlayers; i++){
@@ -350,19 +366,12 @@ public class level : MonoBehaviour {
           AwardMedals();
 
           DisplayResults();
-
-          foreach (player p in activePlayers){
-            p.gameOver = true;
-          }
-
-          GameObject.Find("colliders").SetActive(false);
-          podium.SetActive(true);
-
-          gameOver = true;
         }
       }
       else if(gamemode == GameMode.REVERSE_TAG){
         if(ranking.Count > 0){
+          gameOver = true;
+
           // point limit reached, end the game
           List<player> activePlayers = new List<player>();
           if(PlayerPrefs.GetString("P1") != "none"){
@@ -378,8 +387,18 @@ public class level : MonoBehaviour {
             activePlayers.Add(player4.GetComponent<player>());
           }
 
+          foreach (player p in activePlayers)
+          {
+            p.gameOver = true;
+          }
+
+          GameObject.Find("ui").SetActive(false);
+          GameObject.Find("border").SetActive(false);
+          GameObject.Find("colliders").SetActive(false);
+          podium.SetActive(true);
+
           // sort by rt_points, ties broken by longest continuous hold
-          for(int i = 0; i < numPlayers; i++){
+          for (int i = 0; i < numPlayers; i++){
             for(int j = i + 1; j < numPlayers; j++){
               if(activePlayers[i].rt_points < activePlayers[j].rt_points){
                 player temp = activePlayers[i];
@@ -400,21 +419,10 @@ public class level : MonoBehaviour {
           second = numPlayers >= 2 ? activePlayers[1].gameObject : null;
           third = numPlayers >= 3 ? activePlayers[2].gameObject : null;
           fourth = numPlayers >= 4 ? activePlayers[3].gameObject : null;
-          
 
           AwardMedals();
 
           DisplayResults();
-
-          foreach (player p in activePlayers)
-          {
-            p.gameOver = true;
-          }
-
-          GameObject.Find("colliders").SetActive(false);
-          podium.SetActive(true);
-
-          gameOver = true;
         }
       }
     }
@@ -967,9 +975,7 @@ public class level : MonoBehaviour {
   void DisplayResults(){
 
     // stop moving camera
-    foreach(GameObject player in alive_players){
-      alive_players.Remove(player);
-    }
+    alive_players.Clear();
     gameObject.transform.position = new Vector3(0f, 0f, -10f);
     camera_shaking = true;
 
@@ -1044,7 +1050,6 @@ public class level : MonoBehaviour {
   }
 
   void setResultsUI(Transform place, player p, List<string> earnedMedals){
-    int player_num = -p.player_number;
     string medal1 = "", medal2 = "", medal3 = "";
     string info1 = "", info2 = "", info3 = "";
 
@@ -1128,6 +1133,7 @@ public class level : MonoBehaviour {
   }
 
   void SetUnready(int controller){
+    controller *= -1; // FOR DISABLING THE PLAYER'S CONTROLS
     if(first.GetComponent<player>().player_number == controller){
       PostGameOb.transform.Find("1place").FindChild("AButton").GetComponent<Image>().enabled = true;
       PostGameOb.transform.Find("1place").FindChild("readyText").GetComponent<Text>().enabled = false;
