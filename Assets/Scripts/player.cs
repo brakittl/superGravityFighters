@@ -84,7 +84,7 @@ public class player : MonoBehaviour{
   	string lastDirection = "right";
 
   	// respawns
-  	public bool respawn = false, respawning = false;
+  	public bool respawn = false, respawning = false, dying = false;
   	Vector3 offscreen = new Vector3(-1000, -1000, -1000);  
 
   	// poison
@@ -348,7 +348,7 @@ public class player : MonoBehaviour{
 
       }
 
-      // ==[gravity swap]=======================================================
+      // ==[pausing]============================================================
       // =======================================================================
 
     
@@ -369,7 +369,7 @@ public class player : MonoBehaviour{
   		up = new Vector2(0f, acceleration);
   		
       // swap gravity orientation
-  		if(!poisoned && !dead){
+  		if(!poisoned && !dead && !dying){
   			// up
   			if((Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis") < -0.4f || Input.GetButtonDown(mac + "Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up){
   				Gravity(orientation.up, transform.localEulerAngles.y, 180f);
@@ -413,7 +413,7 @@ public class player : MonoBehaviour{
   		// =======================================================================
 
   		// if alive, allow attack, shoot, and block action
-  		if(!dead){
+  		if(!dead && !dying){
   			if(level.S.gamemode != GameMode.REVERSE_TAG){
 
           // shoot
@@ -467,10 +467,10 @@ public class player : MonoBehaviour{
           airStart = true; 
       }
       else if(player_animator.GetBool("grounded")  && airStart){
-          if((int)((Time.time - curAirTime) * 100) > longestAirTime)
-              longestAirTime = (int)((Time.time - curAirTime) * 100);
-          airTime += (int)((Time.time - curAirTime) * 100);
-          airStart = false;
+        if((int)((Time.time - curAirTime) * 100) > longestAirTime)
+            longestAirTime = (int)((Time.time - curAirTime) * 100);
+        airTime += (int)((Time.time - curAirTime) * 100);
+        airStart = false;
       }
 
       move_left = false;
@@ -601,7 +601,9 @@ public class player : MonoBehaviour{
   		// crouch
   		player_animator.SetBool("crouched", false);
   		if(move_down){
-  			Crouch();
+        if(!dying){
+  			 Crouch();
+        }
   		}
       
   		// ==[respawn and death]==================================================
@@ -650,8 +652,8 @@ public class player : MonoBehaviour{
       }
 
       if(invincible && Time.time > invincibleStart){
-            invincible = false;
-        }
+        invincible = false;
+      }
   	}
 
   	void FixedUpdate(){
@@ -659,12 +661,16 @@ public class player : MonoBehaviour{
       // ==[run]================================================================
       // =======================================================================
   		
-      if(move_right && !player_animator.GetBool("landing")){
-  			Run(true);
-  		}
-  		if(move_left && !player_animator.GetBool("landing")){
-  			Run(false);
-  		}
+      if(!dying)){
+
+        if(move_right && !player_animator.GetBool("landing")){
+    			Run(true);
+    		}
+    		if(move_left && !player_animator.GetBool("landing")){
+    			Run(false);
+    		}
+
+      }
 
       // ==[grounded]===========================================================
       // =======================================================================
@@ -690,42 +696,46 @@ public class player : MonoBehaviour{
 
       float speed = body.velocity.magnitude;
 
-  		if(player_orientation == orientation.down){
-  			if(speed < terminal_velocity && grounded == 0){
-  			  body.AddForce(down);
-        }
-  		}
-  		else if(player_orientation == orientation.up){
-  			if(speed < terminal_velocity && grounded == 0){
-          body.AddForce(up);
-        }
-  		}
-  		else if(player_orientation == orientation.left){
-  			if(speed < terminal_velocity && grounded == 0){
-          body.AddForce(left);
-        }
-  		}
-  		else if(player_orientation == orientation.right){
-  			if(speed < terminal_velocity && grounded == 0){
-          body.AddForce(right);
-        }
-  		}
+      if(!dying){
+    		if(player_orientation == orientation.down){
+    			if(speed < terminal_velocity && grounded == 0){
+    			  body.AddForce(down);
+          }
+    		}
+    		else if(player_orientation == orientation.up){
+    			if(speed < terminal_velocity && grounded == 0){
+            body.AddForce(up);
+          }
+    		}
+    		else if(player_orientation == orientation.left){
+    			if(speed < terminal_velocity && grounded == 0){
+            body.AddForce(left);
+          }
+    		}
+    		else if(player_orientation == orientation.right){
+    			if(speed < terminal_velocity && grounded == 0){
+            body.AddForce(right);
+          }
+    		}
+      }
 
   		// ==[jump]===============================================================
   		// =======================================================================
 
   		// apply jump
-  		if(move_up && grounded == 1 && (delay < 0)){
-  			//Jump();
-  		}
-  		else if(grounded == 1 && (player_orientation == orientation.up || player_orientation == orientation.down)){
-  			body.velocity = new Vector2(body.velocity.x, 0);
-  			delay -= Time.deltaTime;
-  		}
-  		else if(grounded == 1 && (player_orientation == orientation.left || player_orientation == orientation.right)){
-  			body.velocity = new Vector2(0, body.velocity.y);
-  			delay -= Time.deltaTime;
-  		}
+      if(!dying){
+    		if(move_up && grounded == 1 && (delay < 0)){
+    			//Jump();
+    		}
+    		else if(grounded == 1 && (player_orientation == orientation.up || player_orientation == orientation.down)){
+    			body.velocity = new Vector2(body.velocity.x, 0);
+    			delay -= Time.deltaTime;
+    		}
+    		else if(grounded == 1 && (player_orientation == orientation.left || player_orientation == orientation.right)){
+    			body.velocity = new Vector2(0, body.velocity.y);
+    			delay -= Time.deltaTime;
+    		}
+      }
   	}
 
   // ==[raycasts]=============================================================
@@ -1200,7 +1210,11 @@ public class player : MonoBehaviour{
   	IEnumerator Wait(){
 
       Time.timeScale = 0.1f;
+
+      dying = true;
+      body.velocity = new Vector3(0f, 0f, 0f);
       yield return new WaitForSeconds(0.3f);
+      dying = false;
 
       Vector3 pos = transform.position;
   		transform.position = offscreen;
