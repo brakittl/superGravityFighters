@@ -783,7 +783,7 @@ public class player : MonoBehaviour{
   			break;
   		}
 
-  		float length_ray_leftright = (player_length * 1.1F);
+  		float length_ray_leftright = (player_length * .9F);
 
   		Vector2 left = transform.TransformDirection(new Vector2(length_ray_leftright, 0));
   		// Vector2 right = transform.TransformDirection(new Vector2(-length_ray_leftright, 0));
