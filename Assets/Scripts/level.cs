@@ -978,11 +978,9 @@ public class level : MonoBehaviour {
     place4 = PostGameOb.transform.Find("4place");
 
     if(first != null){
-      float acc = first.GetComponent<player>().acceleration;
-      first.GetComponent<player>().acceleration = 0f;
-      place1.FindChild("trophy").GetComponent<Image>().sprite = gold;
+      first.GetComponent<player>().player_number *= -1;
       first.GetComponent<player>().Gravity(player.orientation.down, 0f, 0f);
-      first.GetComponent<player>().acceleration = acc;
+      place1.FindChild("trophy").GetComponent<Image>().sprite = gold;
       first.transform.localScale = new Vector3(1.2f, 1.2f, 0f);
       first.transform.position = podiumPositions[0];
       first.GetComponent<SpriteRenderer>().sortingOrder = 100;
@@ -993,11 +991,9 @@ public class level : MonoBehaviour {
     }
 
     if(second != null){
-      float acc = second.GetComponent<player>().acceleration;
-      second.GetComponent<player>().acceleration = 0f;
-      place2.FindChild("trophy").GetComponent<Image>().sprite = silver;
+      second.GetComponent<player>().player_number *= -1;
       second.GetComponent<player>().Gravity(player.orientation.down, 0f, 0f);
-      second.GetComponent<player>().acceleration = acc;
+      place2.FindChild("trophy").GetComponent<Image>().sprite = silver;
       second.transform.localScale = new Vector3(1.2f, 1.2f, 0f);
       second.transform.position = podiumPositions[1];
       second.GetComponent<SpriteRenderer>().sortingOrder = 100;
@@ -1008,14 +1004,11 @@ public class level : MonoBehaviour {
     }
 
     if(third != null){
-      float acc = third.GetComponent<player>().acceleration;
-      third.GetComponent<player>().acceleration = 0f;
-      place3.FindChild("trophy").GetComponent<Image>().sprite = bronze;
+      third.GetComponent<player>().player_number *= -1;
       third.GetComponent<player>().Gravity(player.orientation.down, 0f, 0f);
-      third.GetComponent<player>().acceleration = acc;
+      place3.FindChild("trophy").GetComponent<Image>().sprite = bronze;
       third.transform.localScale = new Vector3(1.2f, 1.2f, 0f);
       third.transform.position = podiumPositions[2];
-      third.GetComponent<player>().Gravity(player.orientation.down, 0f, 0f);
       third.GetComponent<SpriteRenderer>().sortingOrder = 100;
       setResultsUI(place3, third.GetComponent<player>(), third.GetComponent<player>().medals);
     }
@@ -1024,11 +1017,9 @@ public class level : MonoBehaviour {
     }
 
     if(fourth != null){
-      float acc = fourth.GetComponent<player>().acceleration;
-      fourth.GetComponent<player>().acceleration = 0f;
-      place4.FindChild("trophy").GetComponent<Image>().enabled = false;
+      fourth.GetComponent<player>().player_number *= -1;
       fourth.GetComponent<player>().Gravity(player.orientation.down, 0f, 0f);
-      fourth.GetComponent<player>().acceleration = acc;
+      place4.FindChild("trophy").GetComponent<Image>().enabled = false;
       fourth.transform.localScale = new Vector3(1.2f, 1.2f, 0f);
       fourth.transform.position = podiumPositions[3];
       fourth.GetComponent<SpriteRenderer>().sortingOrder = 100;
@@ -1040,6 +1031,7 @@ public class level : MonoBehaviour {
   }
 
   void setResultsUI(Transform place, player p, List<string> earnedMedals){
+    int player_num = -p.player_number;
     string medal1 = "", medal2 = "", medal3 = "";
     string info1 = "", info2 = "", info3 = "";
 
@@ -1052,25 +1044,30 @@ public class level : MonoBehaviour {
       place.FindChild("deathsText").GetComponent<Text>().text = "";
     }
 
-    int medalCount = earnedMedals.Count;
+    string medalString = (p.player_number * -1) + "'s Medals:";
+    foreach (string medal in earnedMedals)
+    {
+      medalString += " " + medal + " ";
+    }
+    Debug.Log(medalString);
 
-    if(medalCount > 0){
-      medal1 = earnedMedals[Random.Range(0, medalCount)];
+    if(earnedMedals.Count > 0){
+      medal1 = earnedMedals[Random.Range(0, earnedMedals.Count)];
       info1 = medals[medal1];
+      earnedMedals.Remove(medal1);
       medal1 += ":";
-      medalCount--;
     }
-    if(medalCount > 0){
-      medal2 = earnedMedals[Random.Range(0, medalCount)];
+    if(earnedMedals.Count > 0){
+      medal2 = earnedMedals[Random.Range(0, earnedMedals.Count)];
       info2 = medals[medal2];
+      earnedMedals.Remove(medal2);
       medal2 += ":";
-      medalCount--;
     }
-    if(medalCount > 0){
-      medal3 = earnedMedals[Random.Range(0, medalCount)];
+    if(earnedMedals.Count > 0){
+      medal3 = earnedMedals[Random.Range(0, earnedMedals.Count)];
       info3 = medals[medal3];
+      earnedMedals.Remove(medal3);
       medal3 += ":";
-      medalCount--;
     }
 
     place.FindChild("medal1").GetComponent<Text>().text = medal1;
@@ -1099,6 +1096,7 @@ public class level : MonoBehaviour {
   }
 
   void SetReady(int controller){
+    controller *= -1; // set opposite due to player's losing conrol of characters
     if(first.GetComponent<player>().player_number == controller){
       PostGameOb.transform.Find("1place").FindChild("AButton").GetComponent<Image>().enabled = false;
       PostGameOb.transform.Find("1place").FindChild("readyText").GetComponent<Text>().enabled = true;
