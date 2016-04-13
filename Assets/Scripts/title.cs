@@ -22,12 +22,10 @@ public class title : MonoBehaviour {
     // Mac Check
     if (Application.platform == RuntimePlatform.OSXEditor
       || Application.platform == RuntimePlatform.OSXPlayer
-      || Application.platform == RuntimePlatform.OSXPlayer)
-    {
+      || Application.platform == RuntimePlatform.OSXPlayer){
       mac = "Mac ";
     }
-    else
-    {
+    else{
       mac = "";
     }
 
@@ -36,6 +34,19 @@ public class title : MonoBehaviour {
 
     ColorUtility.TryParseHtmlString("#ec393d", out red);
     ColorUtility.TryParseHtmlString("#ebebeb", out white);
+
+    if(!PlayerPrefs.HasKey("screen")){
+      PlayerPrefs.SetString("screen", "MONITOR");
+    }
+    if(!PlayerPrefs.HasKey("tutorial")){
+      PlayerPrefs.SetFloat("tutorial", 1);
+    }
+    if(!PlayerPrefs.HasKey("music")){
+      PlayerPrefs.SetFloat("music", 1);
+    }
+    if(!PlayerPrefs.HasKey("sfx")){
+      PlayerPrefs.SetFloat("music", 1);
+    }
 	
 	}
 	
@@ -68,6 +79,15 @@ public class title : MonoBehaviour {
 
       if(i == 0){
         SceneManager.LoadScene("_character_select");
+      }
+      if(i == 1){
+        SceneManager.LoadScene("_options");
+      }
+      if(i == 2){
+        SceneManager.LoadScene("_controls");
+      }
+      if(i == 3){
+        SceneManager.LoadScene("_credits");
       }
 
     }

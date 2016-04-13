@@ -28,6 +28,7 @@ public class level : MonoBehaviour {
   public bool gameOver;
   public int readyCount;
   public GameObject PostGameOb;
+  public GameObject PostGameBoxes;
   public Canvas PostGameUI;
 
   public GameObject gravity_stone;
@@ -39,53 +40,58 @@ public class level : MonoBehaviour {
   public List<GameObject> alive_players;
   public Vector3 target_position;
 
+  public GameObject killStreak;
+  GameObject streak;
+  public bool pause = false, running = false;
+
+  float shakeIntensity = 0.2f;
+  bool camera_shaking = false;
+
   public Dictionary<string, string> medals = new Dictionary<string, string>(){
-    { "SKY DIVER","longest consecutive airtime" },
-    { "TELEPORTER","most border teleports" },
-    { "CAUTIOUS","least border teleports" },
-    { "AIRBORNE","most time in air" },
-    { "GROUNDED","least airtime" },
-    { "HOARDER","most bullets picked up" },
-    { "POVERTY","least bullets picked up" },
-    { "ASTRONAUT","most gravity swaps" },
-    { "STEADY","least gravity swaps" },
-    { "SURVIVOR","longest life" },
-    { "RECKLESS","shortest life" },
-    { "LICH KING","most poisons" },
-    { "SAMURAI","best sword accuracy" },
-    { "SNIPER","best bullet accuracy" },
-    { "ASSASSIN","most sword kills" },
-    { "GUNSLINGER","most gun kills" },
-    { "PACIFIST","least kills" },
-    { "ATHLETE","most distance traveled" },
-    { "CAMPER","least distance traveled" },
-    { "WHOOPS","most suicides" },
-    { "PARTICIPANT","you had fun :)" },
-    { "THUG LIFE","most steals" },
-    { "JUST A GOOD PERSON","least steals" },
-    { "IRON GRIP","longest single possession" },
-    { "BUTTERFINGERS","shortest single possession" },
-    { "QUICKDRAW","first possession" }
+    { "SKY DIVER","most consecutive\nairtime" },
+    { "TELEPORTER","most border\nteleports" },
+    { "CAUTIOUS","least border\nteleports" },
+    { "AIRBORNE","most time\nin air" },
+    { "GROUNDED","least\nairtime" },
+    { "HOARDER","most bullets\npicked up" },
+    { "POVERTY","least bullets\npicked up" },
+    { "ASTRONAUT","most gravity\nswaps" },
+    { "STEADY","least gravity\nswaps" },
+    { "SURVIVOR","longest\nlife" },
+    { "RECKLESS","shortest\nlife" },
+    { "LICH KING","most\npoisons" },
+    { "SAMURAI","best sword\naccuracy" },
+    { "SNIPER","best bullet\naccuracy" },
+    { "ASSASSIN","most sword\nkills" },
+    { "GUNSLINGER","most gun\nkills" },
+    { "PACIFIST","least\nkills" },
+    { "ATHLETE","most distance\ntraveled" },
+    { "CAMPER","least distance\ntraveled" },
+    { "WHOOPS","most\nsuicides" },
+    { "PARTICIPANT","you had\nfun :)" },
+    { "THUG LIFE","most\nsteals" },
+    { "JUST A GOOD PERSON","least\nsteals" },
+    { "IRON GRIP","longest single\npossession" },
+    { "BUTTERFINGERS","shortest single\npossession" },
+    { "QUICKDRAW","first\npossession" }
   };
 
   void Start(){
     // Mac Check
-    if (Application.platform == RuntimePlatform.OSXEditor
-      || Application.platform == RuntimePlatform.OSXPlayer
-      || Application.platform == RuntimePlatform.OSXPlayer)
-    {
+    if(Application.platform == RuntimePlatform.OSXEditor ||
+       Application.platform == RuntimePlatform.OSXPlayer ||
+       Application.platform == RuntimePlatform.OSXPlayer ){
       mac = "Mac ";
     }
-    else
-    {
+    else{
       mac = "";
     }
 
-    if (SceneManager.GetActiveScene().name == "_city"
-      || SceneManager.GetActiveScene().name == "_forest"
-      || SceneManager.GetActiveScene().name == "_galaxy"
-      || SceneManager.GetActiveScene().name == "_desert"
-      || SceneManager.GetActiveScene().name == "_volcano"){
+    if(SceneManager.GetActiveScene().name == "_city"   ||
+       SceneManager.GetActiveScene().name == "_forest" ||
+       SceneManager.GetActiveScene().name == "_galaxy" ||
+       SceneManager.GetActiveScene().name == "_desert" ||
+       SceneManager.GetActiveScene().name == "_volcano"){
       isMap = true;
     }
     else{
@@ -97,14 +103,21 @@ public class level : MonoBehaviour {
 
     S = this;
 
-        if (isMap){
+    if(isMap){
       podium = GameObject.Find("Podium");
-      if (podium != null) podium.SetActive(false);
+      if(podium != null){
+        podium.SetActive(false);
+      }
       PostGameOb = GameObject.Find("PostGameCanvas");
-      if (PostGameOb != null) PostGameOb.SetActive(false);
+      PostGameBoxes = GameObject.Find("PostGameBoxes");
+      if(PostGameOb != null){
+        PostGameOb.SetActive(false);
+      }
+      if(PostGameBoxes != null){
+        PostGameBoxes.SetActive(false);
+      }
       //PostGameUI = GameObject.Find("PostGameCanvas").GetComponent<Canvas>();
       //if(PostGameUI != null) PostGameUI.enabled = false;
-
       gameOver = false;
       player1Ready = player2Ready = player3Ready = player4Ready = false;
     }
@@ -119,31 +132,24 @@ public class level : MonoBehaviour {
 			else if(PlayerPrefs.GetString("GameMode") == "REVERSE_TAG"){
 				gamemode = GameMode.REVERSE_TAG;
 			} 
-			else Debug.Log("INCORRECT GAMEMODE STRING PASSED IN FROM PLAYERPREFS. CHECK level SCRIPT");
-		}
-		else{
-			// Debug.Log("GAMEMODE ALREADY SET FROM level SCRIPT. CURRENT GAMEMODE: " + gamemode);
-			// Debug.Log("TO LET GAMEMODE BE SET THRU level SELECT, MAKE SURE level SCRIPT'S GAMEMODE IS NONE");
+			else{
+        Debug.Log("INCORRECT GAMEMODE STRING PASSED IN FROM PLAYERPREFS. CHECK level SCRIPT");
+      }
 		}
 
     // ==[players]============================================================
     // =========================================================================
 
-    /*
-    PlayerPrefs.SetString("P1", "red_player");
-    PlayerPrefs.SetString("P2", "black_player");
-    PlayerPrefs.SetString("P3", "yellow_player");
-    PlayerPrefs.SetString("P4", "green_player");
-    */
-
-    PlayerPrefs.SetString("Player Name", "Foobar");
+    // PlayerPrefs.SetString("P1", "red_player");
+    // PlayerPrefs.SetString("P2", "black_player");
+    // PlayerPrefs.SetString("P3", "yellow_player");
+    // PlayerPrefs.SetString("P4", "green_player");
 
     Vector3 rot = new Vector3(0, 0, 0);
 
     if(isMap){
-
-            // p1
-            numPlayers = 0;
+      numPlayers = 0;
+      // p1      
       if(PlayerPrefs.GetString("P1") != "none"){
         player1 = Instantiate(Resources.Load("__Prefabs/_players/" + PlayerPrefs.GetString("P1")), returnPosition(0), Quaternion.Euler(rot)) as GameObject;
         player1.SendMessage("SetPlayerNumber", 1);
@@ -178,8 +184,6 @@ public class level : MonoBehaviour {
       gravity_stone_instance = Instantiate(gravity_stone, stone_position, Quaternion.Euler(rot)) as GameObject;
       Debug.Log(gravity_stone_instance);
     }
-
-
   }
 
   void Update(){
@@ -189,6 +193,8 @@ public class level : MonoBehaviour {
     }
 
     if(gameOver){
+
+      // pressed a to ready up
       if(!player1Ready && Input.GetButtonDown(mac + "Controller 1 A Button")){
         player1Ready = true;
         SetReady(1);
@@ -210,30 +216,48 @@ public class level : MonoBehaviour {
         readyCount++;
       }
 
+      // pressed b to unconfirm ready
+      if(player1Ready && Input.GetButtonDown(mac + "Controller 1 B Button")){
+        player1Ready = false;
+        SetUnready(1);
+        readyCount--;
+      }
+      if(player2Ready && Input.GetButtonDown(mac + "Controller 2 B Button")){
+        player2Ready = false;
+        SetUnready(2);
+        readyCount--;
+      }
+      if(player3Ready && Input.GetButtonDown(mac + "Controller 3 B Button")){
+        player3Ready = false;
+        SetUnready(3);
+        readyCount--;
+      }
+      if(player4Ready && Input.GetButtonDown(mac + "Controller 4 B Button")){
+        player4Ready = false;
+        SetUnready(4);
+        readyCount--;
+      }
+
       // check if all available players are ready
       if(readyCount >= numPlayers){
         Debug.Log("ReadyCount: " + readyCount);
         Debug.Log("numPlayers: " + numPlayers);
-        //SceneManager.LoadScene("_scene_MapSelect");
-        //SceneManager.LoadScene("_scene_Menu");
         SceneManager.LoadScene("_map_game_select");
       }
     }
     else{
 
-
-      MoveCamera();
-
+      if(!camera_shaking){
+        MoveCamera();
+      }
 
       if(gamemode == GameMode.SURVIVAL){
         // check number of dead players
         int deadCount = 0;
-        foreach (player p in ranking)
-        {
+        foreach (player p in ranking){
           Debug.Log(p);
           deadCount++;
         }
-
         if(numPlayers - deadCount <= 1){
           // one player left, end the game
           List<player> activePlayers = new List<player>();
@@ -341,38 +365,29 @@ public class level : MonoBehaviour {
         if(ranking.Count > 0){
           // point limit reached, end the game
           List<player> activePlayers = new List<player>();
-          if (PlayerPrefs.GetString("P1") != "none")
-          {
+          if(PlayerPrefs.GetString("P1") != "none"){
             activePlayers.Add(player1.GetComponent<player>());
           }
-          if (PlayerPrefs.GetString("P2") != "none")
-          {
+          if(PlayerPrefs.GetString("P2") != "none"){
             activePlayers.Add(player2.GetComponent<player>());
           }
-          if (PlayerPrefs.GetString("P3") != "none")
-          {
+          if(PlayerPrefs.GetString("P3") != "none"){
             activePlayers.Add(player3.GetComponent<player>());
           }
-          if (PlayerPrefs.GetString("P4") != "none")
-          {
+          if(PlayerPrefs.GetString("P4") != "none"){
             activePlayers.Add(player4.GetComponent<player>());
           }
 
           // sort by rt_points, ties broken by longest continuous hold
-          for (int i = 0; i < numPlayers; i++)
-          {
-            for (int j = i + 1; j < numPlayers; j++)
-            {
-              if (activePlayers[i].rt_points < activePlayers[j].rt_points)
-              {
+          for(int i = 0; i < numPlayers; i++){
+            for(int j = i + 1; j < numPlayers; j++){
+              if(activePlayers[i].rt_points < activePlayers[j].rt_points){
                 player temp = activePlayers[i];
                 activePlayers[i] = activePlayers[j];
                 activePlayers[j] = temp;
               }
-              else if (activePlayers[i].rt_points == activePlayers[j].rt_points)
-              {
-                if (activePlayers[i].rt_longest_continuous_hold < activePlayers[j].rt_longest_continuous_hold)
-                {
+              else if(activePlayers[i].rt_points == activePlayers[j].rt_points){
+                if(activePlayers[i].rt_longest_continuous_hold < activePlayers[j].rt_longest_continuous_hold){
                   player temp = activePlayers[i];
                   activePlayers[i] = activePlayers[j];
                   activePlayers[j] = temp;
@@ -408,57 +423,56 @@ public class level : MonoBehaviour {
   public Vector3 returnPosition(int i){
     return respawnPoints[i];
   }
-
-  public GameObject killStreak;
-  GameObject streak;
-  public bool pause = false, running = false;
-
-
-    bool cameraShake = false;
-    public void KillPause(Vector3 playerPos){
+  
+  public void KillPause(Vector3 playerPos, Color player_color){
     if(!running){
       running = true;
-      StartCoroutine(Pause(playerPos));
+      camera_shaking = true;
+      StartCoroutine(Pause(playerPos, player_color));
     }
   }
 
-  IEnumerator Pause(Vector3 pos){
+  IEnumerator Pause(Vector3 pos, Color player_color){
     Time.timeScale = 0.1f;
-    Vector3 rot = transform.rotation.eulerAngles, originalPos = transform.position;
+    Vector3 rot = transform.rotation.eulerAngles, originalPos = gameObject.transform.position;
 
     rot.z = Random.Range(0, 90);
-    if(gamemode == GameMode.SURVIVAL)
-        streak = Instantiate(killStreak, pos, Quaternion.Euler(rot)) as GameObject;
+    if(gamemode == GameMode.SURVIVAL){
+      streak = Instantiate(killStreak, pos, Quaternion.Euler(rot)) as GameObject;
+      streak.GetComponent<Renderer>().material.color = player_color;
+    }
     
-    
     CameraShake();
     yield return new WaitForSeconds(0.005f);
-    transform.position = originalPos;
+    gameObject.transform.position = originalPos;
+
     CameraShake();
     yield return new WaitForSeconds(0.005f);
-    transform.position = originalPos;
+    gameObject.transform.position = originalPos;
+
     CameraShake();
     yield return new WaitForSeconds(0.005f);
-    transform.position = originalPos;
+    gameObject.transform.position = originalPos;
+
     CameraShake();
     yield return new WaitForSeconds(0.005f);
-    transform.position = originalPos;
+    gameObject.transform.position = originalPos;
+
     CameraShake();
-    transform.position = originalPos;
+    gameObject.transform.position = originalPos;
+    camera_shaking = false;
 
     Destroy(streak);
     Time.timeScale = 1;
     running = false;
   }
-
-    float shakeIntensity = 0.15f;
-    void CameraShake()
-    {
-        Vector3 pos = transform.position;
-        pos.x = Random.Range(-shakeIntensity, shakeIntensity);
-        pos.y = Random.Range(-shakeIntensity, shakeIntensity);
-        transform.position = pos;
-    }
+  
+  void CameraShake(){
+    Vector3 pos = gameObject.transform.position;
+    pos.x = Random.Range(pos.x - shakeIntensity, pos.x + shakeIntensity);
+    pos.y = Random.Range(pos.y - shakeIntensity, pos.y + shakeIntensity);
+    gameObject.transform.position = pos;
+  }
 
   public Vector3 findRespawn(){
     
@@ -519,12 +533,13 @@ public class level : MonoBehaviour {
           longestAirTime = current;
           duplicate = false;
         }
-        else if (current == longestAirTime)
-        {
+        else if(current == longestAirTime){
           duplicate = true;
         }
       }
-      if (!duplicate) activePlayers[high].medals.Add("SKY DIVER");
+      if(!duplicate){
+        activePlayers[high].medals.Add("SKY DIVER");
+      }
 
       // Teleporter: most border swaps
       // Cautious: least border swap
@@ -535,29 +550,29 @@ public class level : MonoBehaviour {
       int leastBorderSwaps = mostBorderSwaps;
       for (int i = high + 1; i < numPlayers; i++){
         int current = activePlayers[i].borderSwaps;
-        if (current > mostBorderSwaps)
-        {
+        if(current > mostBorderSwaps){
           high = i;
           mostBorderSwaps = current;
           highDuplicate = false;
         }
-        else if (current < leastBorderSwaps)
-        {
+        else if(current < leastBorderSwaps){
           low = i;
           leastBorderSwaps = current;
           lowDuplicate = false;
         }
-        else if (current == mostBorderSwaps)
-        {
+        else if(current == mostBorderSwaps){
           highDuplicate = true;
         }
-        else if (current == leastBorderSwaps)
-        {
+        else if(current == leastBorderSwaps){
           lowDuplicate = true;
         }
       }
-      if (!highDuplicate) activePlayers[high].medals.Add("TELEPORTER");
-      if (!lowDuplicate) activePlayers[low].medals.Add("CAUTIOUS");
+      if(!highDuplicate){
+        activePlayers[high].medals.Add("TELEPORTER");
+      }
+      if(!lowDuplicate){
+        activePlayers[low].medals.Add("CAUTIOUS");
+      }
 
       // Airborne: most time in air
       // Grounded: least time in air
@@ -578,17 +593,19 @@ public class level : MonoBehaviour {
           leastAirTime = current;
           lowDuplicate = false;
         }
-        else if(current == mostAirTime)
-        {
+        else if(current == mostAirTime){
           highDuplicate = true;
         }
-        else if(current == leastAirTime)
-        {
+        else if(current == leastAirTime){
           lowDuplicate = true;
         }
       }
-      if (!highDuplicate) activePlayers[high].medals.Add("AIRBORNE");
-      if (!lowDuplicate) activePlayers[low].medals.Add("GROUNDED");
+      if(!highDuplicate){
+        activePlayers[high].medals.Add("AIRBORNE");
+      }
+      if(!lowDuplicate){
+        activePlayers[low].medals.Add("GROUNDED");
+      }
 
       // Astronaut: most gravity swaps
       // Steady: least gravity 
@@ -597,32 +614,31 @@ public class level : MonoBehaviour {
       low = 0;
       int mostGravitySwaps = activePlayers[high].gravitySwapCount;
       int leastGravitySwaps = mostGravitySwaps;
-      for (int i = high + 1; i < numPlayers; i++)
-      {
+      for (int i = high + 1; i < numPlayers; i++){
         int current = activePlayers[i].gravitySwapCount;
-        if (current > mostGravitySwaps)
-        {
+        if(current > mostGravitySwaps){
           high = i;
           mostGravitySwaps = current;
           highDuplicate = false;
         }
-        else if (current < leastGravitySwaps)
-        {
+        else if(current < leastGravitySwaps){
           low = i;
           leastGravitySwaps = current;
           lowDuplicate = false;
         }
-        else if (current == mostGravitySwaps)
-        {
+        else if(current == mostGravitySwaps){
           highDuplicate = true;
         }
-        else if (current == leastGravitySwaps)
-        {
+        else if(current == leastGravitySwaps){
           lowDuplicate = true;
         }
       }
-      if (!highDuplicate) activePlayers[high].medals.Add("ASTRONAUT");
-      if (!lowDuplicate) activePlayers[low].medals.Add("STEADY");
+      if(!highDuplicate){
+        activePlayers[high].medals.Add("ASTRONAUT");
+      }
+      if(!lowDuplicate){
+        activePlayers[low].medals.Add("STEADY");
+      }
 
       // Athlete: most distance traveled
       // Camper: least distance traveled
@@ -631,36 +647,35 @@ public class level : MonoBehaviour {
       low = 0;
       int mostDistance = activePlayers[high].steps;
       int leastDistance = mostDistance;
-      for (int i = high + 1; i < numPlayers; i++)
-      {
+      for (int i = high + 1; i < numPlayers; i++){
         int current = activePlayers[i].steps;
-        if (current > mostDistance)
-        {
+        if(current > mostDistance){
           high = i;
           mostDistance = current;
           highDuplicate = false;
         }
-        else if (current < leastDistance)
-        {
+        else if(current < leastDistance){
           low = i;
           leastDistance = current;
           lowDuplicate = false;
         }
-        else if (current == mostDistance)
-        {
+        else if(current == mostDistance){
           highDuplicate = true;
         }
-        else if (current == leastDistance)
-        {
+        else if(current == leastDistance){
           lowDuplicate = true;
         }
       }
-      if (!highDuplicate) activePlayers[high].medals.Add("ATHLETE");
-      if (!lowDuplicate) activePlayers[low].medals.Add("CAMPER");
+      if(!highDuplicate){
+        activePlayers[high].medals.Add("ATHLETE");
+      }
+      if(!lowDuplicate){
+        activePlayers[low].medals.Add("CAMPER");
+      }
 
-      /////////////////////////////// COMBAT ONLY MEDALS ////////////////////////////////////////////
-      if (gamemode == GameMode.SURVIVAL || gamemode == GameMode.DEATHMATCH)
-      {
+      //////////////////////// COMBAT ONLY MEDALS //////////////////////////////
+      if(gamemode == GameMode.SURVIVAL || gamemode == GameMode.DEATHMATCH){
+        
         // First Blood
 
         // Hoarder: most bullets picked up
@@ -670,209 +685,200 @@ public class level : MonoBehaviour {
         low = 0;
         int mostBullets = activePlayers[high].bulletPickUps;
         int leastBullets = mostBullets;
-        for (int i = high + 1; i < numPlayers; i++)
-        {
+        for (int i = high + 1; i < numPlayers; i++){
           int current = activePlayers[i].bulletPickUps;
-          if (current > mostBullets)
-          {
+          if(current > mostBullets){
             high = i;
             mostBullets = current;
             highDuplicate = false;
           }
-          else if (current < leastBullets)
-          {
+          else if(current < leastBullets){
             low = i;
             leastBullets = current;
             lowDuplicate = false;
           }
-          else if (current == mostBullets)
-          {
+          else if(current == mostBullets){
             highDuplicate = true;
           }
-          else if (current == leastBullets)
-          {
+          else if(current == leastBullets){
             lowDuplicate = true;
           }
         }
-        if (!highDuplicate) activePlayers[high].medals.Add("HOARDER");
-        if (!lowDuplicate) activePlayers[low].medals.Add("POVERTY");
+        if(!highDuplicate){
+          activePlayers[high].medals.Add("HOARDER");
+        }
+        if(!lowDuplicate){
+          activePlayers[low].medals.Add("POVERTY");
+        }
 
         // Survivor: longest life
         duplicate = false;
         high = 0;
         int longestLife = activePlayers[high].longestLife;
-        for (int i = high + 1; i < numPlayers; i++)
-        {
+        for (int i = high + 1; i < numPlayers; i++){
           int current = activePlayers[i].longestLife;
-          if (current > longestLife)
-          {
+          if(current > longestLife){
             high = i;
             longestLife = current;
             duplicate = false;
           }
-          else if (current == longestLife)
-          {
+          else if(current == longestLife){
             duplicate = true;
           }
         }
-        if (!duplicate) activePlayers[high].medals.Add("SURVIVOR");
+        if(!duplicate){
+          activePlayers[high].medals.Add("SURVIVOR");
+        }
 
         // Reckless: shortest life
         duplicate = false;
         low = 0;
         int shortestLife = activePlayers[high].shortestLife;
-        for (int i = low + 1; i < numPlayers; i++)
-        {
+        for (int i = low + 1; i < numPlayers; i++){
           int current = activePlayers[i].shortestLife;
-          if (current < shortestLife)
-          {
+          if(current < shortestLife){
             low = i;
             shortestLife = current;
             duplicate = false;
           }
-          else if (current == shortestLife)
-          {
+          else if(current == shortestLife){
             duplicate = true;
           }
         }
-        if (!duplicate) activePlayers[low].medals.Add("RECKLESS");
+        if(!duplicate){
+          activePlayers[low].medals.Add("RECKLESS");
+        }
 
         // Samurai: best sword accuracy
         duplicate = false;
         high = 0;
         float bestSwordAccuracy = (float)(activePlayers[high].numSwordHits) / (activePlayers[high].numSwordSwipes);
-        for (int i = high + 1; i < numPlayers; i++)
-        {
+        for (int i = high + 1; i < numPlayers; i++){
           float current = (float)(activePlayers[i].numSwordHits) / (activePlayers[i].numSwordSwipes);
-          if (current > bestSwordAccuracy)
-          {
+          if(current > bestSwordAccuracy){
             high = i;
             bestSwordAccuracy = current;
             duplicate = false;
           }
-          else if (current == bestSwordAccuracy)
-          {
+          else if(current == bestSwordAccuracy){
             duplicate = true;
           }
         }
-        if (!duplicate) activePlayers[high].medals.Add("SAMURAI");
+        if(!duplicate){
+          activePlayers[high].medals.Add("SAMURAI");
+        }
 
         // Sniper: bullet accuracy
         duplicate = false;
         high = 0;
         float bestBulletAccuracy = (float)(activePlayers[high].numBulletHits) / (activePlayers[high].numBulletShots);
-        for (int i = high + 1; i < numPlayers; i++)
-        {
+        for (int i = high + 1; i < numPlayers; i++){
           float current = (float)(activePlayers[i].numBulletHits) / (activePlayers[i].numBulletShots);
-          if (current > bestBulletAccuracy)
-          {
+          if(current > bestBulletAccuracy){
             high = i;
             bestBulletAccuracy = current;
             duplicate = false;
           }
-          else if (current == bestBulletAccuracy)
-          {
+          else if(current == bestBulletAccuracy){
             duplicate = true;
           }
         }
-        if (!duplicate) activePlayers[high].medals.Add("SNIPER");
+        if(!duplicate){
+          activePlayers[high].medals.Add("SNIPER");
+        }
 
         // Assassin: most sword kills
         duplicate = false;
         high = 0;
         int mostSwordKills = activePlayers[high].numSwordHits;
-        for (int i = high + 1; i < numPlayers; i++)
-        {
+        for (int i = high + 1; i < numPlayers; i++){
           int current = activePlayers[i].numSwordHits;
-          if (current > mostSwordKills)
-          {
+          if(current > mostSwordKills){
             high = i;
             mostSwordKills = current;
             duplicate = false;
           }
-          else if (current == mostSwordKills)
-          {
+          else if(current == mostSwordKills){
             duplicate = true;
           }
         }
-        if (!duplicate) activePlayers[high].medals.Add("ASSASSIN");
+        if(!duplicate){
+          activePlayers[high].medals.Add("ASSASSIN");
+        }
 
         // Gunslinger: most bullet kills
         duplicate = false;
         high = 0;
         int mostBulletKills = activePlayers[high].numBulletHits;
-        for (int i = high + 1; i < numPlayers; i++)
-        {
+        for (int i = high + 1; i < numPlayers; i++){
           int current = activePlayers[i].numBulletHits;
-          if (current > mostBulletKills)
-          {
+          if(current > mostBulletKills){
             high = i;
             mostBulletKills = current;
             duplicate = false;
           }
-          else if (current == mostBulletKills)
-          {
+          else if(current == mostBulletKills){
             duplicate = true;
           }
         }
-        if (!duplicate) activePlayers[high].medals.Add("GUNSLINGER");
+        if(!duplicate){
+          activePlayers[high].medals.Add("GUNSLINGER");
+        }
 
         // Pacifist: least kills
         duplicate = false;
         low = 0;
         int leastKills = activePlayers[low].numBulletHits + activePlayers[low].numSwordHits;
-        for (int i = low + 1; i < numPlayers; i++)
-        {
+        for (int i = low + 1; i < numPlayers; i++){
           int current = activePlayers[i].numBulletHits + activePlayers[low].numSwordHits;
-          if (current < leastKills)
-          {
+          if(current < leastKills){
             low = i;
             leastKills = current;
             duplicate = false;
           }
-          else if (current == leastKills)
-          {
+          else if(current == leastKills){
             duplicate = true;
           }
         }
-        if (!duplicate) activePlayers[low].medals.Add("PACIFIST");
+        if(!duplicate){
+          activePlayers[low].medals.Add("PACIFIST");
+        }
 
         // Whoops: most suicides
         duplicate = false;
         high = 0;
         int mostSuicides = activePlayers[high].suicides;
-        for (int i = high + 1; i < numPlayers; i++)
-        {
+        for (int i = high + 1; i < numPlayers; i++){
           int current = activePlayers[i].suicides;
-          if (current > mostSuicides)
-          {
+          if(current > mostSuicides){
             high = i;
             mostSuicides = current;
             duplicate = false;
           }
-          else if (current == mostSuicides)
-          {
+          else if(current == mostSuicides){
             duplicate = true;
           }
         }
-        if (!duplicate) activePlayers[high].medals.Add("WHOOPS");
-
-        /* poisons taken out
-        // Lich King: most poisons
-        high = 0;
-        int mostPoisons = activePlayers[high].totalPoisoned;
-        for (int i = high + 1; i < numPlayers; i++){
-          int current = activePlayers[i].totalPoisoned;
-          if(current > mostPoisons){
-            high = i;
-            mostPoisons = current;
-          }
+        if(!duplicate){
+          activePlayers[high].medals.Add("WHOOPS");
         }
-        activePlayers[high].medals.Add("LICH KING");
-        */
+
+        // // Lich King: most poisons
+        // high = 0;
+        // int mostPoisons = activePlayers[high].totalPoisoned;
+        // for (int i = high + 1; i < numPlayers; i++){
+        //   int current = activePlayers[i].totalPoisoned;
+        //   if(current > mostPoisons){
+        //     high = i;
+        //     mostPoisons = current;
+        //   }
+        // }
+        // activePlayers[high].medals.Add("LICH KING");
+
       }
-      else if (gamemode == GameMode.REVERSE_TAG) ////// REVERSE TAG ONLY MEDALS
-      {
+      /////////////////////////// RT ONLY MEDALS ///////////////////////////////
+      else if(gamemode == GameMode.REVERSE_TAG){
+        
         // Longest Held
         // Shortest Held
         lowDuplicate = false; highDuplicate = false;
@@ -880,32 +886,31 @@ public class level : MonoBehaviour {
         low = 0;
         float longestHeld = activePlayers[high].rt_longest_continuous_hold;
         float shortestHeld = longestHeld;
-        for (int i = high + 1; i < numPlayers; i++)
-        {
+        for (int i = high + 1; i < numPlayers; i++){
           float current = activePlayers[i].rt_longest_continuous_hold;
-          if (current > longestHeld)
-          {
+          if(current > longestHeld){
             high = i;
             longestHeld = current;
             highDuplicate = false;
           }
-          else if (current < shortestHeld)
-          {
+          else if(current < shortestHeld){
             low = i;
             shortestHeld = current;
             lowDuplicate = false;
           }
-          else if (current == longestHeld)
-          {
+          else if(current == longestHeld){
             highDuplicate = true;
           }
-          else if (current == shortestHeld)
-          {
+          else if(current == shortestHeld){
             lowDuplicate = true;
           }
         }
-        if (!highDuplicate) activePlayers[high].medals.Add("IRON GRIP");
-        if (!lowDuplicate) activePlayers[low].medals.Add("BUTTERFINGERS");
+        if(!highDuplicate){
+          activePlayers[high].medals.Add("IRON GRIP");
+        }
+        if(!lowDuplicate){
+          activePlayers[low].medals.Add("BUTTERFINGERS");
+        }
 
         // Most Steals
         // Least Steals
@@ -914,39 +919,36 @@ public class level : MonoBehaviour {
         low = 0;
         float mostSteals = activePlayers[high].steals;
         float leastSteals = mostSteals;
-        for (int i = high + 1; i < numPlayers; i++)
-        {
+        for (int i = high + 1; i < numPlayers; i++){
           float current = activePlayers[i].steals;
-          if (current > mostSteals)
-          {
+          if(current > mostSteals){
             high = i;
             mostSteals = current;
             highDuplicate = false;
           }
-          else if (current < leastSteals)
-          {
+          else if(current < leastSteals){
             low = i;
             leastSteals = current;
             lowDuplicate = false;
           }
-          else if (current == mostSteals)
-          {
+          else if(current == mostSteals){
             highDuplicate = true;
           }
-          else if (current == leastSteals)
-          {
+          else if(current == leastSteals){
             lowDuplicate = true;
           }
         }
-        if (!highDuplicate) activePlayers[high].medals.Add("THUG LIFE");
-        if (!lowDuplicate) activePlayers[low].medals.Add("JUST A GOOD PERSON");
+        if(!highDuplicate){
+          activePlayers[high].medals.Add("THUG LIFE");
+        }
+        if(!lowDuplicate){
+          activePlayers[low].medals.Add("JUST A GOOD PERSON");
+        }
 
         // First Touch
         low = 0;
-        for (int i = low; i < numPlayers; i++)
-        {
-          if (activePlayers[low].firstTouch)
-          {
+        for (int i = low; i < numPlayers; i++){
+          if(activePlayers[low].firstTouch){
             activePlayers[low].medals.Add("QUICKDRAW");
             break;
           }
@@ -964,9 +966,20 @@ public class level : MonoBehaviour {
 
   void DisplayResults(){
 
-    gameObject.transform.position = new Vector3(0f, 0f, 0f);
+    // stop moving camera
+    foreach(GameObject player in alive_players){
+      alive_players.Remove(player);
+    }
+    gameObject.transform.position = new Vector3(0f, 0f, -10f);
+    camera_shaking = true;
 
-    if (PostGameOb != null) PostGameOb.SetActive(true);
+    if(PostGameOb != null){
+      PostGameOb.SetActive(true);
+    }
+    if(PostGameBoxes != null){
+      PostGameBoxes.SetActive(true);
+    }
+
     //if(PostGameUI != null) PostGameUI.enabled = true;
 
     // show the end game UI
@@ -1092,7 +1105,6 @@ public class level : MonoBehaviour {
 
     target_position = new Vector3(centroid_x / count, centroid_y / count, -10f);
     gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, target_position, 1.5f * Time.deltaTime);
-
   }
 
   void SetReady(int controller){
@@ -1114,4 +1126,24 @@ public class level : MonoBehaviour {
       PostGameOb.transform.Find("4place").FindChild("readyText").GetComponent<Text>().enabled = true;
     }
   }
+
+  void SetUnready(int controller){
+    if(first.GetComponent<player>().player_number == controller){
+      PostGameOb.transform.Find("1place").FindChild("AButton").GetComponent<Image>().enabled = true;
+      PostGameOb.transform.Find("1place").FindChild("readyText").GetComponent<Text>().enabled = false;
+    }
+    else if(second.GetComponent<player>().player_number == controller){
+      PostGameOb.transform.Find("2place").FindChild("AButton").GetComponent<Image>().enabled = true;
+      PostGameOb.transform.Find("2place").FindChild("readyText").GetComponent<Text>().enabled = false;
+    }
+    else if(third.GetComponent<player>().player_number == controller){
+      PostGameOb.transform.Find("3place").FindChild("AButton").GetComponent<Image>().enabled = true;
+      PostGameOb.transform.Find("3place").FindChild("readyText").GetComponent<Text>().enabled = false;
+    }
+    else if(fourth.GetComponent<player>().player_number == controller){
+      PostGameOb.transform.Find("4place").FindChild("AButton").GetComponent<Image>().enabled = true;
+      PostGameOb.transform.Find("4place").FindChild("readyText").GetComponent<Text>().enabled = false;
+    }
+  }
+
 }

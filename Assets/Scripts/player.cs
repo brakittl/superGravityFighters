@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class player : MonoBehaviour{
 
@@ -27,6 +28,8 @@ public class player : MonoBehaviour{
   	public int rt_points = 0;
   	public float rt_total_time = 0; // total time holding the "gem"
   	public float rt_longest_continuous_hold = 0; // longest time holding the "gem" without losing it
+  	public float hit_by_pulse_times = 0;
+
   	
     //point limit is in level script, call with level.S.rt_point_limit
 
@@ -75,7 +78,7 @@ public class player : MonoBehaviour{
     // bullet information
     public GameObject bullet, extraBullet;
   	GameObject bullet_instance;
-  	public float shotVelocity = 5f, numBullets = 1;
+  	public float shotVelocity = 3f, numBullets = 1;
     public float fireRate = 1f;
   	float nextFire = 0f, bulletCreationDist = 0.25f;
   	string lastDirection = "right";
@@ -131,6 +134,8 @@ public class player : MonoBehaviour{
     Color black = new Color();
     public Dictionary<string, Color> colors;
 
+    bool is_character_select;
+
   // ==[helper functions]=======================================================
   // ===========================================================================
 
@@ -157,13 +162,18 @@ public class player : MonoBehaviour{
       // Mac Check
       if (Application.platform == RuntimePlatform.OSXEditor
         || Application.platform == RuntimePlatform.OSXPlayer
-        || Application.platform == RuntimePlatform.OSXPlayer)
-      {
+        || Application.platform == RuntimePlatform.OSXPlayer){
         mac = "Mac ";
       }
-      else
-      {
+      else{
         mac = "";
+      }
+
+      if(SceneManager.GetActiveScene().name == "_character_select"){
+        is_character_select = true;
+      }
+      else{
+        is_character_select = false;
       }
 
       // initialize variables
@@ -178,7 +188,14 @@ public class player : MonoBehaviour{
       ColorUtility.TryParseHtmlString("#2c5d99", out blue);
       ColorUtility.TryParseHtmlString("#854db5", out purple);
       ColorUtility.TryParseHtmlString("#ebebeb", out black);
-      colors = new Dictionary<string, Color>(){{ "red", red},{ "orange", orange},{ "yellow", yellow},{ "green", green},{ "blue", blue},{ "purple", purple},{ "black", black},
+      colors = new Dictionary<string, Color>(){
+        {"red", red},
+        {"orange", orange},
+        {"yellow", yellow},
+        {"green", green},
+        {"blue", blue},
+        {"purple", purple},
+        {"black", black},
       };
 
       // get components
@@ -306,10 +323,12 @@ public class player : MonoBehaviour{
         else if(level.S.gamemode == GameMode.DEATHMATCH){
           int i = 0;
           foreach(string player_string in playersKilled){
-            char[] delimiters = {'_'};
-            string[] splits = player_string.Split(delimiters);
+            Debug.Log(player_string);
+            // char[] delimiters = {'_'};
+            // string[] splits = player_string.Split(delimiters);
             hearts[i].SetActive(true);
-            hearts[i].GetComponent<Image>().sprite = get_sprite_by_name(hearts_skulls, splits[0] + "_skull");
+            // hearts[i].GetComponent<Image>().sprite = get_sprite_by_name(hearts_skulls, splits[0] + "_skull");
+            hearts[i].GetComponent<Image>().sprite = get_sprite_by_name(hearts_skulls, player_color.ToLower() + "_skull");
             ++i;
           }
           for(; i < 10; ++i){
@@ -351,26 +370,38 @@ public class player : MonoBehaviour{
   			if((Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis") < -0.4f || Input.GetButtonDown(mac + "Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up){
   				Gravity(orientation.up, transform.localEulerAngles.y, 180f);
           gravitySwapCount++;
-          sound.PlayOneShot(gravitySwap, gravVolume);
+          if(PlayerPrefs.GetFloat("sfx") != 0){
+            sound.PlayOneShot(gravitySwap, gravVolume);
+          }
+
         }
   			// down
 
   			if((Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis") > 0.4f || Input.GetButtonDown(mac + "Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S)) && player_orientation != orientation.down){
   				Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
           gravitySwapCount++;
-          sound.PlayOneShot(gravitySwap, gravVolume);
+          if(PlayerPrefs.GetFloat("sfx") != 0){
+            sound.PlayOneShot(gravitySwap, gravVolume);
+          }
+
         }
   			// left
   			if((Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis") < -0.4f || Input.GetButtonDown(mac + "Controller " + player_number + " X Button") || Input.GetKey(KeyCode.A)) && player_orientation != orientation.left){
   				Gravity(orientation.left, 0f, -90f);
           gravitySwapCount++;
-          sound.PlayOneShot(gravitySwap, gravVolume);
+          if(PlayerPrefs.GetFloat("sfx") != 0){
+            sound.PlayOneShot(gravitySwap, gravVolume);
+          }
+
         }
   			// right
   			if((Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis") > 0.4f || Input.GetButtonDown(mac + "Controller " + player_number + " B Button") || Input.GetKey(KeyCode.D)) && player_orientation != orientation.right){
   				Gravity(orientation.right, 0f, 90f);
           gravitySwapCount++;
-          sound.PlayOneShot(gravitySwap, gravVolume);
+          if(PlayerPrefs.GetFloat("sfx") != 0){
+            sound.PlayOneShot(gravitySwap, gravVolume);
+          }
+
         }
   		}
 
@@ -391,7 +422,7 @@ public class player : MonoBehaviour{
           
           // attack
           if((Input.GetAxis(mac + "Controller " + player_number + " Right Trigger") > 0.25f || Input.GetButtonDown(mac + "Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.Space)) && Time.time > nextFire){
-                    numSwordSwipes++;
+            numSwordSwipes++;
   				  Block();
   			  }
           
@@ -538,6 +569,8 @@ public class player : MonoBehaviour{
   			}
 
   		}
+
+      TabletopMovementShift();
 
       // ==[resets]=============================================================
       // =======================================================================
@@ -696,11 +729,11 @@ public class player : MonoBehaviour{
 
   	bool checkSides(){
 
-		float bc_offset_x = GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
-		float bc_offset_y = GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
+  		float bc_offset_x = GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
+  		float bc_offset_y = GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
 
-		float player_length = GetComponent<BoxCollider2D>().size.x * transform.localScale.x;
-		// float player_height = GetComponent<BoxCollider2D>().size.y * transform.localScale.y;
+  		float player_length = GetComponent<BoxCollider2D>().size.x * transform.localScale.x;
+  		// float player_height = GetComponent<BoxCollider2D>().size.y * transform.localScale.y;
 
   		// due to the box collider's position being off (due to rotation and offset), also need to "rotate" the ray		
       switch (player_orientation){
@@ -778,11 +811,15 @@ public class player : MonoBehaviour{
   	}
       
   	bool checkGround(){
+
+      // if(is_character_select){
+      //   return true;
+      // }
 	
-		float bc_offset_x = GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
-		float bc_offset_y = GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
-		float player_length = GetComponent<BoxCollider2D>().size.x * transform.localScale.x;
-		float player_height = GetComponent<BoxCollider2D>().size.y * transform.localScale.y;
+  		float bc_offset_x = GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
+  		float bc_offset_y = GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
+  		float player_length = GetComponent<BoxCollider2D>().size.x * transform.localScale.x;
+  		float player_height = GetComponent<BoxCollider2D>().size.y * transform.localScale.y;
 
   		// due to the box collider's position being off (due to rotation and offset), also need to "rotate" the ray		
       switch (player_orientation){
@@ -833,9 +870,18 @@ public class player : MonoBehaviour{
 
   		float length_ray_updw = (player_height / 2) + (player_height * .2F);
 
+      if(is_character_select){
+        if(player_orientation == orientation.up || player_orientation == orientation.down){
+          length_ray_updw -= 0.04f;
+        }
+        else{
+          length_ray_updw -= 0.038f;
+        }
+      }
+
   		Vector2 below = transform.TransformDirection(new Vector2(0F, -length_ray_updw));
 
-  		LayerMask ignoreplayer_layerMask = ~(LayerMask.NameToLayer("Player") | LayerMask.NameToLayer("Border") | LayerMask.NameToLayer("TagBall"));
+  		LayerMask ignoreplayer_layerMask = ~(LayerMask.NameToLayer("Player") | LayerMask.NameToLayer("Border") | LayerMask.NameToLayer("TagBall") | LayerMask.NameToLayer("Attack"));
   		ignoreplayer_layerMask = ~ignoreplayer_layerMask;
 
   		if(player_orientation == orientation.up || player_orientation == orientation.down){ 
@@ -931,7 +977,10 @@ public class player : MonoBehaviour{
 
   		if(!player_animator.GetBool("attack") && !respawn && !player_animator.GetBool("crouched")){
 
-        sound.PlayOneShot(swordSlash);
+        if(PlayerPrefs.GetFloat("sfx") != 0){
+          sound.PlayOneShot(swordSlash);
+        }
+
         numSwordSwipes++; // statistics count
         nextFire = Time.time + fireRate;
         player_animator.SetBool("attack", true);
@@ -969,7 +1018,10 @@ public class player : MonoBehaviour{
   	void Shoot(){
 
       if(numBullets > 0){
-    		sound.PlayOneShot(gunshot);
+    		if(PlayerPrefs.GetFloat("sfx") != 0){
+          sound.PlayOneShot(gunshot);
+        }
+
     		nextFire = Time.time + fireRate;
     		numBulletShots++;
     		numBullets--;
@@ -1072,13 +1124,13 @@ public class player : MonoBehaviour{
   // ===========================================================================
 
   	public void FindKiller(GameObject collideObject, bool bulletAttack){
-      Vector3 killerPos = new Vector3(0,0,0);
+      // Vector3 killerPos = new Vector3(0,0,0);
   		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
   		foreach(GameObject p in players){
   			player other = (player)p.GetComponent(typeof(player));
         if(bulletAttack && other.bullet_instance == collideObject){
           other.numBulletHits++;
-          killerPos = other.transform.position;
+          // killerPos = other.transform.position;
           if(this.name != other.name){
             other.playersKilled.Add(this.gameObject.name);
           }
@@ -1090,7 +1142,7 @@ public class player : MonoBehaviour{
         else if(!bulletAttack && other.shield == collideObject){
 	        other.playersKilled.Add(this.gameObject.name);
           other.numSwordHits++;
-          killerPos = other.transform.position;
+          // killerPos = other.transform.position;
         }
   		}
       KillPlayer();
@@ -1098,14 +1150,17 @@ public class player : MonoBehaviour{
 
   	public void KillPlayer(){
       
-      sound.PlayOneShot(death);
+      if(PlayerPrefs.GetFloat("sfx") != 0){
+        sound.PlayOneShot(death);
+      }
+
       respawn = true;
       slash.GetComponent<BoxCollider2D>().enabled = false;
   	  side_slash.GetComponent<BoxCollider2D>().enabled = false;
   	  up_slash.GetComponent<BoxCollider2D>().enabled = false;
   	  down_slash.GetComponent<BoxCollider2D>().enabled = false;
       lives--;
-      level.S.KillPause(transform.position);
+      level.S.KillPause(transform.position, colors[player_color.ToLower()]);
 
       // turn off poison
       poisoned = false;
@@ -1131,19 +1186,20 @@ public class player : MonoBehaviour{
 
   	IEnumerator Wait(){
 
-        Time.timeScale = 0.1f;
-        yield return new WaitForSeconds(0.3f);
+      Time.timeScale = 0.1f;
+      yield return new WaitForSeconds(0.3f);
 
-        Vector3 pos = transform.position;
+      Vector3 pos = transform.position;
   		transform.position = offscreen;
-        if(level.S.gamemode == GameMode.SURVIVAL)
-            Instantiate(extraBullet, pos, transform.rotation);
+      if(level.S.gamemode == GameMode.SURVIVAL){
+        Instantiate(extraBullet, pos, transform.rotation);
+      }
       Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
       player_orientation = orientation.down;
 
       yield return new WaitForSeconds(1f);
 
-        transform.position = level.S.findRespawn();
+      transform.position = level.S.findRespawn();
   		transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
       body.velocity = new Vector2(0f, 0f);
       player_orientation = orientation.down;
@@ -1175,42 +1231,46 @@ public class player : MonoBehaviour{
       
   	void OnTriggerEnter2D(Collider2D col){
       
-      /*if(col.tag == "slash" && !respawn && !dead && !invincible){
-        player p = col.transform.parent.GetComponent<player>();
-        if(p.dead){
-          if(!poisoned){
-            p.totalPoisoned++;
-          }
-          Poison();
-          p.poisonTime = Time.time + poisonRate;
-          return;
-        }
+      // if(col.tag == "slash" && !respawn && !dead && !invincible){
+      //   player p = col.transform.parent.GetComponent<player>();
+      //   if(p.dead){
+      //     if(!poisoned){
+      //       p.totalPoisoned++;
+      //     }
+      //     Poison();
+      //     p.poisonTime = Time.time + poisonRate;
+      //     return;
+      //   }
 
-        if(player_animator.GetBool("block") || player_animator.GetBool("attack")){
-          if(swipeBlock){
-            swipeBlockStart = Time.time;
-            sound.PlayOneShot(block);
-            body.AddForce(transform.right * -1 * 0.1f, ForceMode2D.Impulse);
-            numBlocks++;
-          }
-          swipeBlock = false;
-  	      return;
-        }
+      //   if(player_animator.GetBool("block") || player_animator.GetBool("attack")){
+      //     if(swipeBlock){
+      //       swipeBlockStart = Time.time;
+      //       if(PlayerPrefs.GetFloat("sfx") != 0){
+      //         sound.PlayOneShot(block);
+      //       }
 
-  			FindKiller(col.gameObject, false);
-  			KillPlayer();
-  			slash.GetComponent<BoxCollider2D>().enabled = false;
-  			side_slash.GetComponent<BoxCollider2D>().enabled = false;
-  			up_slash.GetComponent<BoxCollider2D>().enabled = false;
-  			down_slash.GetComponent<BoxCollider2D>().enabled = false;
+      //       body.AddForce(transform.right * -1 * 0.1f, ForceMode2D.Impulse);
+      //       numBlocks++;
+      //     }
+      //     swipeBlock = false;
+      //     return;
+      //   }
 
-      }*/
+      //   FindKiller(col.gameObject, false);
+      //   KillPlayer();
+      //   slash.GetComponent<BoxCollider2D>().enabled = false;
+      //   side_slash.GetComponent<BoxCollider2D>().enabled = false;
+      //   up_slash.GetComponent<BoxCollider2D>().enabled = false;
+      //   down_slash.GetComponent<BoxCollider2D>().enabled = false;
+      // }
       
       if(col.tag == "shield" && !respawn && !dead){
         if(player_animator.GetBool("block") || player_animator.GetBool("attack")){
           if(swipeBlock){
             swipeBlockStart = Time.time;
-            sound.PlayOneShot(block);
+            if(PlayerPrefs.GetFloat("sfx") != 0){
+              sound.PlayOneShot(block);
+            }
             body.AddForce(transform.right * -1 * 0.02f, ForceMode2D.Impulse);
             numBlocks++;
           }
@@ -1229,5 +1289,42 @@ public class player : MonoBehaviour{
         Destroy(col.gameObject);
       }
     }
+
+	public void HitByPulse(float time_of_pulse)
+	{
+		StartCoroutine(PlayerHit(time_of_pulse));
+
+	}
+
+	IEnumerator PlayerHit(float time_of_pulse) {
+		yield return new WaitForSeconds(time_of_pulse * 3);
+		hit_by_pulse_times = 0;
+	}
+
+
+
+  void TabletopMovementShift(){
+    if(PlayerPrefs.GetString("screen") == "TABLETOP"){
+
+      if(player_number == 1){
+        return;
+      }
+      
+      else if(player_number == 2){
+
+      }
+
+      else if(player_number == 3){
+
+      }
+
+      else if(player_number == 4){
+
+      }
+
+    }
+
+  }
+
 
 }
