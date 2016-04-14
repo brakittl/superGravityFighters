@@ -46,6 +46,7 @@ public class level : MonoBehaviour {
 
   float shakeIntensity = 0.2f;
   bool camera_shaking = false;
+  public bool block_camera_shake;
 
     AudioSource music;
     public AudioClip victoryMusic;
@@ -102,6 +103,8 @@ public class level : MonoBehaviour {
     else{
       isMap = false;
     }
+
+    block_camera_shake = true;
 
     // ==[game mode]============================================================
     // =========================================================================
@@ -446,20 +449,20 @@ public class level : MonoBehaviour {
     return respawnPoints[i];
   }
   
-  public void KillPause(Vector3 playerPos, Color player_color){
-    if(!running){
+  public void KillPause(Vector3 playerPos, Color player_color, bool create_streak){
+    if(!running && block_camera_shake){
       running = true;
       camera_shaking = true;
-      StartCoroutine(Pause(playerPos, player_color));
+      StartCoroutine(Pause(playerPos, player_color, create_streak));
     }
   }
 
-  IEnumerator Pause(Vector3 pos, Color player_color){
+  IEnumerator Pause(Vector3 pos, Color player_color, bool create_streak){
     Time.timeScale = 0.1f;
     Vector3 rot = transform.rotation.eulerAngles, originalPos = gameObject.transform.position;
 
     rot.z = Random.Range(0, 90);
-    if(gamemode == GameMode.SURVIVAL){
+    if(gamemode == GameMode.SURVIVAL && create_streak){
       streak = Instantiate(killStreak, pos, Quaternion.Euler(rot)) as GameObject;
 			//print(streak.GetComponent<MeshRenderer>().material.color);
 			streak.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", player_color);
@@ -474,19 +477,25 @@ public class level : MonoBehaviour {
     yield return new WaitForSeconds(0.005f);
     gameObject.transform.position = originalPos;
 
-    CameraShake();
-    yield return new WaitForSeconds(0.005f);
-    gameObject.transform.position = originalPos;
+    if(create_streak){
 
-    CameraShake();
-    yield return new WaitForSeconds(0.005f);
-    gameObject.transform.position = originalPos;
+      CameraShake();
+      yield return new WaitForSeconds(0.005f);
+      gameObject.transform.position = originalPos;
+
+      CameraShake();
+      yield return new WaitForSeconds(0.005f);
+      gameObject.transform.position = originalPos;
+
+    }
 
     CameraShake();
     gameObject.transform.position = originalPos;
     camera_shaking = false;
-
-    Destroy(streak);
+    
+    if(gamemode == GameMode.SURVIVAL && create_streak){
+      Destroy(streak);
+    }
     Time.timeScale = 1;
     running = false;
   }

@@ -66,6 +66,8 @@ public class character_select_manager : MonoBehaviour {
       mac = "";
     }
 
+    PlayerPrefs.SetString("GameMode", "SURVIVAL");
+
     selected_character["P1"] = PlayerPrefs.GetInt("P1Num");
     selected_character["P2"] = PlayerPrefs.GetInt("P2Num");
     selected_character["P3"] = PlayerPrefs.GetInt("P3Num");

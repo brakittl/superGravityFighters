@@ -25,8 +25,7 @@ public class ReverseTag : MonoBehaviour {
 			transform.parent.GetComponent<player>().rt_points = (int)(transform.parent.GetComponent<player>().rt_total_time / time_until_point);
 			transform.localPosition = new Vector3(-0.06f, 0.15f, 0f);
 			transform.localEulerAngles = new Vector3(0f, 0f, 0f);
-			if (total_current_time_with_player >= transform.parent.GetComponent<player>().rt_longest_continuous_hold)
-			{
+			if (total_current_time_with_player >= transform.parent.GetComponent<player>().rt_longest_continuous_hold){
 				transform.parent.GetComponent<player>().rt_longest_continuous_hold = total_current_time_with_player;
 			}
 		}
@@ -43,9 +42,7 @@ public class ReverseTag : MonoBehaviour {
         other.firstTouch = true;
       }
 
-
 			this.transform.parent = col.gameObject.transform;
-			GameObject player_GO = transform.parent.gameObject;
 
 			string player_color_string = transform.parent.GetComponent<player>().player_color.ToLower();
 			Color player_color_Color = transform.parent.GetComponent<player>().colors[player_color_string];

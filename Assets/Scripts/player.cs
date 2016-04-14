@@ -29,6 +29,7 @@ public class player : MonoBehaviour{
   	public float rt_total_time = 0; // total time holding the "gem"
   	public float rt_longest_continuous_hold = 0; // longest time holding the "gem" without losing it
   	public float hit_by_pulse_times = 0;
+    float pulse_hit_count = 0;
 
   	
     //point limit is in level script, call with level.S.rt_point_limit
@@ -159,7 +160,7 @@ public class player : MonoBehaviour{
 
   	void Start(){
       // Mac Check
-      if (Application.platform == RuntimePlatform.OSXEditor
+      if(Application.platform == RuntimePlatform.OSXEditor
         || Application.platform == RuntimePlatform.OSXPlayer
         || Application.platform == RuntimePlatform.OSXPlayer){
         mac = "Mac ";
@@ -428,14 +429,14 @@ public class player : MonoBehaviour{
 
         // Input.GetAxis("Controller " + player_number + " Both Triggers") < -0.25f || Input.GetAxis(mac + "Controller " + player_number + " Right Trigger") > 0.25f || 
         // attack
-        if ((Input.GetButtonDown(mac + "Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.Space)) && Time.time > nextFire){
+        if((Input.GetButtonDown(mac + "Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.Space)) && Time.time > nextFire){
             numSwordSwipes++;
   				  Block();
   			  }
 
         // Input.GetAxis("Controller " + player_number + " Both Triggers") > 0.25f || Input.GetAxis(mac + "Controller " + player_number + " Left Trigger") > 0.25f || 
         // block
-        else if ((Input.GetButtonDown(mac + "Controller " + player_number + " Left Bumper") || Input.GetKey(KeyCode.Q)) && Time.time > nextFire){
+        else if((Input.GetButtonDown(mac + "Controller " + player_number + " Left Bumper") || Input.GetKey(KeyCode.Q)) && Time.time > nextFire){
             Shoot();
   			  }
 
@@ -1123,12 +1124,12 @@ public class player : MonoBehaviour{
   	}
 
   	void Block(){
-        if (PlayerPrefs.GetFloat("sfx") != 0)
+        if(PlayerPrefs.GetFloat("sfx") != 0)
             sound.PlayOneShot(shieldPulse);
 
       nextFire = Time.time + fireRate;
-        invincibleStart = Time.time + invincibleTime;
-        invincible = true;
+      invincibleStart = Time.time + invincibleTime;
+      invincible = true;
       player_animator.Play("Attack");
   		player_animator.SetBool("block", true);
   		shield_animator.Play("Shield");
@@ -1200,7 +1201,7 @@ public class player : MonoBehaviour{
   	  up_slash.GetComponent<BoxCollider2D>().enabled = false;
   	  down_slash.GetComponent<BoxCollider2D>().enabled = false;
       lives--;
-      level.S.KillPause(transform.position, colors[killer_color.ToLower()]);
+      level.S.KillPause(transform.position, colors[killer_color.ToLower()], !is_character_select);
 
       // turn off poison
       poisoned = false;
@@ -1214,10 +1215,12 @@ public class player : MonoBehaviour{
 
       level.S.alive_players.Remove(gameObject);
 
-      if(Time.time - lastDeath > longestLife)
+      if(Time.time - lastDeath > longestLife){
         longestLife = (int)((Time.time - lastDeath) *100);
-      if(Time.time - lastDeath < shortestLife)
+      }
+      if(Time.time - lastDeath < shortestLife){
         shortestLife = (int)((Time.time - lastDeath) * 100);
+      }
       lastDeath = Time.time;
         
       body.velocity = new Vector2(0f, 0f);
@@ -1316,7 +1319,15 @@ public class player : MonoBehaviour{
             if(PlayerPrefs.GetFloat("sfx") != 0){
               sound.PlayOneShot(block);
             }
-            body.AddForce(transform.right * -1 * 0.02f, ForceMode2D.Impulse);
+            body.AddForce(transform.right * -1 * 0.05f, ForceMode2D.Impulse);
+            if(level.S.block_camera_shake){
+              level.S.block_camera_shake = false;
+            }
+            else{
+              level.S.block_camera_shake = true;
+            }
+            // print(player_color);
+            // level.S.KillPause(transform.position, colors["black_ui"], false);
             numBlocks++;
           }
           swipeBlock = false;
@@ -1328,30 +1339,24 @@ public class player : MonoBehaviour{
             
       }
       
-      else if(col.tag == "extraBullets" && !player_animator.GetBool("attack"))
-      {
-        if(numBullets < bulletLimit)
-        {
-            numBullets++;
-            bulletPickUps++;
+      else if(col.tag == "extraBullets" && !player_animator.GetBool("attack")){
+        if(numBullets < bulletLimit){
+          numBullets++;
+          bulletPickUps++;
         }
         Destroy(col.gameObject);
-
       }
     }
 
-	public void HitByPulse(float time_of_pulse)
-	{
+	public void HitByPulse(float time_of_pulse){
 		StartCoroutine(PlayerHit(time_of_pulse));
-
+    ++pulse_hit_count;
 	}
 
 	IEnumerator PlayerHit(float time_of_pulse) {
 		yield return new WaitForSeconds(time_of_pulse * 3);
 		hit_by_pulse_times = 0;
 	}
-
-
 
   void TabletopMovementShift(){
     if(PlayerPrefs.GetString("screen") == "TABLETOP"){
