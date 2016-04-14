@@ -1045,7 +1045,9 @@ public class player : MonoBehaviour{
 
     		nextFire = Time.time + fireRate;
     		numBulletShots++;
-    		numBullets--;
+        if(!is_character_select){
+    		  numBullets--;
+        }
 
     		Vector3 pos = transform.position, rot = transform.rotation.eulerAngles;
     		rot.x = 0;
