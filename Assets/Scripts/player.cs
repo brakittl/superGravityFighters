@@ -1164,7 +1164,9 @@ public class player : MonoBehaviour{
   		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
   		foreach(GameObject p in players){
   			player other = (player)p.GetComponent(typeof(player));
+
         if(bulletAttack && other.bullet_instance == collideObject){
+
           other.numBulletHits++;
           // killerPos = other.transform.position;
           if(this.name != other.name){
@@ -1178,6 +1180,9 @@ public class player : MonoBehaviour{
         }
 
         else if(!bulletAttack && other.shield == collideObject){
+          if(other.dying){
+            return;
+          }
 	        other.playersKilled.Add(this.gameObject.name);
           other.numSwordHits++;
           killer_color = other.player_color;
