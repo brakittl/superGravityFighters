@@ -451,7 +451,9 @@ public class level : MonoBehaviour {
     rot.z = Random.Range(0, 90);
     if(gamemode == GameMode.SURVIVAL){
       streak = Instantiate(killStreak, pos, Quaternion.Euler(rot)) as GameObject;
-      streak.GetComponent<Renderer>().material.color = player_color;
+			print(streak.GetComponent<MeshRenderer>().material.color);
+			streak.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", player_color);
+			print(streak.GetComponent<MeshRenderer>().material.color);
     }
     
     CameraShake();
