@@ -44,10 +44,16 @@ public class ReverseTag : MonoBehaviour {
       }
 
 
+			this.transform.parent = col.gameObject.transform;
+			GameObject player_GO = transform.parent.gameObject;
+
+			string player_color_string = transform.parent.GetComponent<player>().player_color.ToLower();
+			Color player_color_Color = transform.parent.GetComponent<player>().colors[player_color_string];
+
 			attached_to_player = true;
 			ResetTimers();
 			transform.position = col.transform.position;
-			this.transform.parent = col.gameObject.transform;
+			GetComponent<TrailRenderer>().material.SetColor("_EmissionColor", player_color_Color);
 			StartCoroutine(ActivatePulses());
       other.steals++;
     }
