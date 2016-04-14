@@ -12,10 +12,14 @@ public class ReverseTag : MonoBehaviour {
 	public float total_current_time_with_player;
 	GameObject pulse_instance_1;
 
+  AudioSource sound;
+  public AudioClip stealSound;
+
 	void Start() {
 		attached_to_player = false;
 		ResetTimers();
-	}
+    sound = GetComponent<AudioSource>();
+  }
 
 	void Update() {
 		invincibility_time -= Time.deltaTime;
@@ -52,6 +56,7 @@ public class ReverseTag : MonoBehaviour {
 			transform.position = col.transform.position;
 			GetComponent<TrailRenderer>().material.SetColor("_EmissionColor", player_color_Color);
 			StartCoroutine(ActivatePulses());
+      sound.PlayOneShot(stealSound);
       other.steals++;
     }
 

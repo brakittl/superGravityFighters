@@ -204,11 +204,13 @@ public class level : MonoBehaviour {
     }
 
     if(gameOver){
+      /*
             if (!playingVictory)
             {
-                music.PlayOneShot(victoryMusic);
+        music.clip = victoryMusic;
+                //music.PlayOneShot(victoryMusic);
                 playingVictory = true;
-            }
+            }*/
                 
       // pressed a to ready up
       if(!player1Ready && Input.GetButtonDown(mac + "Controller 1 A Button")){
@@ -278,6 +280,8 @@ public class level : MonoBehaviour {
         if(numPlayers - deadCount <= 1){
           Debug.Log("GAMEOVER COUNT");
           gameOver = true;
+          music.clip = victoryMusic;
+          if (!music.isPlaying) music.Play();
 
           // one player left, end the game
           List<player> activePlayers = new List<player>();
@@ -329,6 +333,8 @@ public class level : MonoBehaviour {
       else if(gamemode == GameMode.DEATHMATCH){
         if(ranking.Capacity > 0){
           gameOver = true;
+          music.clip = victoryMusic;
+          if (!music.isPlaying) music.Play();
 
           // killcount reached, end the game
           List<player> activePlayers = new List<player>();
@@ -388,6 +394,8 @@ public class level : MonoBehaviour {
       else if(gamemode == GameMode.REVERSE_TAG){
         if(ranking.Count > 0){
           gameOver = true;
+          music.clip = victoryMusic;
+          if (!music.isPlaying) music.Play();
           // point limit reached, end the game
           List<player> activePlayers = new List<player>();
           if(PlayerPrefs.GetString("P1") != "none"){
@@ -450,7 +458,7 @@ public class level : MonoBehaviour {
   }
   
   public void KillPause(Vector3 playerPos, Color player_color, bool create_streak){
-    if(!running && block_camera_shake){
+    if(!running){
       running = true;
       camera_shaking = true;
       StartCoroutine(Pause(playerPos, player_color, create_streak));
@@ -462,7 +470,7 @@ public class level : MonoBehaviour {
     Vector3 rot = transform.rotation.eulerAngles, originalPos = gameObject.transform.position;
 
     rot.z = Random.Range(0, 90);
-    if(gamemode == GameMode.SURVIVAL && create_streak){
+    if(gamemode == GameMode.SURVIVAL){
       streak = Instantiate(killStreak, pos, Quaternion.Euler(rot)) as GameObject;
 			//print(streak.GetComponent<MeshRenderer>().material.color);
 			streak.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", player_color);
@@ -477,8 +485,6 @@ public class level : MonoBehaviour {
     yield return new WaitForSeconds(0.005f);
     gameObject.transform.position = originalPos;
 
-    if(create_streak){
-
       CameraShake();
       yield return new WaitForSeconds(0.005f);
       gameObject.transform.position = originalPos;
@@ -486,8 +492,6 @@ public class level : MonoBehaviour {
       CameraShake();
       yield return new WaitForSeconds(0.005f);
       gameObject.transform.position = originalPos;
-
-    }
 
     CameraShake();
     gameObject.transform.position = originalPos;
