@@ -695,7 +695,7 @@ public class player : MonoBehaviour{
       else{
         grounded = 0;
         player_animator.SetBool("grounded", false);
-        if(!player_animator.GetBool("swapping") && player_number > 0){
+        if(!player_animator.GetBool("swapping") && player_number > 0 && !dying){
           player_animator.Play("Falling");
         }
       }

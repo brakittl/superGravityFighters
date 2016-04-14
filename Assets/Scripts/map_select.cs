@@ -65,11 +65,6 @@ public class map_select : MonoBehaviour {
       map_name.text = map_game_objects[map].name.ToUpper();
       map_name.color = white;
 
-      if(map_name.text == "FOREST" || map_name.text == "VOLCANO"){
-        map_name.text = "COMING SOON";
-        map_name.color = red;
-      }
-
       foreach(GameObject map_GO in map_game_objects){
         map_GO.SetActive(false);
       }
@@ -91,11 +86,6 @@ public class map_select : MonoBehaviour {
       
       map_name.text = map_game_objects[map].name.ToUpper();
       map_name.color = white;
-
-      if(map_name.text == "FOREST" || map_name.text == "VOLCANO"){
-        map_name.text = "COMING SOON";
-        map_name.color = red;
-      }
       
       foreach(GameObject map_GO in map_game_objects){
         map_GO.SetActive(false);
@@ -149,11 +139,11 @@ public class map_select : MonoBehaviour {
         PlayerPrefs.SetString("GameMode", "SURVIVAL");
       }
 
-      else if(game_mode == 1){
-        PlayerPrefs.SetString("GameMode", "DEATHMATCH");
-      }
+      // else if(game_mode == 1){
+      //   PlayerPrefs.SetString("GameMode", "DEATHMATCH");
+      // }
 
-      else if(game_mode == 2){
+      else if(game_mode == 1){
         PlayerPrefs.SetString("GameMode", "REVERSE_TAG");
       }
 
@@ -167,10 +157,10 @@ public class map_select : MonoBehaviour {
         SceneManager.LoadScene("_desert");
       }
       else if(map == 3){
-        // SceneManager.LoadScene("_forest");
+        SceneManager.LoadScene("_forest");
       }
       else{
-        // SceneManager.LoadScene("_volcano");
+        SceneManager.LoadScene("_volcano");
       }
 
     }
@@ -192,10 +182,10 @@ public class map_select : MonoBehaviour {
       description.text = "Survive to win! Last man standing wins after 10 lives. Come back as a ghost and poison your nemisis if you lose all 10 lives.";
       abilities.text = "Gravity swap\nBurst attack\n1 bullet per life";
     }
-    else if(game_mode == 1){
-      description.text = "Kill to win! Be the first player to score 10 kills. Continue to fight with infinite lives, and become the gravity swap champion.";
-      abilities.text = "Gravity swap\nBurst attack\n1 bullet per life";
-    }
+    // else if(game_mode == 1){
+    //   description.text = "Kill to win! Be the first player to score 10 kills. Continue to fight with infinite lives, and become the gravity swap champion.";
+    //   abilities.text = "Gravity swap\nBurst attack\n1 bullet per life";
+    // }
     else{
       description.text = "Run to win! Control the gravity stone to win 50 points. Steal they stone from your enemies by\ntouching them.";
       abilities.text = "Gravity swap";
