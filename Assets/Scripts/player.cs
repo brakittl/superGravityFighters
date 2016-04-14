@@ -106,7 +106,7 @@ public class player : MonoBehaviour{
     bool swipeBlock = true;
     public bool invincible = false;
     float swipeBlockStart = 0f, swipeBlockTime = 0.25f, 
-        invincibleStart = 0f, invincibleTime = 1f;
+        invincibleStart = 0f, invincibleTime = 0.3f;
     float delay = 0;
 
     // ui
