@@ -418,22 +418,24 @@ public class player : MonoBehaviour{
   		if(!dead && !dying){
   			if(level.S.gamemode != GameMode.REVERSE_TAG){
 
-          // shoot
-          //if((Input.GetButtonDown(mac + "Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.LeftShift)) && Time.time > nextFire && numBullets > 0)
-          /*if((Input.GetButtonDown(mac + "Controller " + player_number + " Right Bumper") &&
-              Input.GetButtonDown(mac + "Controller " + player_number + " Left Bumper") ||
-              Input.GetKeyDown(KeyCode.LeftShift)) && Time.time > nextFire){
-          	Shoot();
-          }*/
-          
-          // attack
-          if((Input.GetAxis("Controller " + player_number + " Both Triggers") < -0.25f || Input.GetAxis(mac + "Controller " + player_number + " Right Trigger") > 0.25f || Input.GetButtonDown(mac + "Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.Space)) && Time.time > nextFire){
+        // shoot
+        //if((Input.GetButtonDown(mac + "Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.LeftShift)) && Time.time > nextFire && numBullets > 0)
+        /*if((Input.GetButtonDown(mac + "Controller " + player_number + " Right Bumper") &&
+            Input.GetButtonDown(mac + "Controller " + player_number + " Left Bumper") ||
+            Input.GetKeyDown(KeyCode.LeftShift)) && Time.time > nextFire){
+          Shoot();
+        }*/
+
+        // Input.GetAxis("Controller " + player_number + " Both Triggers") < -0.25f || Input.GetAxis(mac + "Controller " + player_number + " Right Trigger") > 0.25f || 
+        // attack
+        if ((Input.GetButtonDown(mac + "Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.Space)) && Time.time > nextFire){
             numSwordSwipes++;
   				  Block();
   			  }
-          
-          // block
-          else if((Input.GetAxis("Controller " + player_number + " Both Triggers") > 0.25f || Input.GetAxis(mac + "Controller " + player_number + " Left Trigger") > 0.25f || Input.GetButtonDown(mac + "Controller " + player_number + " Left Bumper") || Input.GetKey(KeyCode.Q)) && Time.time > nextFire){
+
+        // Input.GetAxis("Controller " + player_number + " Both Triggers") > 0.25f || Input.GetAxis(mac + "Controller " + player_number + " Left Trigger") > 0.25f || 
+        // block
+        else if ((Input.GetButtonDown(mac + "Controller " + player_number + " Left Bumper") || Input.GetKey(KeyCode.Q)) && Time.time > nextFire){
             Shoot();
   			  }
 
