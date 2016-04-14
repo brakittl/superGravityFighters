@@ -282,6 +282,10 @@ public class player : MonoBehaviour{
 
   	void Update(){
 
+      if(is_character_select){
+        invincible = true;
+      }
+
       // ==[win conditions]=====================================================
       // =======================================================================
       
