@@ -901,17 +901,19 @@ public class player : MonoBehaviour{
   		LayerMask ignoreplayer_layerMask = ~(LayerMask.NameToLayer("Player") | LayerMask.NameToLayer("Border") | LayerMask.NameToLayer("TagBall") | LayerMask.NameToLayer("Attack"));
   		ignoreplayer_layerMask = ~ignoreplayer_layerMask;
 
+      float ray_offset = 0.01F;
+
   		if(player_orientation == orientation.up || player_orientation == orientation.down){ 
-  			Debug.DrawRay(new Vector2(transform.position.x + (0.01F + player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y), below, Color.green);
-			Debug.DrawRay(new Vector2(transform.position.x - (0.01F + player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y), below, Color.green);
-			return(!Physics2D.Raycast(new Vector3(transform.position.x + (0.01F + player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y),below,length_ray_updw,ignoreplayer_layerMask) && 
-				!Physics2D.Raycast(new Vector3(transform.position.x - (0.01F + player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y),below,length_ray_updw, ignoreplayer_layerMask));
+  			Debug.DrawRay(new Vector2(transform.position.x + (ray_offset + player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y), below, Color.green);
+			Debug.DrawRay(new Vector2(transform.position.x - (ray_offset + player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y), below, Color.green);
+			return(!Physics2D.Raycast(new Vector3(transform.position.x + (ray_offset + player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y),below,length_ray_updw,ignoreplayer_layerMask) && 
+				!Physics2D.Raycast(new Vector3(transform.position.x - (ray_offset + player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y),below,length_ray_updw, ignoreplayer_layerMask));
   		}
   		else{
-			Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x, transform.position.y + (0.01F + player_length / 2) + bc_offset_y), below, Color.green);
-			Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x, transform.position.y  - (0.01F + player_length / 2) + bc_offset_y), below, Color.green);
-			return(!Physics2D.Raycast(new Vector3(transform.position.x + bc_offset_x, transform.position.y + (0.01F + player_length / 2) + bc_offset_y),below,length_ray_updw,ignoreplayer_layerMask) && 
-				!Physics2D.Raycast(new Vector3(transform.position.x + bc_offset_x, transform.position.y - (0.01F + player_length / 2) + bc_offset_y),below,length_ray_updw, ignoreplayer_layerMask));
+			Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x, transform.position.y + (ray_offset + player_length / 2) + bc_offset_y), below, Color.green);
+			Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x, transform.position.y  - (ray_offset + player_length / 2) + bc_offset_y), below, Color.green);
+			return(!Physics2D.Raycast(new Vector3(transform.position.x + bc_offset_x, transform.position.y + (ray_offset + player_length / 2) + bc_offset_y),below,length_ray_updw,ignoreplayer_layerMask) && 
+				!Physics2D.Raycast(new Vector3(transform.position.x + bc_offset_x, transform.position.y - (ray_offset + player_length / 2) + bc_offset_y),below,length_ray_updw, ignoreplayer_layerMask));
   		}
   	}
 
