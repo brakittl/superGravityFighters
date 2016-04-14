@@ -79,7 +79,7 @@ public class player : MonoBehaviour{
     public GameObject bullet, extraBullet;
   	GameObject bullet_instance;
   	public float shotVelocity = 3f, numBullets = 1, bulletLimit = 3;
-    public float fireRate = 1f;
+    float fireRate = 0.5f;
   	float nextFire = 0f, bulletCreationDist = 0.25f;
   	string lastDirection = "right";
 
@@ -1244,6 +1244,7 @@ public class player : MonoBehaviour{
       if(lives == 0 && (level.S.gamemode == GameMode.SURVIVAL)){
         //halo.SetActive(true);
         dead = true;
+        level.S.alive_players.Remove(this.gameObject);
         transform.position = offscreen;
         deathTime = Time.time;
         level.S.ranking.Add(this);
