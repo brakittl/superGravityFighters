@@ -253,6 +253,8 @@ public class player : MonoBehaviour{
           rt_text_GO.SetActive(true);
         }
 
+        // lives = PlayerPrefs.GetInt("lives");
+
         // initialize hearts/skulls
         hearts = new GameObject[10];
         for(int i = 0; i < 10; ++i){

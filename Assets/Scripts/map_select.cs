@@ -9,7 +9,7 @@ public class map_select : MonoBehaviour {
   public string mac = "";
 
   int game_mode;
-  int map;
+  public int map;
 
   public List<GameObject> map_game_objects;
   public List<Text> game_mode_objects;
@@ -159,7 +159,7 @@ public class map_select : MonoBehaviour {
       else if(map == 3){
         SceneManager.LoadScene("_forest");
       }
-      else{
+      else if(map == 4){
         SceneManager.LoadScene("_volcano");
       }
 

@@ -109,8 +109,9 @@ public class level : MonoBehaviour {
     S = this;
         music = GetComponent<AudioSource>();
 
-    if (isMap){
-      
+    if(isMap){
+
+      // rt_point_limit = PlayerPrefs.GetInt("rt_point_limit");
       podium = GameObject.Find("Podium");
       if(podium != null){
         podium.SetActive(false);
