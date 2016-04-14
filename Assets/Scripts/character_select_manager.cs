@@ -65,6 +65,16 @@ public class character_select_manager : MonoBehaviour {
     else{
       mac = "";
     }
+
+    selected_character["P1"] = PlayerPrefs.GetInt("P1Num");
+    selected_character["P2"] = PlayerPrefs.GetInt("P2Num");
+    selected_character["P3"] = PlayerPrefs.GetInt("P3Num");
+    selected_character["P4"] = PlayerPrefs.GetInt("P4Num");
+
+    ready_character["P1"] = PlayerPrefs.GetInt("P1Num");
+    ready_character["P2"] = PlayerPrefs.GetInt("P2Num");
+    ready_character["P3"] = PlayerPrefs.GetInt("P3Num");
+    ready_character["P4"] = PlayerPrefs.GetInt("P4Num");
   }
 
   void Update(){
@@ -79,10 +89,12 @@ public class character_select_manager : MonoBehaviour {
       || Input.GetButtonUp(mac + "Controller 4 Start Button")){
         for(int i = 1; i <= 4; i++){
           if(ready_character["P" + i] >= 0){
+            PlayerPrefs.SetInt("P" + i + "Num", ready_character["P" + i]);
             PlayerPrefs.SetString("P" + i, player_prefab_names[ready_character["P" + i]]);
                         
           }
           else{
+            PlayerPrefs.SetInt("P" + i + "Num", -2);
             PlayerPrefs.SetString("P" + i, "none");
           }
         }

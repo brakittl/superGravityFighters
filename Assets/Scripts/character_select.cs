@@ -58,98 +58,124 @@ public class character_select : MonoBehaviour {
     selected = false;
     axis_in_use = false;
 
-    if(player > Input.GetJoystickNames().Length){
-    // if(player > 1){
-      this.gameObject.SetActive(false);
-      join_button.SetActive(false);
+    if (PlayerPrefs.GetFloat("tutorial") == 0)
+    {
+      tutorial = false;
+    }
+    else {
+      tutorial = true;
     }
 
     resize = new Vector3(1f, 1f, 1f);
 
-    if(PlayerPrefs.GetFloat("tutorial") == 0){
-      tutorial = false;
+    if (player > Input.GetJoystickNames().Length){
+      // deactivate player if controller not connected
+      this.gameObject.SetActive(false);
+      join_button.SetActive(false);
     }
-    else{
-      tutorial = true;
+    else if (PlayerPrefs.GetInt("P" + player + "Num") != -2)
+    {
+      prefab_number = PlayerPrefs.GetInt("P" + player + "Num");
+      Join(prefab_number);
+      Confirm();
+      if (tutorial)
+      {
+        borders_touched = 4;
+        GameObject.Find("p" + player + "_bottom").GetComponent<SpriteRenderer>().sprite = GameObject.Find("p" + player + "_bottom").GetComponent<character_select_border>().red_line;
+        GameObject.Find("p" + player + "_top").GetComponent<SpriteRenderer>().sprite = GameObject.Find("p" + player + "_top").GetComponent<character_select_border>().red_line;
+        GameObject.Find("p" + player + "_left").GetComponent<SpriteRenderer>().sprite = GameObject.Find("p" + player + "_left").GetComponent<character_select_border>().red_line;
+        GameObject.Find("p" + player + "_right").GetComponent<SpriteRenderer>().sprite = GameObject.Find("p" + player + "_right").GetComponent<character_select_border>().red_line;
+      }
     }
-	
 	}
 	
 	void Update(){
-
-    if(System.Math.Abs(Input.GetAxis(mac + "Controller " + player + " Left Stick X Axis")) < 0.9f){
+    if (System.Math.Abs(Input.GetAxis(mac + "Controller " + player + " Left Stick X Axis")) < 0.9f)
+    {
       axis_in_use = false;
     }
 
     // axis_in_use = false;
 
     // set color to black if already selected
-    if(player_object != null){
-      if(manager.GetComponent<character_select_manager>().character_is_selected("P" + player, prefab_number)){
+    if (player_object != null)
+    {
+      if (manager.GetComponent<character_select_manager>().character_is_selected("P" + player, prefab_number))
+      {
         player_object.GetComponent<SpriteRenderer>().color = Color.black;
       }
-      else{
+      else {
         player_object.GetComponent<SpriteRenderer>().color = character_color;
       }
     }
 
     // join
-    if(!joined){
+    if (!joined)
+    {
 
       // join game
-      if(Input.GetButtonDown(mac + "Controller " + player + " X Button") ||
-         Input.GetKeyDown(KeyCode.X)){
+      if (Input.GetButtonDown(mac + "Controller " + player + " X Button") ||
+          Input.GetKeyDown(KeyCode.X))
+      {
         Join();
       }
 
-      // join game
-      if(Input.GetButtonDown(mac + "Controller " + player + " B Button") ||
-         Input.GetButtonDown(mac + "Controller " + player + " Back Button") ||
-         Input.GetKeyDown(KeyCode.B)){
+      // exit game
+      if (Input.GetButtonDown(mac + "Controller " + player + " B Button") ||
+          Input.GetButtonDown(mac + "Controller " + player + " Back Button") ||
+          Input.GetKeyDown(KeyCode.B))
+      {
         SceneManager.LoadScene("_title");
-      }      
+      }
 
     }
 
     // in character select
-    else if(joined && !selected){
+    else if (joined && !selected)
+    {
 
       // change color right
-      if(Input.GetButtonDown(mac + "Controller " + player + " Right Bumper") ||
-         (!axis_in_use && Input.GetAxis(mac + "Controller " + player + " Left Stick X Axis") >= 0.95f) ||
-         Input.GetKeyDown(KeyCode.RightArrow)){
+      if (Input.GetButtonDown(mac + "Controller " + player + " Right Bumper") ||
+          (!axis_in_use && Input.GetAxis(mac + "Controller " + player + " Left Stick X Axis") >= 0.95f) ||
+          Input.GetKeyDown(KeyCode.RightArrow))
+      {
         Cycle(1);
       }
 
       // change color left
-      if(Input.GetButtonDown(mac + "Controller " + player + " Left Bumper") ||
-         (!axis_in_use && Input.GetAxis(mac + "Controller " + player + " Left Stick X Axis") <= -0.95f) ||
-         Input.GetKeyDown(KeyCode.LeftArrow)){
+      if (Input.GetButtonDown(mac + "Controller " + player + " Left Bumper") ||
+          (!axis_in_use && Input.GetAxis(mac + "Controller " + player + " Left Stick X Axis") <= -0.95f) ||
+          Input.GetKeyDown(KeyCode.LeftArrow))
+      {
         Cycle(-1);
       }
 
       // confirm color
-      if(Input.GetButtonDown(mac + "Controller " + player + " A Button") ||
-         Input.GetKeyDown(KeyCode.A)){
+      if (Input.GetButtonDown(mac + "Controller " + player + " A Button") ||
+          Input.GetKeyDown(KeyCode.A))
+      {
         Confirm();
       }
 
       // unjoin game
-      if(Input.GetButtonDown(mac + "Controller " + player + " Back Button") ||
+      if (Input.GetButtonDown(mac + "Controller " + player + " Back Button") ||
         Input.GetButtonDown(mac + "Controller " + player + " B Button") ||
-         Input.GetKeyDown(KeyCode.B)){
+          Input.GetKeyDown(KeyCode.B))
+      {
         Unjoin();
       }
 
     }
 
-    else{
-      if(tutorial && borders_touched >= 4){
+    else {
+      if (tutorial && borders_touched >= 4)
+      {
         WallsTouched();
       }
       // return to character select
-      if(Input.GetButtonDown(mac + "Controller " + player + " Back Button") ||
-         Input.GetKeyDown(KeyCode.B)){
+      if (Input.GetButtonDown(mac + "Controller " + player + " Back Button") ||
+          Input.GetKeyDown(KeyCode.B))
+      {
         Unconfirm();
       }
     }
@@ -165,6 +191,19 @@ public class character_select : MonoBehaviour {
     Show(true);
     manager.GetComponent<character_select_manager>().selected_character["P" + player] = -1;
     manager.GetComponent<character_select_manager>().ready_character["P" + player] = -1;
+  }
+
+  void Join(int value)
+  {
+    joined = true;
+    join_set.SetActive(false);
+    join_button.SetActive(false);
+    select_set.SetActive(true);
+    confirm_button.SetActive(true);
+    podium.SetActive(true);
+    Show(true);
+    manager.GetComponent<character_select_manager>().selected_character["P" + player] = value;
+    manager.GetComponent<character_select_manager>().ready_character["P" + player] = value;
   }
 
   void Unjoin(){

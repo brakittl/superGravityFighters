@@ -77,7 +77,16 @@ public class title : MonoBehaviour {
        Input.GetButtonDown(mac + "Controller 4 A Button") ||
        Input.GetKeyDown(KeyCode.Return)){
 
-      if(i == 0){
+      if(i == 0)
+      {
+        PlayerPrefs.SetInt("P1Num", -2);
+        PlayerPrefs.SetInt("P2Num", -2);
+        PlayerPrefs.SetInt("P3Num", -2);
+        PlayerPrefs.SetInt("P4Num", -2);
+        PlayerPrefs.SetString("P1", "none");
+        PlayerPrefs.SetString("P2", "none");
+        PlayerPrefs.SetString("P3", "none");
+        PlayerPrefs.SetString("P4", "none");
         SceneManager.LoadScene("_character_select");
       }
       if(i == 1){
