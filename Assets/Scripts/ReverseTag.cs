@@ -56,7 +56,11 @@ public class ReverseTag : MonoBehaviour {
 			transform.position = col.transform.position;
 			GetComponent<TrailRenderer>().material.SetColor("_EmissionColor", player_color_Color);
 			StartCoroutine(ActivatePulses());
-      sound.PlayOneShot(stealSound);
+      if (PlayerPrefs.GetFloat("sfx") != 0)
+      {
+          sound.PlayOneShot(stealSound);
+      }
+      
       other.steals++;
     }
 
