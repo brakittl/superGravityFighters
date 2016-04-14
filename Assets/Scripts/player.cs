@@ -78,7 +78,7 @@ public class player : MonoBehaviour{
     // bullet information
     public GameObject bullet, extraBullet;
   	GameObject bullet_instance;
-  	public float shotVelocity = 3f, numBullets = 1;
+  	public float shotVelocity = 3f, numBullets = 1, bulletLimit = 3;
     public float fireRate = 1f;
   	float nextFire = 0f, bulletCreationDist = 0.25f;
   	string lastDirection = "right";
@@ -1315,10 +1315,15 @@ public class player : MonoBehaviour{
             
       }
       
-      else if(col.tag == "extraBullets" && !player_animator.GetBool("attack")){
-        numBullets++;
-        bulletPickUps++;
+      else if(col.tag == "extraBullets" && !player_animator.GetBool("attack"))
+      {
+        if(numBullets < bulletLimit)
+        {
+            numBullets++;
+            bulletPickUps++;
+        }
         Destroy(col.gameObject);
+
       }
     }
 
