@@ -654,6 +654,7 @@ public class player : MonoBehaviour{
       if(invincible && Time.time > invincibleStart){
         invincible = false;
       }
+
   	}
 
   	void FixedUpdate(){
@@ -676,23 +677,29 @@ public class player : MonoBehaviour{
 
       // ==[grounded]===========================================================
       // =======================================================================
-  		
-  		if(!checkGround()){
-  			if(grounded == 0){
-  				delay = 0.08F; // need a little delay to have the player land completely
-  			}
-  			grounded = 1;
-  			player_animator.SetBool("grounded", true);
-  		}
 
-  		else{
-  			grounded = 0;
-  			player_animator.SetBool("grounded", false);
-  			if(!player_animator.GetBool("swapping")){
+      if(!checkGround()){
+        // if(grounded == 0){
+        //  delay = 0.08F; // need a little delay to have the player land completely
+        // }
+        grounded = 1;
+        // if(player_orientation == orientation.up || player_orientation == orientation.down){
+        //   body.velocity = new Vector2(body.velocity.x, 0);
+        // }
+        // else if(player_orientation == orientation.left || player_orientation == orientation.right){
+        //   body.velocity = new Vector2(0, body.velocity.y);
+        // }
+        player_animator.SetBool("grounded", true);
+      }
+
+      else{
+        grounded = 0;
+        player_animator.SetBool("grounded", false);
+        if(!player_animator.GetBool("swapping") && player_number > 0){
           player_animator.Play("Falling");
-				print("Falling");
         }
-  		}
+      }
+  		
 
   		// ==[gravity force]======================================================
   		// =======================================================================
@@ -706,17 +713,17 @@ public class player : MonoBehaviour{
           }
     		}
     		else if(player_orientation == orientation.up){
-    			if(speed < terminal_velocity && grounded == 0){
+    			if(speed < terminal_velocity){
             body.AddForce(up);
           }
     		}
     		else if(player_orientation == orientation.left){
-    			if(speed < terminal_velocity && grounded == 0){
+    			if(speed < terminal_velocity){
             body.AddForce(left);
           }
     		}
     		else if(player_orientation == orientation.right){
-    			if(speed < terminal_velocity && grounded == 0){
+    			if(speed < terminal_velocity){
             body.AddForce(right);
           }
     		}
@@ -730,14 +737,7 @@ public class player : MonoBehaviour{
     		if(move_up && grounded == 1 && (delay < 0)){
     			//Jump();
     		}
-    		else if(grounded == 1 && (player_orientation == orientation.up || player_orientation == orientation.down)){
-    			body.velocity = new Vector2(body.velocity.x, 0);
-    			delay -= Time.deltaTime;
-    		}
-    		else if(grounded == 1 && (player_orientation == orientation.left || player_orientation == orientation.right)){
-    			body.velocity = new Vector2(0, body.velocity.y);
-    			delay -= Time.deltaTime;
-    		}
+    		
       }
   	}
 
@@ -887,21 +887,21 @@ public class player : MonoBehaviour{
 
   		float length_ray_updw = (player_height / 2) + (player_height * .2F);
 
-      if(is_character_select){
-        if(player_orientation == orientation.up || player_orientation == orientation.down){
-          length_ray_updw -= 0.04f;
-        }
-        else{
-          length_ray_updw -= 0.038f;
-        }
-      }
+      // if(is_character_select){
+      //   if(player_orientation == orientation.up || player_orientation == orientation.down){
+      //     length_ray_updw -= 0.1f;
+      //   }
+      //   else{
+      //     length_ray_updw -= 0.038f;
+      //   }
+      // }
 
   		Vector2 below = transform.TransformDirection(new Vector2(0F, -length_ray_updw));
 
   		LayerMask ignoreplayer_layerMask = ~(LayerMask.NameToLayer("Player") | LayerMask.NameToLayer("Border") | LayerMask.NameToLayer("TagBall") | LayerMask.NameToLayer("Attack"));
   		ignoreplayer_layerMask = ~ignoreplayer_layerMask;
 
-      float ray_offset = 0.01F;
+      float ray_offset = 0.011F;
 
   		if(player_orientation == orientation.up || player_orientation == orientation.down){ 
   			Debug.DrawRay(new Vector2(transform.position.x + (ray_offset + player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y), below, Color.green);

@@ -45,7 +45,7 @@ public class character_select : MonoBehaviour {
 
 	void Start(){
     // Mac Check
-    if (Application.platform == RuntimePlatform.OSXEditor
+    if(Application.platform == RuntimePlatform.OSXEditor
       || Application.platform == RuntimePlatform.OSXPlayer
       || Application.platform == RuntimePlatform.OSXPlayer){
       mac = "Mac ";
@@ -58,8 +58,7 @@ public class character_select : MonoBehaviour {
     selected = false;
     axis_in_use = false;
 
-    if (PlayerPrefs.GetFloat("tutorial") == 0)
-    {
+    if(PlayerPrefs.GetFloat("tutorial") == 0){
       tutorial = false;
     }
     else {
@@ -68,18 +67,17 @@ public class character_select : MonoBehaviour {
 
     resize = new Vector3(1f, 1f, 1f);
 
-    if (player > Input.GetJoystickNames().Length){
+    // if(player > Input.GetJoystickNames().Length){
+    if(player > 1){
       // deactivate player if controller not connected
       this.gameObject.SetActive(false);
       join_button.SetActive(false);
     }
-    else if (PlayerPrefs.GetInt("P" + player + "Num") != -2)
-    {
+    else if(PlayerPrefs.GetInt("P" + player + "Num") != -2){
       prefab_number = PlayerPrefs.GetInt("P" + player + "Num");
       Join(prefab_number);
       Confirm();
-      if (tutorial)
-      {
+      if(tutorial){
         borders_touched = 4;
         GameObject.Find("p" + player + "_bottom").GetComponent<SpriteRenderer>().sprite = GameObject.Find("p" + player + "_bottom").GetComponent<character_select_border>().red_line;
         GameObject.Find("p" + player + "_top").GetComponent<SpriteRenderer>().sprite = GameObject.Find("p" + player + "_top").GetComponent<character_select_border>().red_line;
@@ -90,18 +88,14 @@ public class character_select : MonoBehaviour {
 	}
 	
 	void Update(){
-    if (System.Math.Abs(Input.GetAxis(mac + "Controller " + player + " Left Stick X Axis")) < 0.9f)
-    {
+
+    if(System.Math.Abs(Input.GetAxis(mac + "Controller " + player + " Left Stick X Axis")) < 0.9f){
       axis_in_use = false;
     }
 
-    // axis_in_use = false;
-
     // set color to black if already selected
-    if (player_object != null)
-    {
-      if (manager.GetComponent<character_select_manager>().character_is_selected("P" + player, prefab_number))
-      {
+    if(player_object != null){
+      if(manager.GetComponent<character_select_manager>().character_is_selected("P" + player, prefab_number)){
         player_object.GetComponent<SpriteRenderer>().color = Color.black;
       }
       else {
@@ -110,72 +104,62 @@ public class character_select : MonoBehaviour {
     }
 
     // join
-    if (!joined)
-    {
+    if(!joined){
 
       // join game
-      if (Input.GetButtonDown(mac + "Controller " + player + " X Button") ||
-          Input.GetKeyDown(KeyCode.X))
-      {
+      if(Input.GetButtonDown(mac + "Controller " + player + " X Button") ||
+          Input.GetKeyDown(KeyCode.X)){
         Join();
       }
 
       // exit game
-      if (Input.GetButtonDown(mac + "Controller " + player + " B Button") ||
+      if(Input.GetButtonDown(mac + "Controller " + player + " B Button") ||
           Input.GetButtonDown(mac + "Controller " + player + " Back Button") ||
-          Input.GetKeyDown(KeyCode.B))
-      {
+          Input.GetKeyDown(KeyCode.B)){
         SceneManager.LoadScene("_title");
       }
 
     }
 
     // in character select
-    else if (joined && !selected)
-    {
+    else if(joined && !selected){
 
       // change color right
-      if (Input.GetButtonDown(mac + "Controller " + player + " Right Bumper") ||
+      if(Input.GetButtonDown(mac + "Controller " + player + " Right Bumper") ||
           (!axis_in_use && Input.GetAxis(mac + "Controller " + player + " Left Stick X Axis") >= 0.95f) ||
-          Input.GetKeyDown(KeyCode.RightArrow))
-      {
+          Input.GetKeyDown(KeyCode.RightArrow)){
         Cycle(1);
       }
 
       // change color left
-      if (Input.GetButtonDown(mac + "Controller " + player + " Left Bumper") ||
+      if(Input.GetButtonDown(mac + "Controller " + player + " Left Bumper") ||
           (!axis_in_use && Input.GetAxis(mac + "Controller " + player + " Left Stick X Axis") <= -0.95f) ||
-          Input.GetKeyDown(KeyCode.LeftArrow))
-      {
+          Input.GetKeyDown(KeyCode.LeftArrow)){
         Cycle(-1);
       }
 
       // confirm color
-      if (Input.GetButtonDown(mac + "Controller " + player + " A Button") ||
-          Input.GetKeyDown(KeyCode.A))
-      {
+      if(Input.GetButtonDown(mac + "Controller " + player + " A Button") ||
+          Input.GetKeyDown(KeyCode.A)){
         Confirm();
       }
 
       // unjoin game
-      if (Input.GetButtonDown(mac + "Controller " + player + " Back Button") ||
+      if(Input.GetButtonDown(mac + "Controller " + player + " Back Button") ||
         Input.GetButtonDown(mac + "Controller " + player + " B Button") ||
-          Input.GetKeyDown(KeyCode.B))
-      {
+          Input.GetKeyDown(KeyCode.B)){
         Unjoin();
       }
 
     }
 
     else {
-      if (tutorial && borders_touched >= 4)
-      {
+      if(tutorial && borders_touched >= 4){
         WallsTouched();
       }
       // return to character select
-      if (Input.GetButtonDown(mac + "Controller " + player + " Back Button") ||
-          Input.GetKeyDown(KeyCode.B))
-      {
+      if(Input.GetButtonDown(mac + "Controller " + player + " Back Button") ||
+          Input.GetKeyDown(KeyCode.B)){
         Unconfirm();
       }
     }
@@ -193,8 +177,7 @@ public class character_select : MonoBehaviour {
     manager.GetComponent<character_select_manager>().ready_character["P" + player] = -1;
   }
 
-  void Join(int value)
-  {
+  void Join(int value){
     joined = true;
     join_set.SetActive(false);
     join_button.SetActive(false);
