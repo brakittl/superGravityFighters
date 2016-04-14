@@ -688,7 +688,9 @@ public class player : MonoBehaviour{
   		else{
   			grounded = 0;
   			player_animator.SetBool("grounded", false);
-  			player_animator.Play("Falling");
+  			if(!player_animator.GetBool("swapping")){
+          player_animator.Play("Falling");
+        }
   		}
 
   		// ==[gravity force]======================================================
