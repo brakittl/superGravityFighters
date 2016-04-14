@@ -1182,6 +1182,7 @@ public class player : MonoBehaviour{
 		print(killer_color);
       if(PlayerPrefs.GetFloat("sfx") != 0){
         sound.PlayOneShot(death);
+        sound.PlayOneShot(swordSlash);
       }
 
       respawn = true;
