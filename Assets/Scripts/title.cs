@@ -45,7 +45,7 @@ public class title : MonoBehaviour {
       PlayerPrefs.SetFloat("music", 1);
     }
     if(!PlayerPrefs.HasKey("sfx")){
-      PlayerPrefs.SetFloat("music", 1);
+      PlayerPrefs.SetFloat("sfx", 1);
     }
 	
 	}
