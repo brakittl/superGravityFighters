@@ -661,7 +661,7 @@ public class player : MonoBehaviour{
       // ==[run]================================================================
       // =======================================================================
   		
-      if(!dying)){
+      if(!dying){
 
         if(move_right && !player_animator.GetBool("landing")){
     			Run(true);
