@@ -38,7 +38,7 @@ public class options : MonoBehaviour {
       menu_objects[0].text = PlayerPrefs.GetString("screen");
     }
     else{
-      PlayerPrefs.SetString("screen", menu_objects[0].text);
+      PlayerPrefs.SetString("screen", "MONITOR");
     }
     
     if(PlayerPrefs.HasKey("tutorial")){

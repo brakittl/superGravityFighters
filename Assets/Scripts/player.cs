@@ -84,7 +84,7 @@ public class player : MonoBehaviour{
   	string lastDirection = "right";
 
   	// respawns
-  	public bool respawn = false, respawning = false;
+  	public bool respawn = false, respawning = false, dying = false;
   	Vector3 offscreen = new Vector3(-1000, -1000, -1000);  
 
   	// poison
@@ -129,6 +129,7 @@ public class player : MonoBehaviour{
     Color green = new Color();
     Color blue = new Color();
     Color purple = new Color();
+    Color black_ui = new Color();
     Color black = new Color();
     public Dictionary<string, Color> colors;
 
@@ -185,7 +186,8 @@ public class player : MonoBehaviour{
       ColorUtility.TryParseHtmlString("#45a349", out green);
       ColorUtility.TryParseHtmlString("#2c5d99", out blue);
       ColorUtility.TryParseHtmlString("#854db5", out purple);
-      ColorUtility.TryParseHtmlString("#ebebeb", out black);
+      ColorUtility.TryParseHtmlString("#3f3f45", out black);
+      ColorUtility.TryParseHtmlString("#ebebeb", out black_ui);
       colors = new Dictionary<string, Color>(){
         {"red", red},
         {"orange", orange},
@@ -194,6 +196,7 @@ public class player : MonoBehaviour{
         {"blue", blue},
         {"purple", purple},
         {"black", black},
+        {"black_ui", black_ui},
       };
 
       // get components
@@ -338,11 +341,14 @@ public class player : MonoBehaviour{
         else if(level.S.gamemode == GameMode.REVERSE_TAG){
           rt_text.text = rt_points.ToString();
           rt_text.color = colors[player_color.ToLower()];
+          if(player_color == "Black"){
+            rt_text.color = colors[player_color.ToLower() + "_ui"];
+          }
         }
 
       }
 
-      // ==[gravity swap]=======================================================
+      // ==[pausing]============================================================
       // =======================================================================
 
     
@@ -363,7 +369,7 @@ public class player : MonoBehaviour{
   		up = new Vector2(0f, acceleration);
   		
       // swap gravity orientation
-  		if(!poisoned && !dead){
+  		if(!poisoned && !dead && !dying){
   			// up
   			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis") < -0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up){
   				Gravity(orientation.up, transform.localEulerAngles.y, 180f);
@@ -407,8 +413,8 @@ public class player : MonoBehaviour{
   		// =======================================================================
 
   		// if alive, allow attack, shoot, and block action
-  		if(!dead){
-      if (level.S.gamemode != GameMode.REVERSE_TAG){
+  		if(!dead && !dying){
+  			if(level.S.gamemode != GameMode.REVERSE_TAG){
 
           // shoot
           //if((Input.GetButtonDown(mac + "Controller " + player_number + " Right Bumper") || Input.GetKey(KeyCode.LeftShift)) && Time.time > nextFire && numBullets > 0)
@@ -461,10 +467,10 @@ public class player : MonoBehaviour{
           airStart = true; 
       }
       else if(player_animator.GetBool("grounded")  && airStart){
-          if((int)((Time.time - curAirTime) * 100) > longestAirTime)
-              longestAirTime = (int)((Time.time - curAirTime) * 100);
-          airTime += (int)((Time.time - curAirTime) * 100);
-          airStart = false;
+        if((int)((Time.time - curAirTime) * 100) > longestAirTime)
+            longestAirTime = (int)((Time.time - curAirTime) * 100);
+        airTime += (int)((Time.time - curAirTime) * 100);
+        airStart = false;
       }
 
       move_left = false;
@@ -595,7 +601,9 @@ public class player : MonoBehaviour{
   		// crouch
   		player_animator.SetBool("crouched", false);
   		if(move_down){
-  			Crouch();
+        if(!dying){
+  			 Crouch();
+        }
   		}
       
   		// ==[respawn and death]==================================================
@@ -644,21 +652,27 @@ public class player : MonoBehaviour{
       }
 
       if(invincible && Time.time > invincibleStart){
-            invincible = false;
-        }
+        invincible = false;
+      }
   	}
 
   	void FixedUpdate(){
 
+		float speed = body.velocity.magnitude;
+
       // ==[run]================================================================
       // =======================================================================
   		
-      if(move_right && !player_animator.GetBool("landing")){
-  			Run(true);
-  		}
-  		if(move_left && !player_animator.GetBool("landing")){
-  			Run(false);
-  		}
+      if(!dying){
+
+        if(move_right && !player_animator.GetBool("landing")){
+    			Run(true);
+    		}
+    		if(move_left && !player_animator.GetBool("landing")){
+    			Run(false);
+    		}
+
+      }
 
       // ==[grounded]===========================================================
       // =======================================================================
@@ -674,52 +688,56 @@ public class player : MonoBehaviour{
   		else{
   			grounded = 0;
   			player_animator.SetBool("grounded", false);
-  			if(!player_animator.GetBool("jump") && player_animator.GetBool("run")){
-  				player_animator.Play("Falling");
-  			}
+  			if(!player_animator.GetBool("swapping")){
+          player_animator.Play("Falling");
+        }
   		}
 
   		// ==[gravity force]======================================================
   		// =======================================================================
 
-      float speed = body.velocity.magnitude;
+      
 
-  		if(player_orientation == orientation.down){
-  			if(speed < terminal_velocity && grounded == 0){
-  			  body.AddForce(down);
-        }
-  		}
-  		else if(player_orientation == orientation.up){
-  			if(speed < terminal_velocity && grounded == 0){
-          body.AddForce(up);
-        }
-  		}
-  		else if(player_orientation == orientation.left){
-  			if(speed < terminal_velocity && grounded == 0){
-          body.AddForce(left);
-        }
-  		}
-  		else if(player_orientation == orientation.right){
-  			if(speed < terminal_velocity && grounded == 0){
-          body.AddForce(right);
-        }
-  		}
+      if(!dying){
+    		if(player_orientation == orientation.down){
+    			if(speed < terminal_velocity){
+    			  body.AddForce(down);
+          }
+    		}
+    		else if(player_orientation == orientation.up){
+    			if(speed < terminal_velocity && grounded == 0){
+            body.AddForce(up);
+          }
+    		}
+    		else if(player_orientation == orientation.left){
+    			if(speed < terminal_velocity && grounded == 0){
+            body.AddForce(left);
+          }
+    		}
+    		else if(player_orientation == orientation.right){
+    			if(speed < terminal_velocity && grounded == 0){
+            body.AddForce(right);
+          }
+    		}
+      }
 
   		// ==[jump]===============================================================
   		// =======================================================================
 
   		// apply jump
-  		if(move_up && grounded == 1 && (delay < 0)){
-  			//Jump();
-  		}
-  		else if(grounded == 1 && (player_orientation == orientation.up || player_orientation == orientation.down)){
-  			body.velocity = new Vector2(body.velocity.x, 0);
-  			delay -= Time.deltaTime;
-  		}
-  		else if(grounded == 1 && (player_orientation == orientation.left || player_orientation == orientation.right)){
-  			body.velocity = new Vector2(0, body.velocity.y);
-  			delay -= Time.deltaTime;
-  		}
+      if(!dying){
+    		if(move_up && grounded == 1 && (delay < 0)){
+    			//Jump();
+    		}
+    		else if(grounded == 1 && (player_orientation == orientation.up || player_orientation == orientation.down)){
+    			body.velocity = new Vector2(body.velocity.x, 0);
+    			delay -= Time.deltaTime;
+    		}
+    		else if(grounded == 1 && (player_orientation == orientation.left || player_orientation == orientation.right)){
+    			body.velocity = new Vector2(0, body.velocity.y);
+    			delay -= Time.deltaTime;
+    		}
+      }
   	}
 
   // ==[raycasts]=============================================================
@@ -792,8 +810,8 @@ public class player : MonoBehaviour{
   		//print(Physics2D.Raycast(new Vector3(transform.position.x + (player_length / 2), transform.position.y),below,length_ray_updw,ignoreplayer_layerMask));
   		//print(hit.collider);
   		if(player_orientation == orientation.up || player_orientation == orientation.down){  
-  			//Debug.DrawRay(new Vector2(transform.position.x - bc_offset_x, transform.position.y + bc_offset_y  + (player_length / 2)), left, Color.green);
-  			//Debug.DrawRay(new Vector2(transform.position.x - bc_offset_x, transform.position.y + bc_offset_y  - (player_length / 2)), left, Color.green);
+  			Debug.DrawRay(new Vector2(transform.position.x - bc_offset_x, transform.position.y + bc_offset_y  + (player_length / 2)), left, Color.green);
+  			Debug.DrawRay(new Vector2(transform.position.x - bc_offset_x, transform.position.y + bc_offset_y  - (player_length / 2)), left, Color.green);
   			return(!Physics2D.Raycast(new Vector3(transform.position.x - bc_offset_x, transform.position.y + bc_offset_y  + (player_length / 2)),left,length_ray_leftright,ignoreplayer_layerMask) && 
   				!Physics2D.Raycast(new Vector3(transform.position.x - bc_offset_x, transform.position.y + bc_offset_y  - (player_length / 2)),left,length_ray_leftright, ignoreplayer_layerMask));
   		}
@@ -801,8 +819,8 @@ public class player : MonoBehaviour{
   		else {
   			length_ray_leftright = (player_length * 1.7F);
   			left = transform.TransformDirection(new Vector2(length_ray_leftright, 0));
-  			//Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x  + (player_length / 2), transform.position.y + bc_offset_y), left, Color.green);
-  			//Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x  - (player_length / 2), transform.position.y + bc_offset_y), left, Color.green);
+  			Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x  + (player_length / 2), transform.position.y + bc_offset_y), left, Color.green);
+  			Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x  - (player_length / 2), transform.position.y + bc_offset_y), left, Color.green);
   			return(!Physics2D.Raycast(new Vector3(transform.position.x + bc_offset_x  + (player_length / 2), transform.position.y + bc_offset_y),left,length_ray_leftright,ignoreplayer_layerMask) && 
   				!Physics2D.Raycast(new Vector3(transform.position.x + bc_offset_x  - (player_length / 2), transform.position.y + bc_offset_y),left,length_ray_leftright, ignoreplayer_layerMask));
   		}
@@ -843,22 +861,22 @@ public class player : MonoBehaviour{
   			break;
   		case orientation.left:
   			if(transform.rotation.y == 0){
-				bc_offset_x = GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
-				bc_offset_y = -GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
+				bc_offset_x = GetComponent<BoxCollider2D>().offset.y * transform.localScale.x;
+				bc_offset_y = -GetComponent<BoxCollider2D>().offset.x * transform.localScale.y;
   			}
   			else{
-				bc_offset_x = GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
-				bc_offset_y = GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
+				bc_offset_x = GetComponent<BoxCollider2D>().offset.y * transform.localScale.x;
+				bc_offset_y = GetComponent<BoxCollider2D>().offset.x * transform.localScale.y;
   			}
   			break;
   		case orientation.right:
   			if(transform.rotation.y == 0){
-				bc_offset_x = -GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
-				bc_offset_y = GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
+				bc_offset_x = -GetComponent<BoxCollider2D>().offset.y * transform.localScale.x;
+				bc_offset_y = GetComponent<BoxCollider2D>().offset.x * transform.localScale.y;
   			}
   			else{
-				bc_offset_x = -GetComponent<BoxCollider2D>().offset.x * transform.localScale.x;
-				bc_offset_y = -GetComponent<BoxCollider2D>().offset.y * transform.localScale.y;
+				bc_offset_x = -GetComponent<BoxCollider2D>().offset.y * transform.localScale.x;
+				bc_offset_y = -GetComponent<BoxCollider2D>().offset.x * transform.localScale.y;
   			}
   			break;
   		default:
@@ -883,14 +901,14 @@ public class player : MonoBehaviour{
   		ignoreplayer_layerMask = ~ignoreplayer_layerMask;
 
   		if(player_orientation == orientation.up || player_orientation == orientation.down){ 
-  			//Debug.DrawRay(new Vector2(transform.position.x + (player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y), below, Color.green);
-  			//Debug.DrawRay(new Vector2(transform.position.x - (player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y), below, Color.green);
+  			Debug.DrawRay(new Vector2(transform.position.x + (player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y), below, Color.green);
+			Debug.DrawRay(new Vector2(transform.position.x - (player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y), below, Color.green);
   			return(!Physics2D.Raycast(new Vector3(transform.position.x + (player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y),below,length_ray_updw,ignoreplayer_layerMask) && 
   				!Physics2D.Raycast(new Vector3(transform.position.x - (player_length / 2) + bc_offset_x, transform.position.y + bc_offset_y),below,length_ray_updw, ignoreplayer_layerMask));
   		}
   		else{
-  			//Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x, transform.position.y + (player_length / 2) + bc_offset_y), below, Color.green);
-  			//Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x, transform.position.y  - (player_length / 2) + bc_offset_y), below, Color.green);
+  			Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x, transform.position.y + (player_length / 2) + bc_offset_y), below, Color.green);
+  			Debug.DrawRay(new Vector2(transform.position.x + bc_offset_x, transform.position.y  - (player_length / 2) + bc_offset_y), below, Color.green);
   			return(!Physics2D.Raycast(new Vector3(transform.position.x + bc_offset_x, transform.position.y + (player_length / 2) + bc_offset_y),below,length_ray_updw,ignoreplayer_layerMask) && 
   				!Physics2D.Raycast(new Vector3(transform.position.x + bc_offset_x, transform.position.y - (player_length / 2) + bc_offset_y),below,length_ray_updw, ignoreplayer_layerMask));
   		}
@@ -1125,6 +1143,9 @@ public class player : MonoBehaviour{
 
   	public void FindKiller(GameObject collideObject, bool bulletAttack){
       // Vector3 killerPos = new Vector3(0,0,0);
+
+      string killer_color = "none";
+
   		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
   		foreach(GameObject p in players){
   			player other = (player)p.GetComponent(typeof(player));
@@ -1133,22 +1154,26 @@ public class player : MonoBehaviour{
           // killerPos = other.transform.position;
           if(this.name != other.name){
             other.playersKilled.Add(this.gameObject.name);
+            killer_color = other.player_color;
           }
           else{
             suicides++;
+            killer_color = gameObject.GetComponent<player>().player_color;
           }  
         }
 
         else if(!bulletAttack && other.shield == collideObject){
 	        other.playersKilled.Add(this.gameObject.name);
           other.numSwordHits++;
+          killer_color = other.player_color;
           // killerPos = other.transform.position;
         }
   		}
-      KillPlayer();
+
+      KillPlayer(killer_color);
   	}
 
-  	public void KillPlayer(){
+  	public void KillPlayer(string killer_color){
       
       if(PlayerPrefs.GetFloat("sfx") != 0){
         sound.PlayOneShot(death);
@@ -1160,7 +1185,7 @@ public class player : MonoBehaviour{
   	  up_slash.GetComponent<BoxCollider2D>().enabled = false;
   	  down_slash.GetComponent<BoxCollider2D>().enabled = false;
       lives--;
-      level.S.KillPause(transform.position, colors[player_color.ToLower()]);
+      level.S.KillPause(transform.position, colors[killer_color.ToLower()]);
 
       // turn off poison
       poisoned = false;
@@ -1187,7 +1212,11 @@ public class player : MonoBehaviour{
   	IEnumerator Wait(){
 
       Time.timeScale = 0.1f;
+
+      dying = true;
+      body.velocity = new Vector3(0f, 0f, 0f);
       yield return new WaitForSeconds(0.3f);
+      dying = false;
 
       Vector3 pos = transform.position;
   		transform.position = offscreen;
