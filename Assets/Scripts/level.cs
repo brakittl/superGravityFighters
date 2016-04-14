@@ -461,9 +461,9 @@ public class level : MonoBehaviour {
     rot.z = Random.Range(0, 90);
     if(gamemode == GameMode.SURVIVAL){
       streak = Instantiate(killStreak, pos, Quaternion.Euler(rot)) as GameObject;
-			print(streak.GetComponent<MeshRenderer>().material.color);
+			//print(streak.GetComponent<MeshRenderer>().material.color);
 			streak.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", player_color);
-			print(streak.GetComponent<MeshRenderer>().material.color);
+			//print(streak.GetComponent<MeshRenderer>().material.color);
     }
     
     CameraShake();
@@ -780,9 +780,14 @@ public class level : MonoBehaviour {
         // Samurai: best sword accuracy
         duplicate = false;
         high = 0;
-        float bestSwordAccuracy = (float)(activePlayers[high].numSwordHits) / (activePlayers[high].numSwordSwipes);
+        float bestSwordAccuracy = 0;
+        if (activePlayers[high].numSwordSwipes > 0)
+        {
+          bestSwordAccuracy = (float)(activePlayers[high].numSwordHits) / (activePlayers[high].numSwordSwipes);
+        }
         for (int i = high + 1; i < numPlayers; i++){
-          float current = (float)(activePlayers[i].numSwordHits) / (activePlayers[i].numSwordSwipes);
+          float current = 0;
+          if (activePlayers[i].numSwordSwipes > 0) current = (float)(activePlayers[i].numSwordHits) / (activePlayers[i].numSwordSwipes);
           if(current > bestSwordAccuracy){
             high = i;
             bestSwordAccuracy = current;
@@ -799,9 +804,14 @@ public class level : MonoBehaviour {
         // Sniper: bullet accuracy
         duplicate = false;
         high = 0;
-        float bestBulletAccuracy = (float)(activePlayers[high].numBulletHits) / (activePlayers[high].numBulletShots);
+        float bestBulletAccuracy = 0;
+        if (activePlayers[high].numBulletShots > 0)
+        {
+          bestBulletAccuracy = (float)(activePlayers[high].numBulletHits) / (activePlayers[high].numBulletShots);
+        }
         for (int i = high + 1; i < numPlayers; i++){
-          float current = (float)(activePlayers[i].numBulletHits) / (activePlayers[i].numBulletShots);
+          float current = 0;
+          if (activePlayers[i].numBulletShots > 0) current = (float)(activePlayers[i].numBulletHits) / (activePlayers[i].numBulletShots);
           if(current > bestBulletAccuracy){
             high = i;
             bestBulletAccuracy = current;
