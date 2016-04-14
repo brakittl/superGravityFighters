@@ -35,7 +35,7 @@ public class level : MonoBehaviour {
   public Vector3 stone_position;
 
   public Sprite gold, silver, bronze;
-  List<Vector3> podiumPositions = new List<Vector3>(){ new Vector3(-1.56f, 30f, 0f), new Vector3(-0.29f, 15f, 0f), new Vector3(0.98f, 10f, 0f), new Vector3(2.22f, 5f, 0f) };
+  List<Vector3> podiumPositions = new List<Vector3>(){ new Vector3(-1.56f, 5f, 0f), new Vector3(-0.29f, 5f, 0f), new Vector3(0.98f, 5f, 0f), new Vector3(2.22f, 5f, 0f) };
 
   public List<GameObject> alive_players;
   public Vector3 target_position;
