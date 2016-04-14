@@ -1179,7 +1179,7 @@ public class player : MonoBehaviour{
   	}
 
   	public void KillPlayer(string killer_color){
-      
+		print(killer_color);
       if(PlayerPrefs.GetFloat("sfx") != 0){
         sound.PlayOneShot(death);
       }

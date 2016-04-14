@@ -47,6 +47,10 @@ public class level : MonoBehaviour {
   float shakeIntensity = 0.2f;
   bool camera_shaking = false;
 
+    AudioSource music;
+    public AudioClip victoryMusic;
+    bool playingVictory = false;
+
   public Dictionary<string, string> medals = new Dictionary<string, string>(){
     { "SKY DIVER","most consecutive\nairtime" },
     { "TELEPORTER","most border\nteleports" },
@@ -78,8 +82,6 @@ public class level : MonoBehaviour {
 
   void Start(){
 
-
-
     // Mac Check
     if(Application.platform == RuntimePlatform.OSXEditor ||
        Application.platform == RuntimePlatform.OSXPlayer ||
@@ -105,11 +107,11 @@ public class level : MonoBehaviour {
     // =========================================================================
 
     S = this;
+        music = GetComponent<AudioSource>();
 
     if(isMap){
 
       // rt_point_limit = PlayerPrefs.GetInt("rt_point_limit");
-
       podium = GameObject.Find("Podium");
       if(podium != null){
         podium.SetActive(false);
@@ -199,7 +201,12 @@ public class level : MonoBehaviour {
     }
 
     if(gameOver){
-
+            if (!playingVictory)
+            {
+                music.PlayOneShot(victoryMusic);
+                playingVictory = true;
+            }
+                
       // pressed a to ready up
       if(!player1Ready && Input.GetButtonDown(mac + "Controller 1 A Button")){
         player1Ready = true;
@@ -454,9 +461,9 @@ public class level : MonoBehaviour {
     rot.z = Random.Range(0, 90);
     if(gamemode == GameMode.SURVIVAL){
       streak = Instantiate(killStreak, pos, Quaternion.Euler(rot)) as GameObject;
-			print(streak.GetComponent<MeshRenderer>().material.color);
+			//print(streak.GetComponent<MeshRenderer>().material.color);
 			streak.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", player_color);
-			print(streak.GetComponent<MeshRenderer>().material.color);
+			//print(streak.GetComponent<MeshRenderer>().material.color);
     }
     
     CameraShake();
