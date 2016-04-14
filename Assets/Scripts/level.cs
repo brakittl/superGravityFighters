@@ -74,7 +74,7 @@ public class level : MonoBehaviour {
     { "WHOOPS","most\nsuicides" },
     { "PARTICIPANT","you had\nfun :)" },
     { "THUG LIFE","most\nsteals" },
-    { "JUST A GOOD PERSON","least\nsteals" },
+    { "GOOD PERSON","least\nsteals" },
     { "IRON GRIP","longest single\npossession" },
     { "BUTTERFINGERS","shortest single\npossession" },
     { "QUICKDRAW","first\npossession" }
@@ -866,9 +866,9 @@ public class level : MonoBehaviour {
         // Pacifist: least kills
         duplicate = false;
         low = 0;
-        int leastKills = activePlayers[low].numBulletHits + activePlayers[low].numSwordHits;
+        int leastKills = activePlayers[low].playersKilled.Count;
         for (int i = low + 1; i < numPlayers; i++){
-          int current = activePlayers[i].numBulletHits + activePlayers[low].numSwordHits;
+          int current = activePlayers[i].playersKilled.Count;
           if(current < leastKills){
             low = i;
             leastKills = current;
@@ -947,7 +947,7 @@ public class level : MonoBehaviour {
           activePlayers[high].medals.Add("IRON GRIP");
         }
         if(!lowDuplicate){
-          //activePlayers[low].medals.Add("BUTTERFINGERS");
+          activePlayers[low].medals.Add("BUTTERFINGERS");
         }
 
         // Most Steals
@@ -980,7 +980,7 @@ public class level : MonoBehaviour {
           activePlayers[high].medals.Add("THUG LIFE");
         }
         if(!lowDuplicate){
-          //activePlayers[low].medals.Add("JUST A GOOD PERSON");
+          activePlayers[low].medals.Add("GOOD PERSON");
         }
 
         // First Touch
