@@ -107,6 +107,9 @@ public class level : MonoBehaviour {
     S = this;
 
     if(isMap){
+
+      // rt_point_limit = PlayerPrefs.GetInt("rt_point_limit");
+
       podium = GameObject.Find("Podium");
       if(podium != null){
         podium.SetActive(false);
