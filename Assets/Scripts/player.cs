@@ -150,8 +150,6 @@ public class player : MonoBehaviour{
 
     void SetPlayerNumber(int sent_number){
       player_number = sent_number;
-      // print(level.S.respawnPoints[sent_number - 1]);
-      // transform.position = level.S.findRespawn();
     }
 
     void SetGravityFromCharacterSelect(string orientation){
@@ -778,7 +776,7 @@ public class player : MonoBehaviour{
   		Vector2 left = transform.TransformDirection(new Vector2(length_ray_leftright, 0));
 
       // layers raycast should ignore
-  		LayerMask ignoreplayer_layerMask = ~(LayerMask.NameToLayer("Player") | LayerMask.NameToLayer("Border") | LayerMask.NameToLayer("TagBall")) | LayerMask.NameToLayer("Attack")) ;
+  		LayerMask ignoreplayer_layerMask = ~(LayerMask.NameToLayer("Player") | LayerMask.NameToLayer("Border") | LayerMask.NameToLayer("TagBall") | LayerMask.NameToLayer("Attack")) ;
   		ignoreplayer_layerMask = ~ignoreplayer_layerMask;
 
   		if(player_orientation == orientation.up || player_orientation == orientation.down){  

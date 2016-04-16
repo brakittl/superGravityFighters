@@ -23,7 +23,6 @@ public class level : MonoBehaviour {
   public Vector3[] respawnPoints;
   public List<player> ranking = new List<player>();
   int numPlayers;
-  // Texture2D black = new Texture2D(1, 1);
 
   public bool gameOver;
   public int readyCount;
@@ -48,9 +47,9 @@ public class level : MonoBehaviour {
   bool camera_shaking = false;
   public bool block_camera_shake;
 
-    AudioSource music;
-    public AudioClip victoryMusic;
-    bool playingVictory = false;
+  AudioSource music;
+  public AudioClip victoryMusic;
+  bool playingVictory = false;
 
   public Dictionary<string, string> medals = new Dictionary<string, string>(){
     { "SKY DIVER","most consecutive\nairtime" },
@@ -110,7 +109,7 @@ public class level : MonoBehaviour {
     // =========================================================================
 
     S = this;
-        music = GetComponent<AudioSource>();
+    music = GetComponent<AudioSource>();
 
     if(isMap){
 
@@ -127,8 +126,6 @@ public class level : MonoBehaviour {
       if(PostGameBoxes != null){
         PostGameBoxes.SetActive(false);
       }
-      //PostGameUI = GameObject.Find("PostGameCanvas").GetComponent<Canvas>();
-      //if(PostGameUI != null) PostGameUI.enabled = false;
       gameOver = false;
       player1Ready = player2Ready = player3Ready = player4Ready = false;
     }
@@ -205,7 +202,7 @@ public class level : MonoBehaviour {
 
     if(gameOver){
       /*
-            if (!playingVictory)
+            if(!playingVictory)
             {
         music.clip = victoryMusic;
                 //music.PlayOneShot(victoryMusic);
@@ -281,7 +278,7 @@ public class level : MonoBehaviour {
           Debug.Log("GAMEOVER COUNT");
           gameOver = true;
           music.clip = victoryMusic;
-          if (!music.isPlaying) music.Play();
+          if(!music.isPlaying) music.Play();
 
           // one player left, end the game
           List<player> activePlayers = new List<player>();
@@ -310,8 +307,8 @@ public class level : MonoBehaviour {
           podium.SetActive(true);
 
           // sort by deathTime
-          for (int i = 0; i < numPlayers; i++){
-            for (int j = i + 1; j < numPlayers; j++){
+          for(int i = 0; i < numPlayers; i++){
+            for(int j = i + 1; j < numPlayers; j++){
               if(activePlayers[i].deathTime < activePlayers[j].deathTime){
                 player temp = activePlayers[i];
                 activePlayers[i] = activePlayers[j];
@@ -334,7 +331,7 @@ public class level : MonoBehaviour {
         if(ranking.Capacity > 0){
           gameOver = true;
           music.clip = victoryMusic;
-          if (!music.isPlaying) music.Play();
+          if(!music.isPlaying) music.Play();
 
           // killcount reached, end the game
           List<player> activePlayers = new List<player>();
@@ -362,8 +359,8 @@ public class level : MonoBehaviour {
           podium.SetActive(true);
 
           // sort by kills, deaths for ties
-          for (int i = 0; i < numPlayers; i++){
-            for (int j = i + 1; j < numPlayers; j++){
+          for(int i = 0; i < numPlayers; i++){
+            for(int j = i + 1; j < numPlayers; j++){
               if(activePlayers[i].playersKilled.Capacity < activePlayers[j].playersKilled.Capacity){
                 player temp = activePlayers[i];
                 activePlayers[i] = activePlayers[j];
@@ -395,7 +392,7 @@ public class level : MonoBehaviour {
         if(ranking.Count > 0){
           gameOver = true;
           music.clip = victoryMusic;
-          if (!music.isPlaying) music.Play();
+          if(!music.isPlaying) music.Play();
           // point limit reached, end the game
           List<player> activePlayers = new List<player>();
           if(PlayerPrefs.GetString("P1") != "none"){
@@ -423,7 +420,7 @@ public class level : MonoBehaviour {
           podium.SetActive(true);
 
           // sort by rt_points, ties broken by longest continuous hold
-          for (int i = 0; i < numPlayers; i++){
+          for(int i = 0; i < numPlayers; i++){
             for(int j = i + 1; j < numPlayers; j++){
               if(activePlayers[i].rt_points < activePlayers[j].rt_points){
                 player temp = activePlayers[i];
@@ -563,7 +560,7 @@ public class level : MonoBehaviour {
       // Skydiver: longest consecutive airtime
       high = 0; duplicate = false;
       int longestAirTime = activePlayers[high].longestAirTime;
-      for (int i = high + 1; i < numPlayers; i++){
+      for(int i = high + 1; i < numPlayers; i++){
         int current = activePlayers[i].longestAirTime;
         if(current > longestAirTime){
           high = i;
@@ -585,7 +582,7 @@ public class level : MonoBehaviour {
       low = 0;
       int mostBorderSwaps = activePlayers[high].borderSwaps;
       int leastBorderSwaps = mostBorderSwaps;
-      for (int i = high + 1; i < numPlayers; i++){
+      for(int i = high + 1; i < numPlayers; i++){
         int current = activePlayers[i].borderSwaps;
         if(current > mostBorderSwaps){
           high = i;
@@ -618,7 +615,7 @@ public class level : MonoBehaviour {
       low = 0;
       int mostAirTime = activePlayers[high].airTime;
       int leastAirTime = mostAirTime;
-      for (int i = high + 1; i < numPlayers; i++){
+      for(int i = high + 1; i < numPlayers; i++){
         int current = activePlayers[i].airTime;
         if(current > mostAirTime){
           high = i;
@@ -651,7 +648,7 @@ public class level : MonoBehaviour {
       low = 0;
       int mostGravitySwaps = activePlayers[high].gravitySwapCount;
       int leastGravitySwaps = mostGravitySwaps;
-      for (int i = high + 1; i < numPlayers; i++){
+      for(int i = high + 1; i < numPlayers; i++){
         int current = activePlayers[i].gravitySwapCount;
         if(current > mostGravitySwaps){
           high = i;
@@ -684,7 +681,7 @@ public class level : MonoBehaviour {
       low = 0;
       int mostDistance = activePlayers[high].steps;
       int leastDistance = mostDistance;
-      for (int i = high + 1; i < numPlayers; i++){
+      for(int i = high + 1; i < numPlayers; i++){
         int current = activePlayers[i].steps;
         if(current > mostDistance){
           high = i;
@@ -722,7 +719,7 @@ public class level : MonoBehaviour {
         low = 0;
         int mostBullets = activePlayers[high].bulletPickUps;
         int leastBullets = mostBullets;
-        for (int i = high + 1; i < numPlayers; i++){
+        for(int i = high + 1; i < numPlayers; i++){
           int current = activePlayers[i].bulletPickUps;
           if(current > mostBullets){
             high = i;
@@ -752,11 +749,11 @@ public class level : MonoBehaviour {
         duplicate = false;
         high = 0;
         int longestLife = activePlayers[high].longestLife;
-        if (longestLife == 0) longestLife = int.MaxValue;
-        for (int i = high + 1; i < numPlayers; i++){
+        if(longestLife == 0) longestLife = int.MaxValue;
+        for(int i = high + 1; i < numPlayers; i++){
           // set 0's to max because they neve died
           int current = activePlayers[i].longestLife;
-          if (current == 0) current = int.MaxValue;
+          if(current == 0) current = int.MaxValue;
 
           if(current > longestLife){
             high = i;
@@ -775,7 +772,7 @@ public class level : MonoBehaviour {
         duplicate = false;
         low = 0;
         int shortestLife = activePlayers[high].shortestLife;
-        for (int i = low + 1; i < numPlayers; i++){
+        for(int i = low + 1; i < numPlayers; i++){
           int current = activePlayers[i].shortestLife;
           if(current < shortestLife){
             low = i;
@@ -794,13 +791,13 @@ public class level : MonoBehaviour {
         duplicate = false;
         high = 0;
         float bestSwordAccuracy = 0;
-        if (activePlayers[high].numSwordSwipes > 0)
+        if(activePlayers[high].numSwordSwipes > 0)
         {
           bestSwordAccuracy = (float)(activePlayers[high].numSwordHits) / (activePlayers[high].numSwordSwipes);
         }
-        for (int i = high + 1; i < numPlayers; i++){
+        for(int i = high + 1; i < numPlayers; i++){
           float current = 0;
-          if (activePlayers[i].numSwordSwipes > 0) current = (float)(activePlayers[i].numSwordHits) / (activePlayers[i].numSwordSwipes);
+          if(activePlayers[i].numSwordSwipes > 0) current = (float)(activePlayers[i].numSwordHits) / (activePlayers[i].numSwordSwipes);
           if(current > bestSwordAccuracy){
             high = i;
             bestSwordAccuracy = current;
@@ -818,13 +815,13 @@ public class level : MonoBehaviour {
         duplicate = false;
         high = 0;
         float bestBulletAccuracy = 0;
-        if (activePlayers[high].numBulletShots > 0)
+        if(activePlayers[high].numBulletShots > 0)
         {
           bestBulletAccuracy = (float)(activePlayers[high].numBulletHits) / (activePlayers[high].numBulletShots);
         }
-        for (int i = high + 1; i < numPlayers; i++){
+        for(int i = high + 1; i < numPlayers; i++){
           float current = 0;
-          if (activePlayers[i].numBulletShots > 0) current = (float)(activePlayers[i].numBulletHits) / (activePlayers[i].numBulletShots);
+          if(activePlayers[i].numBulletShots > 0) current = (float)(activePlayers[i].numBulletHits) / (activePlayers[i].numBulletShots);
           if(current > bestBulletAccuracy){
             high = i;
             bestBulletAccuracy = current;
@@ -842,7 +839,7 @@ public class level : MonoBehaviour {
         duplicate = false;
         high = 0;
         int mostSwordKills = activePlayers[high].numSwordHits;
-        for (int i = high + 1; i < numPlayers; i++){
+        for(int i = high + 1; i < numPlayers; i++){
           int current = activePlayers[i].numSwordHits;
           if(current > mostSwordKills){
             high = i;
@@ -861,7 +858,7 @@ public class level : MonoBehaviour {
         duplicate = false;
         high = 0;
         int mostBulletKills = activePlayers[high].numBulletHits;
-        for (int i = high + 1; i < numPlayers; i++){
+        for(int i = high + 1; i < numPlayers; i++){
           int current = activePlayers[i].numBulletHits;
           if(current > mostBulletKills){
             high = i;
@@ -880,7 +877,7 @@ public class level : MonoBehaviour {
         duplicate = false;
         low = 0;
         int leastKills = activePlayers[low].playersKilled.Count;
-        for (int i = low + 1; i < numPlayers; i++){
+        for(int i = low + 1; i < numPlayers; i++){
           int current = activePlayers[i].playersKilled.Count;
           if(current < leastKills){
             low = i;
@@ -899,7 +896,7 @@ public class level : MonoBehaviour {
         duplicate = false;
         high = 0;
         int mostSuicides = activePlayers[high].suicides;
-        for (int i = high + 1; i < numPlayers; i++){
+        for(int i = high + 1; i < numPlayers; i++){
           int current = activePlayers[i].suicides;
           if(current > mostSuicides){
             high = i;
@@ -917,7 +914,7 @@ public class level : MonoBehaviour {
         // // Lich King: most poisons
         // high = 0;
         // int mostPoisons = activePlayers[high].totalPoisoned;
-        // for (int i = high + 1; i < numPlayers; i++){
+        // for(int i = high + 1; i < numPlayers; i++){
         //   int current = activePlayers[i].totalPoisoned;
         //   if(current > mostPoisons){
         //     high = i;
@@ -937,7 +934,7 @@ public class level : MonoBehaviour {
         low = 0;
         float longestHeld = activePlayers[high].rt_longest_continuous_hold;
         float shortestHeld = longestHeld;
-        for (int i = high + 1; i < numPlayers; i++){
+        for(int i = high + 1; i < numPlayers; i++){
           float current = activePlayers[i].rt_longest_continuous_hold;
           if(current > longestHeld){
             high = i;
@@ -970,7 +967,7 @@ public class level : MonoBehaviour {
         low = 0;
         float mostSteals = activePlayers[high].steals;
         float leastSteals = mostSteals;
-        for (int i = high + 1; i < numPlayers; i++){
+        for(int i = high + 1; i < numPlayers; i++){
           float current = activePlayers[i].steals;
           if(current > mostSteals){
             high = i;
@@ -998,7 +995,7 @@ public class level : MonoBehaviour {
 
         // First Touch
         low = 0;
-        for (int i = low; i < numPlayers; i++){
+        for(int i = low; i < numPlayers; i++){
           if(activePlayers[low].firstTouch){
             activePlayers[low].medals.Add("QUICKDRAW");
             break;
@@ -1007,7 +1004,7 @@ public class level : MonoBehaviour {
       }
 
       // Participant: had fun (couldn't find an award for them)
-      for (int i = 0; i < numPlayers; i++){
+      for(int i = 0; i < numPlayers; i++){
         if(activePlayers[i].medals.Capacity == 0){
           activePlayers[i].medals.Add("PARTICIPANT");
         }
@@ -1106,8 +1103,7 @@ public class level : MonoBehaviour {
     }
 
     string medalString = (p.player_number * -1) + "'s Medals:";
-    foreach (string medal in earnedMedals)
-    {
+    foreach (string medal in earnedMedals){
       medalString += " " + medal + " ";
     }
     Debug.Log(medalString);

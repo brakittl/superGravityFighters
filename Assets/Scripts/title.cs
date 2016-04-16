@@ -47,6 +47,14 @@ public class title : MonoBehaviour {
     if(!PlayerPrefs.HasKey("sfx")){
       PlayerPrefs.SetFloat("sfx", 1);
     }
+    if(!PlayerPrefs.HasKey("lives")){
+      PlayerPrefs.SetInt("lives", 5);
+      PlayerPrefs.SetInt("lives_index", 4);
+    }
+    if(!PlayerPrefs.HasKey("rt_point_limit")){
+      PlayerPrefs.SetInt("rt_point_limit", 50);
+      PlayerPrefs.SetInt("rt_index", 1);
+    }
 	
 	}
 	
