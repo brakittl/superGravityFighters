@@ -44,7 +44,6 @@ public class level : MonoBehaviour {
   public bool pause = false, running = false;
 
   float shakeIntensity = 0.2f;
-  bool camera_shaking = false;
   public bool block_camera_shake;
 
   AudioSource music;
@@ -201,13 +200,11 @@ public class level : MonoBehaviour {
     }
 
     if(gameOver){
-      /*
-            if(!playingVictory)
-            {
+      
+      if(!playingVictory){
         music.clip = victoryMusic;
-                //music.PlayOneShot(victoryMusic);
-                playingVictory = true;
-            }*/
+        playingVictory = true;
+      }
                 
       // pressed a to ready up
       if(!player1Ready && Input.GetButtonDown(mac + "Controller 1 A Button")){
@@ -262,9 +259,9 @@ public class level : MonoBehaviour {
     }
     else{
 
-      if(!camera_shaking){
-        MoveCamera();
-      }
+      // if(!camera_shaking){
+      //   MoveCamera();
+      // }
 
       if(gamemode == GameMode.SURVIVAL){
         // check number of dead players
@@ -457,7 +454,6 @@ public class level : MonoBehaviour {
   public void KillPause(Vector3 playerPos, Color player_color, bool create_streak){
     if(!running){
       running = true;
-      camera_shaking = true;
       StartCoroutine(Pause(playerPos, player_color, create_streak));
     }
   }
@@ -492,7 +488,6 @@ public class level : MonoBehaviour {
 
     CameraShake();
     gameObject.transform.position = originalPos;
-    camera_shaking = false;
     
     if(gamemode == GameMode.SURVIVAL && create_streak){
       Destroy(streak);
@@ -1017,7 +1012,6 @@ public class level : MonoBehaviour {
     // stop moving camera
     alive_players.Clear();
     gameObject.transform.position = new Vector3(0f, 0f, -10f);
-    camera_shaking = true;
 
     if(PostGameOb != null){
       PostGameOb.SetActive(true);
