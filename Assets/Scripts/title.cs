@@ -77,8 +77,8 @@ public class title : MonoBehaviour {
        Input.GetButtonDown(mac + "Controller 4 A Button") ||
        Input.GetKeyDown(KeyCode.Return)){
 
-      if(i == 0)
-      {
+      if(i == 0){
+
         PlayerPrefs.SetInt("P1Num", -2);
         PlayerPrefs.SetInt("P2Num", -2);
         PlayerPrefs.SetInt("P3Num", -2);
@@ -87,7 +87,13 @@ public class title : MonoBehaviour {
         PlayerPrefs.SetString("P2", "none");
         PlayerPrefs.SetString("P3", "none");
         PlayerPrefs.SetString("P4", "none");
-        SceneManager.LoadScene("_character_select");
+
+        if(PlayerPrefs.GetString("screen") == "MONITOR"){
+          SceneManager.LoadScene("_character_select");
+        }
+        else{
+          SceneManager.LoadScene("_character_select_tabletop");
+        }
       }
       if(i == 1){
         SceneManager.LoadScene("_options");

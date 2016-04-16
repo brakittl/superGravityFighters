@@ -1041,7 +1041,7 @@ public class level : MonoBehaviour {
 
     if(first != null){
       first.GetComponent<player>().player_number *= -1;
-      first.GetComponent<player>().Gravity(player.orientation.down, 0f, 0f);
+      first.GetComponent<player>().Gravity("down", 0f, 0f, false);
       place1.FindChild("trophy").GetComponent<Image>().sprite = gold;
       first.transform.localScale = new Vector3(1.2f, 1.2f, 0f);
       first.transform.position = podiumPositions[0];
@@ -1054,7 +1054,7 @@ public class level : MonoBehaviour {
 
     if(second != null){
       second.GetComponent<player>().player_number *= -1;
-      second.GetComponent<player>().Gravity(player.orientation.down, 0f, 0f);
+      second.GetComponent<player>().Gravity("down", 0f, 0f, false);
       place2.FindChild("trophy").GetComponent<Image>().sprite = silver;
       second.transform.localScale = new Vector3(1.2f, 1.2f, 0f);
       second.transform.position = podiumPositions[1];
@@ -1067,7 +1067,7 @@ public class level : MonoBehaviour {
 
     if(third != null){
       third.GetComponent<player>().player_number *= -1;
-      third.GetComponent<player>().Gravity(player.orientation.down, 0f, 0f);
+      third.GetComponent<player>().Gravity("down", 0f, 0f, false);
       place3.FindChild("trophy").GetComponent<Image>().sprite = bronze;
       third.transform.localScale = new Vector3(1.2f, 1.2f, 0f);
       third.transform.position = podiumPositions[2];
@@ -1080,7 +1080,7 @@ public class level : MonoBehaviour {
 
     if(fourth != null){
       fourth.GetComponent<player>().player_number *= -1;
-      fourth.GetComponent<player>().Gravity(player.orientation.down, 0f, 0f);
+      fourth.GetComponent<player>().Gravity("down", 0f, 0f, false);
       place4.FindChild("trophy").GetComponent<Image>().enabled = false;
       fourth.transform.localScale = new Vector3(1.2f, 1.2f, 0f);
       fourth.transform.position = podiumPositions[3];

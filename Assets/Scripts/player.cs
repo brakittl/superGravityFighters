@@ -35,7 +35,7 @@ public class player : MonoBehaviour{
     //point limit is in level script, call with level.S.rt_point_limit
 
   	// orientation
-  	public enum orientation{up, down, left, right};
+  	public enum orientation {up, down, left, right};
   	public orientation player_orientation;
 
   	// animation elements
@@ -153,6 +153,21 @@ public class player : MonoBehaviour{
       player_number = sent_number;
       // print(level.S.respawnPoints[sent_number - 1]);
       // transform.position = level.S.findRespawn();
+    }
+
+    void SetGravityFromCharacterSelect(string orientation){
+      if(orientation == "up"){
+        Gravity("up", transform.localEulerAngles.y, 180f, true);
+      }
+      if(orientation == "down"){
+        Gravity("down", -transform.localEulerAngles.y, 0f, true);
+      }
+      if(orientation == "left"){
+        Gravity("left", 0f, -90f, true);
+      }
+      if(orientation == "right"){
+        Gravity("right", 0f, 90f, true);
+      }
     }
 
   // ==[start]==================================================================
@@ -375,7 +390,7 @@ public class player : MonoBehaviour{
   		if(!poisoned && !dead && !dying){
   			// up
   			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis") < -0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up){
-  				Gravity(orientation.up, transform.localEulerAngles.y, 180f);
+  				Gravity("up", transform.localEulerAngles.y, 180f, false);
           gravitySwapCount++;
           if(PlayerPrefs.GetFloat("sfx") != 0){
             sound.PlayOneShot(gravitySwap, gravVolume);
@@ -385,7 +400,7 @@ public class player : MonoBehaviour{
   			// down
 
   			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis") > 0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S)) && player_orientation != orientation.down){
-  				Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
+  				Gravity("down", -transform.localEulerAngles.y, 0f, false);
           gravitySwapCount++;
           if(PlayerPrefs.GetFloat("sfx") != 0){
             sound.PlayOneShot(gravitySwap, gravVolume);
@@ -394,7 +409,7 @@ public class player : MonoBehaviour{
         }
   			// left
   			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis") < -0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " X Button") || Input.GetKey(KeyCode.A)) && player_orientation != orientation.left){
-  				Gravity(orientation.left, 0f, -90f);
+  				Gravity("left", 0f, -90f, false);
           gravitySwapCount++;
           if(PlayerPrefs.GetFloat("sfx") != 0){
             sound.PlayOneShot(gravitySwap, gravVolume);
@@ -403,7 +418,7 @@ public class player : MonoBehaviour{
         }
   			// right
   			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis") > 0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " B Button") || Input.GetKey(KeyCode.D)) && player_orientation != orientation.right){
-  				Gravity(orientation.right, 0f, 90f);
+  				Gravity("right", 0f, 90f, false);
           gravitySwapCount++;
           if(PlayerPrefs.GetFloat("sfx") != 0){
             sound.PlayOneShot(gravitySwap, gravVolume);
@@ -930,9 +945,27 @@ public class player : MonoBehaviour{
   // ==[gravity]================================================================
   // ===========================================================================
 
-  	public void Gravity(orientation new_orientation, float y_rot, float z_rot){
-  		body.velocity = new Vector2(0f, 0f); // set velocity to zero at swap initializaiton
-  		player_orientation = new_orientation; // set new orientation
+  	public void Gravity(string new_orientation, float y_rot, float z_rot, bool char_select){
+
+
+      if(new_orientation == "up"){
+        player_orientation = orientation.up;
+      }
+      else if(new_orientation == "left"){
+        player_orientation = orientation.left;
+      }
+      else if(new_orientation == "right"){
+        player_orientation = orientation.right;
+      }
+      else{
+        player_orientation = orientation.down;
+      }
+
+      if(!char_select){
+        body.velocity = new Vector2(0f, 0f); // set velocity to zero at swap initializaiton
+      }
+
+  		// player_orientation = new_orientation; // set new orientation
   		transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, y_rot, z_rot); // rotate for new orientation
   		player_animator.Play("Swap"); // play animation
   	}
@@ -1246,7 +1279,7 @@ public class player : MonoBehaviour{
       if(level.S.gamemode == GameMode.SURVIVAL){
         Instantiate(extraBullet, pos, transform.rotation);
       }
-      Gravity(orientation.down, -transform.localEulerAngles.y, 0f);
+      Gravity("down", -transform.localEulerAngles.y, 0f, false);
       player_orientation = orientation.down;
 
       yield return new WaitForSeconds(1f);

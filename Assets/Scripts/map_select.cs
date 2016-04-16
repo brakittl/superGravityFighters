@@ -129,7 +129,14 @@ public class map_select : MonoBehaviour {
       || Input.GetButtonDown(mac + "Controller 4 B Button")
       || Input.GetKeyDown(KeyCode.B)
       || Input.GetKeyDown(KeyCode.Escape)){
-      SceneManager.LoadScene("_character_select");
+
+      if(PlayerPrefs.GetString("screen") == "MONITOR"){
+        SceneManager.LoadScene("_character_select");
+      }
+      else{
+        SceneManager.LoadScene("_character_select_tabletop");
+      }
+      
     }
 
     if(Input.GetKeyDown(KeyCode.Return) ||
