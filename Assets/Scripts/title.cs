@@ -45,7 +45,15 @@ public class title : MonoBehaviour {
       PlayerPrefs.SetFloat("music", 1);
     }
     if(!PlayerPrefs.HasKey("sfx")){
-      PlayerPrefs.SetFloat("music", 1);
+      PlayerPrefs.SetFloat("sfx", 1);
+    }
+    if(!PlayerPrefs.HasKey("lives")){
+      PlayerPrefs.SetInt("lives", 5);
+      PlayerPrefs.SetInt("lives_index", 4);
+    }
+    if(!PlayerPrefs.HasKey("rt_point_limit")){
+      PlayerPrefs.SetInt("rt_point_limit", 50);
+      PlayerPrefs.SetInt("rt_index", 1);
     }
 	
 	}
@@ -77,8 +85,8 @@ public class title : MonoBehaviour {
        Input.GetButtonDown(mac + "Controller 4 A Button") ||
        Input.GetKeyDown(KeyCode.Return)){
 
-      if(i == 0)
-      {
+      if(i == 0){
+
         PlayerPrefs.SetInt("P1Num", -2);
         PlayerPrefs.SetInt("P2Num", -2);
         PlayerPrefs.SetInt("P3Num", -2);
@@ -87,7 +95,13 @@ public class title : MonoBehaviour {
         PlayerPrefs.SetString("P2", "none");
         PlayerPrefs.SetString("P3", "none");
         PlayerPrefs.SetString("P4", "none");
-        SceneManager.LoadScene("_character_select");
+
+        if(PlayerPrefs.GetString("screen") == "MONITOR"){
+          SceneManager.LoadScene("_character_select");
+        }
+        else{
+          SceneManager.LoadScene("_character_select_tabletop");
+        }
       }
       if(i == 1){
         SceneManager.LoadScene("_options");

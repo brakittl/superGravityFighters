@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class character_select : MonoBehaviour {
   public string mac = "";
 
-  public int player;
+  public int player_num;
   public Vector3 start_position;
   public List<GameObject> player_prefabs;
 
@@ -33,7 +33,7 @@ public class character_select : MonoBehaviour {
   public GameObject[] borders;
 
   public int prefab_number = 0;
-  GameObject player_object;
+  public GameObject player_object;
 
   Color character_color = new Color(1, 1, 1, 1);
 
@@ -67,36 +67,41 @@ public class character_select : MonoBehaviour {
 
     resize = new Vector3(1f, 1f, 1f);
 
-    if(player > Input.GetJoystickNames().Length){
-    //if(player > 1){
+    // if(player_num > Input.GetJoystickNames().Length){
+    if(player_num > 4){
       // deactivate player if controller not connected
       this.gameObject.SetActive(false);
       join_button.SetActive(false);
     }
-    else if(PlayerPrefs.GetInt("P" + player + "Num") != -2){
-      prefab_number = PlayerPrefs.GetInt("P" + player + "Num");
+    else if(PlayerPrefs.GetInt("P" + player_num + "Num") != -2){
+      prefab_number = PlayerPrefs.GetInt("P" + player_num + "Num");
       Join(prefab_number);
       Confirm();
       if(tutorial){
         borders_touched = 4;
-        GameObject.Find("p" + player + "_bottom").GetComponent<SpriteRenderer>().sprite = GameObject.Find("p" + player + "_bottom").GetComponent<character_select_border>().red_line;
-        GameObject.Find("p" + player + "_top").GetComponent<SpriteRenderer>().sprite = GameObject.Find("p" + player + "_top").GetComponent<character_select_border>().red_line;
-        GameObject.Find("p" + player + "_left").GetComponent<SpriteRenderer>().sprite = GameObject.Find("p" + player + "_left").GetComponent<character_select_border>().red_line;
-        GameObject.Find("p" + player + "_right").GetComponent<SpriteRenderer>().sprite = GameObject.Find("p" + player + "_right").GetComponent<character_select_border>().red_line;
+        GameObject.Find("p" + player_num + "_bottom").GetComponent<SpriteRenderer>().sprite = GameObject.Find("p" + player_num + "_bottom").GetComponent<character_select_border>().red_line;
+        GameObject.Find("p" + player_num + "_top").GetComponent<SpriteRenderer>().sprite = GameObject.Find("p" + player_num + "_top").GetComponent<character_select_border>().red_line;
+        GameObject.Find("p" + player_num + "_left").GetComponent<SpriteRenderer>().sprite = GameObject.Find("p" + player_num + "_left").GetComponent<character_select_border>().red_line;
+        GameObject.Find("p" + player_num + "_right").GetComponent<SpriteRenderer>().sprite = GameObject.Find("p" + player_num + "_right").GetComponent<character_select_border>().red_line;
       }
     }
+
+    prefab_number = player_num + 1;
+
 	}
 	
 	void Update(){
 
-    if(System.Math.Abs(Input.GetAxis(mac + "Controller " + player + " Left Stick X Axis")) < 0.9f){
+    if(System.Math.Abs(Input.GetAxis(mac + "Controller " + player_num + " Left Stick X Axis")) < 0.9f){
       axis_in_use = false;
     }
 
     // set color to black if already selected
     if(player_object != null){
-      if(manager.GetComponent<character_select_manager>().character_is_selected("P" + player, prefab_number)){
+      if(manager.GetComponent<character_select_manager>().character_is_selected("P" + player_num, prefab_number)){
         player_object.GetComponent<SpriteRenderer>().color = Color.black;
+        Cycle(1);
+        axis_in_use = false;
       }
       else {
         player_object.GetComponent<SpriteRenderer>().color = character_color;
@@ -107,15 +112,15 @@ public class character_select : MonoBehaviour {
     if(!joined){
 
       // join game
-      if(Input.GetButtonDown(mac + "Controller " + player + " X Button") ||
-          Input.GetKeyDown(KeyCode.X)){
+      if(Input.GetButtonDown(mac + "Controller " + player_num + " X Button") ||
+         Input.GetKeyDown(KeyCode.X)){
         Join();
       }
 
       // exit game
-      if(Input.GetButtonDown(mac + "Controller " + player + " B Button") ||
-          Input.GetButtonDown(mac + "Controller " + player + " Back Button") ||
-          Input.GetKeyDown(KeyCode.B)){
+      if(Input.GetButtonDown(mac + "Controller " + player_num + " B Button") ||
+         Input.GetButtonDown(mac + "Controller " + player_num + " Back Button") ||
+         Input.GetKeyDown(KeyCode.B)){
         SceneManager.LoadScene("_title");
       }
 
@@ -125,29 +130,29 @@ public class character_select : MonoBehaviour {
     else if(joined && !selected){
 
       // change color right
-      if(Input.GetButtonDown(mac + "Controller " + player + " Right Bumper") ||
-          (!axis_in_use && Input.GetAxis(mac + "Controller " + player + " Left Stick X Axis") >= 0.95f) ||
-          Input.GetKeyDown(KeyCode.RightArrow)){
+      if(Input.GetButtonDown(mac + "Controller " + player_num + " Right Bumper") ||
+         (!axis_in_use && Input.GetAxis(mac + "Controller " + player_num + " Left Stick X Axis") >= 0.95f) ||
+         Input.GetKeyDown(KeyCode.RightArrow)){
         Cycle(1);
       }
 
       // change color left
-      if(Input.GetButtonDown(mac + "Controller " + player + " Left Bumper") ||
-          (!axis_in_use && Input.GetAxis(mac + "Controller " + player + " Left Stick X Axis") <= -0.95f) ||
-          Input.GetKeyDown(KeyCode.LeftArrow)){
+      if(Input.GetButtonDown(mac + "Controller " + player_num + " Left Bumper") ||
+         (!axis_in_use && Input.GetAxis(mac + "Controller " + player_num + " Left Stick X Axis") <= -0.95f) ||
+         Input.GetKeyDown(KeyCode.LeftArrow)){
         Cycle(-1);
       }
 
       // confirm color
-      if(Input.GetButtonDown(mac + "Controller " + player + " A Button") ||
-          Input.GetKeyDown(KeyCode.A)){
+      if(Input.GetButtonDown(mac + "Controller " + player_num + " A Button") ||
+         Input.GetKeyDown(KeyCode.A)){
         Confirm();
       }
 
       // unjoin game
-      if(Input.GetButtonDown(mac + "Controller " + player + " Back Button") ||
-        Input.GetButtonDown(mac + "Controller " + player + " B Button") ||
-          Input.GetKeyDown(KeyCode.B)){
+      if(Input.GetButtonDown(mac + "Controller " + player_num + " Back Button") ||
+         Input.GetButtonDown(mac + "Controller " + player_num + " B Button") ||
+         Input.GetKeyDown(KeyCode.B)){
         Unjoin();
       }
 
@@ -158,8 +163,8 @@ public class character_select : MonoBehaviour {
         WallsTouched();
       }
       // return to character select
-      if(Input.GetButtonDown(mac + "Controller " + player + " Back Button") ||
-          Input.GetKeyDown(KeyCode.B)){
+      if(Input.GetButtonDown(mac + "Controller " + player_num + " Back Button") ||
+         Input.GetKeyDown(KeyCode.B)){
         Unconfirm();
       }
     }
@@ -173,8 +178,8 @@ public class character_select : MonoBehaviour {
     confirm_button.SetActive(true);
     podium.SetActive(true);
     Show(true);
-    manager.GetComponent<character_select_manager>().selected_character["P" + player] = -1;
-    manager.GetComponent<character_select_manager>().ready_character["P" + player] = -1;
+    manager.GetComponent<character_select_manager>().selected_character["P" + player_num] = -1;
+    manager.GetComponent<character_select_manager>().ready_character["P" + player_num] = -1;
   }
 
   void Join(int value){
@@ -185,8 +190,8 @@ public class character_select : MonoBehaviour {
     confirm_button.SetActive(true);
     podium.SetActive(true);
     Show(true);
-    manager.GetComponent<character_select_manager>().selected_character["P" + player] = value;
-    manager.GetComponent<character_select_manager>().ready_character["P" + player] = value;
+    manager.GetComponent<character_select_manager>().selected_character["P" + player_num] = value;
+    manager.GetComponent<character_select_manager>().ready_character["P" + player_num] = value;
   }
 
   void Unjoin(){
@@ -197,22 +202,22 @@ public class character_select : MonoBehaviour {
     select_set.SetActive(false);
     confirm_button.SetActive(false);
     podium.SetActive(false);
-    manager.GetComponent<character_select_manager>().selected_character["P" + player] = -2;
-    manager.GetComponent<character_select_manager>().ready_character["P" + player] = -2;
+    manager.GetComponent<character_select_manager>().selected_character["P" + player_num] = -2;
+    manager.GetComponent<character_select_manager>().ready_character["P" + player_num] = -2;
   }
 
   void Confirm(){
-    if(!manager.GetComponent<character_select_manager>().character_is_selected("P" + player, prefab_number)){
+    if(!manager.GetComponent<character_select_manager>().character_is_selected("P" + player_num, prefab_number)){
       selected = true;
       select_set.SetActive(false);
       confirm_button.SetActive(false);
       podium.SetActive(false);
       cancel_button.SetActive(true);
-      player_object.GetComponent<player>().player_number = player;
-      manager.GetComponent<character_select_manager>().selected_character["P" + player] = prefab_number;
+      player_object.GetComponent<player>().player_number = player_num;
+      manager.GetComponent<character_select_manager>().selected_character["P" + player_num] = prefab_number;
       if(!tutorial){
         ready_text.SetActive(true);
-        manager.GetComponent<character_select_manager>().ready_character["P" + player] = prefab_number;
+        manager.GetComponent<character_select_manager>().ready_character["P" + player_num] = prefab_number;
       }
       else{
         controls_layout.SetActive(true);
@@ -227,8 +232,8 @@ public class character_select : MonoBehaviour {
     cancel_button.SetActive(false);
     controls_layout.SetActive(false);
     ready_text.SetActive(false);
-    manager.GetComponent<character_select_manager>().selected_character["P" + player] = -1;
-    manager.GetComponent<character_select_manager>().ready_character["P" + player] = -1;
+    manager.GetComponent<character_select_manager>().selected_character["P" + player_num] = -1;
+    manager.GetComponent<character_select_manager>().ready_character["P" + player_num] = -1;
     borders_touched = 0;
 
     foreach(GameObject border in borders){
@@ -239,7 +244,7 @@ public class character_select : MonoBehaviour {
   }
 
   void WallsTouched(){
-    manager.GetComponent<character_select_manager>().ready_character["P" + player] = prefab_number;
+    manager.GetComponent<character_select_manager>().ready_character["P" + player_num] = prefab_number;
     ready_text.SetActive(true);
     controls_layout.SetActive(false);
   }
@@ -250,6 +255,20 @@ public class character_select : MonoBehaviour {
       player_object.transform.position = start_position;
       player_object.transform.localScale = resize;
       player_object.GetComponent<player>().player_number = 0;
+      if(PlayerPrefs.GetString("screen") == "TABLETOP"){
+        if(player_num == 1){
+          player_object.SendMessage("SetGravityFromCharacterSelect", "down");
+        }
+        else if(player_num == 2){
+          player_object.SendMessage("SetGravityFromCharacterSelect", "right");
+        }
+        else if(player_num == 3){
+          player_object.SendMessage("SetGravityFromCharacterSelect", "up");
+        }
+        else if(player_num == 4){
+          player_object.SendMessage("SetGravityFromCharacterSelect", "left");
+        }
+      }
     }
     else{
       Destroy(player_object);

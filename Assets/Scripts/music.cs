@@ -5,7 +5,7 @@ public class music : MonoBehaviour {
 	
 	void Update(){
 
-    if(PlayerPrefs.GetInt("music") == 1){
+    if(PlayerPrefs.GetFloat("music") == 1){
       gameObject.GetComponent<AudioSource>().enabled = true;
     }
     else{

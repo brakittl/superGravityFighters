@@ -4,11 +4,16 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class options : MonoBehaviour {
+public class game_options : MonoBehaviour {
 
 	public string mac = "";
   public int i;
   public List<Text> menu_objects;
+
+  public List<int> lives_options = new List<int>(){1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+  public List<int> rt_options = new List<int>(){25, 50, 100, 150, 250};
+  public int lives_index = 4;
+  public int rt_index = 1;
 
   Color red = new Color();
   Color white = new Color();
@@ -34,48 +39,21 @@ public class options : MonoBehaviour {
     ColorUtility.TryParseHtmlString("#ec393d", out red);
     ColorUtility.TryParseHtmlString("#ebebeb", out white);
 
-    if(PlayerPrefs.HasKey("screen")){
-      menu_objects[0].text = PlayerPrefs.GetString("screen");
+    if(!PlayerPrefs.HasKey("lives")){
+      lives_index = 4;
+      PlayerPrefs.SetInt("lives", lives_options[lives_index]);
+      PlayerPrefs.SetInt("lives_index", lives_index);
     }
-    else{
-      PlayerPrefs.SetString("screen", "MONITOR");
-    }
+    menu_objects[0].text = PlayerPrefs.GetInt("lives").ToString();
+    lives_index = PlayerPrefs.GetInt("lives_index");
     
-    if(PlayerPrefs.HasKey("tutorial")){
-      if(PlayerPrefs.GetFloat("tutorial") > 0){
-        menu_objects[1].text = "ON";
-      }
-      else{
-        menu_objects[1].text = "OFF";
-      }
+    if(!PlayerPrefs.HasKey("rt_point_limit")){
+      rt_index = 1;
+      PlayerPrefs.SetInt("rt_point_limit", rt_options[rt_index]);
+      PlayerPrefs.SetInt("rt_index", rt_index);
     }
-    else{
-      PlayerPrefs.SetFloat("tutorial", 1);
-    }
-    
-    if(PlayerPrefs.HasKey("music")){
-      if(PlayerPrefs.GetFloat("music") > 0){
-        menu_objects[2].text = "ON";
-      }
-      else{
-        menu_objects[2].text = "OFF";
-      }
-    }
-    else{
-      PlayerPrefs.SetFloat("music", 1);
-    }
-    
-    if(PlayerPrefs.HasKey("sfx")){
-      if(PlayerPrefs.GetFloat("sfx") > 0){
-        menu_objects[3].text = "ON";
-      }
-      else{
-        menu_objects[3].text = "OFF";
-      }
-    }
-    else{
-      PlayerPrefs.SetFloat("screen", 1);
-    }
+    menu_objects[1].text = PlayerPrefs.GetInt("rt_point_limit").ToString();
+    rt_index = PlayerPrefs.GetInt("rt_index");
   
   }
   
@@ -100,10 +78,15 @@ public class options : MonoBehaviour {
       axis_held_y = true;
     }
 
-    if(Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow) ||
-       (!axis_held_x && Input.GetAxis(mac + "Controller 1 Left Stick X Axis") >= 0.9f) ||
+    if(Input.GetKeyDown(KeyCode.LeftArrow) ||
        (!axis_held_x && Input.GetAxis(mac + "Controller 1 Left Stick X Axis") <= -0.9f) ){
-      ToggleOption();
+      ToggleOption(false);
+      axis_held_x = true;
+    }
+
+    if(Input.GetKeyDown(KeyCode.RightArrow) ||
+       (!axis_held_x && Input.GetAxis(mac + "Controller 1 Left Stick X Axis") >= 0.9f) ){
+      ToggleOption(true);
       axis_held_x = true;
     }
 
@@ -112,7 +95,7 @@ public class options : MonoBehaviour {
        Input.GetButtonDown(mac + "Controller 1 B Button") ||
        Input.GetButtonDown(mac + "Controller 1 Back Button") ||
        Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.B)){
-      SceneManager.LoadScene("_title");
+      SceneManager.LoadScene("_map_game_select");
     }
 
     if(Input.GetAxisRaw(mac + "Controller 1 Left Stick Y Axis") == 0){
@@ -130,46 +113,41 @@ public class options : MonoBehaviour {
   
   }
 
-  void ToggleOption(){
+  void ToggleOption(bool right){
+    // lives
     if(i == 0){
-      if(menu_objects[i].text == "MONITOR"){
-        menu_objects[i].text = "TABLETOP";
-        PlayerPrefs.SetString("screen", "TABLETOP");
+      if(right){
+        ++lives_index;
+        if(lives_index >= lives_options.Count){
+          lives_index = 0;
+        }
       }
       else{
-        menu_objects[i].text = "MONITOR";
-        PlayerPrefs.SetString("screen", "MONITOR");
+        --lives_index;
+        if(lives_index < 0){
+          lives_index = lives_options.Count - 1;
+        }
       }
+      PlayerPrefs.SetInt("lives", lives_options[lives_index]);
+      PlayerPrefs.SetInt("lives_index", lives_index);
+      menu_objects[0].text = PlayerPrefs.GetInt("lives").ToString();
     }
     else if(i == 1){
-      if(menu_objects[i].text == "ON"){
-        menu_objects[i].text = "OFF";
-        PlayerPrefs.SetFloat("tutorial", 0);
+      if(right){
+        ++rt_index;
+        if(rt_index >= rt_options.Count){
+          rt_index = 0;
+        }
       }
       else{
-        menu_objects[i].text = "ON";
-        PlayerPrefs.SetFloat("tutorial", 1);
+        --rt_index;
+        if(rt_index < 0){
+          rt_index = rt_options.Count - 1;
+        }
       }
-    }
-    else if(i == 2){
-      if(menu_objects[i].text == "ON"){
-        menu_objects[i].text = "OFF";
-        PlayerPrefs.SetFloat("music", 0);
-      }
-      else{
-        menu_objects[i].text = "ON";
-        PlayerPrefs.SetFloat("music", 1);
-      }
-    }
-    else if(i == 3){
-      if(menu_objects[i].text == "ON"){
-        menu_objects[i].text = "OFF";
-        PlayerPrefs.SetFloat("sfx", 0);
-      }
-      else{
-        menu_objects[i].text = "ON";
-        PlayerPrefs.SetFloat("sfx", 1);
-      }
+      PlayerPrefs.SetInt("rt_point_limit", rt_options[rt_index]);
+      PlayerPrefs.SetInt("rt_index", rt_index);
+      menu_objects[1].text = PlayerPrefs.GetInt("rt_point_limit").ToString();
     }
   }
 

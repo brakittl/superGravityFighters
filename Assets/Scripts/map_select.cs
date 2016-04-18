@@ -129,7 +129,14 @@ public class map_select : MonoBehaviour {
       || Input.GetButtonDown(mac + "Controller 4 B Button")
       || Input.GetKeyDown(KeyCode.B)
       || Input.GetKeyDown(KeyCode.Escape)){
-      SceneManager.LoadScene("_character_select");
+
+      if(PlayerPrefs.GetString("screen") == "MONITOR"){
+        SceneManager.LoadScene("_character_select");
+      }
+      else{
+        SceneManager.LoadScene("_character_select_tabletop");
+      }
+      
     }
 
     if(Input.GetKeyDown(KeyCode.Return) ||
@@ -138,10 +145,6 @@ public class map_select : MonoBehaviour {
       if(game_mode == 0){
         PlayerPrefs.SetString("GameMode", "SURVIVAL");
       }
-
-      // else if(game_mode == 1){
-      //   PlayerPrefs.SetString("GameMode", "DEATHMATCH");
-      // }
 
       else if(game_mode == 1){
         PlayerPrefs.SetString("GameMode", "REVERSE_TAG");
@@ -165,6 +168,10 @@ public class map_select : MonoBehaviour {
 
     }
 
+    if(Input.GetKeyDown(KeyCode.Y) || Input.GetButtonDown(mac + "Controller 1 Y Button") ){
+      SceneManager.LoadScene("_game_options");
+    }
+
     if(Input.GetAxisRaw(mac + "Controller 1 Left Stick Y Axis") == 0){
       axis_held_y = false;
     }
@@ -179,7 +186,7 @@ public class map_select : MonoBehaviour {
     game_mode_objects[game_mode].color = red;
 
     if(game_mode == 0){
-      description.text = "Survive to win! Last man standing wins after 10 lives. Come back as a ghost and poison your nemisis if you lose all 10 lives.";
+      description.text = "Survive to win! In this combat mode, the last man standing wins. Stay alive as your opponents use burst attacks and bullets to try and kill you.";
       abilities.text = "Gravity swap\nBurst attack\n1 bullet per life";
     }
     // else if(game_mode == 1){
@@ -187,7 +194,7 @@ public class map_select : MonoBehaviour {
     //   abilities.text = "Gravity swap\nBurst attack\n1 bullet per life";
     // }
     else{
-      description.text = "Run to win! Control the gravity stone to win 50 points. Steal they stone from your enemies by\ntouching them.";
+      description.text = "Run to win! In this non-combat mode, stay in control of the gravity stone to win points. Steal they stone from your enemies by touching them.";
       abilities.text = "Gravity swap";
     }
 	
