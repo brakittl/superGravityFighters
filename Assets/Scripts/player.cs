@@ -294,52 +294,63 @@ public class player : MonoBehaviour{
           hearts[i] = current_heart;
         }
         
-
       }
-
-        
   	}
 
     void TabletopGravity(string direction){
-      if(player_number == 2){
-        if(direction == "up"){
-          Gravity("left", 0f, -90f, false);
+      if(player_number == 1){
+        if(direction == "up" && player_orientation != orientation.up){
+          Gravity("up", transform.localEulerAngles.y, 180f, false);
         }
-        else if(direction == "down"){
-          Gravity("right", 0f, 90f, false);
-        }
-        else if(direction == "left"){
+        else if(direction == "down" && player_orientation != orientation.down){
           Gravity("down", -transform.localEulerAngles.y, 0f, false);
         }
-        else if(direction == "right"){
+        else if(direction == "left" && player_orientation != orientation.left){
+          Gravity("left", 0f, -90f, false);
+        }
+        else if(direction == "right" && player_orientation != orientation.right){
+          Gravity("right", 0f, 90f, false);
+        }
+      }
+      if(player_number == 2){
+        if(direction == "up" && player_orientation != orientation.left){
+          Gravity("left", 0f, -90f, false);
+        }
+        else if(direction == "down" && player_orientation != orientation.right){
+          Gravity("right", 0f, 90f, false);
+        }
+        else if(direction == "left" && player_orientation != orientation.down){
+          Gravity("down", -transform.localEulerAngles.y, 0f, false);
+        }
+        else if(direction == "right" && player_orientation != orientation.up){
           Gravity("up", transform.localEulerAngles.y, 180f, false);
         }
       }
       if(player_number == 3){
-        if(direction == "up"){
+        if(direction == "up" && player_orientation != orientation.down){
           Gravity("down", -transform.localEulerAngles.y, 0f, false);
         }
-        else if(direction == "down"){
+        else if(direction == "down" && player_orientation != orientation.up){
           Gravity("up", transform.localEulerAngles.y, 180f, false);
         }
-        else if(direction == "left"){
+        else if(direction == "left" && player_orientation != orientation.right){
           Gravity("right", 0f, 90f, false);
         }
-        else if(direction == "right"){
+        else if(direction == "right" && player_orientation != orientation.left){
           Gravity("left", 0f, -90f, false);
         }
       }
       else if(player_number == 4){
-        if(direction == "up"){
+        if(direction == "up" && player_orientation != orientation.right){
           Gravity("right", 0f, 90f, false);
         }
-        else if(direction == "down"){
+        else if(direction == "down" && player_orientation != orientation.left){
           Gravity("left", 0f, -90f, false);
         }
-        else if(direction == "left"){
+        else if(direction == "left" && player_orientation != orientation.up){
           Gravity("up", transform.localEulerAngles.y, 180f, false);
         }
-        else if(direction == "right"){
+        else if(direction == "right" && player_orientation != orientation.down){
           Gravity("down", -transform.localEulerAngles.y, 0f, false);
         }
       }
@@ -440,11 +451,11 @@ public class player : MonoBehaviour{
       // swap gravity orientation
   		if(!poisoned && !dead && !dying){
   			// up
-  			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis") < -0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up){
-  				if(!tabletop){
+  			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis") < -0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W))){
+  				if(!tabletop && player_orientation != orientation.up){
             Gravity("up", transform.localEulerAngles.y, 180f, false);
           }
-          else{
+          else if(tabletop){
             TabletopGravity("up");
           }
           gravitySwapCount++;
@@ -453,11 +464,11 @@ public class player : MonoBehaviour{
           }
         }
   			// down
-  			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis") > 0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S)) && player_orientation != orientation.down){
-  				if(!tabletop){
+  			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis") > 0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S))){
+  				if(!tabletop && player_orientation != orientation.down){
             Gravity("down", -transform.localEulerAngles.y, 0f, false);
           }
-          else{
+          else if(tabletop){
             TabletopGravity("down");
           }
           gravitySwapCount++;
@@ -466,11 +477,11 @@ public class player : MonoBehaviour{
           }
         }
   			// left
-  			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis") < -0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " X Button") || Input.GetKey(KeyCode.A)) && player_orientation != orientation.left){
-  				if(!tabletop){
+  			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis") < -0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " X Button") || Input.GetKey(KeyCode.A))){
+  				if(!tabletop && player_orientation != orientation.left){
             Gravity("left", 0f, -90f, false);
           }
-          else{
+          else if(tabletop){
             TabletopGravity("left");
           }
           gravitySwapCount++;
@@ -479,11 +490,11 @@ public class player : MonoBehaviour{
           }
         }
   			// right
-  			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis") > 0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " B Button") || Input.GetKey(KeyCode.D)) && player_orientation != orientation.right){
-  				if(!tabletop){
+  			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis") > 0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " B Button") || Input.GetKey(KeyCode.D))){
+  				if(!tabletop && player_orientation != orientation.right){
             Gravity("right", 0f, 90f, false);
           }
-          else{
+          else if(tabletop){
             TabletopGravity("right");
           }
           gravitySwapCount++;
@@ -713,6 +724,11 @@ public class player : MonoBehaviour{
       if(is_character_select){
         invincible = true;
       }
+
+      if(Input.GetKey(KeyCode.P)){
+        KillPlayer(player_color.ToLower());
+      }
+
     }
 
   	void FixedUpdate(){
@@ -1259,16 +1275,18 @@ public class player : MonoBehaviour{
 
       // decrement lives
       lives--;
-        if(lives <= 0 && level.S.numPlayers - level.S.ranking.Count - 1 <= 1)
-            level.S.lastKill(this, colors[killer_color.ToLower()]);
-        else
-            level.S.KillPause(transform.position, colors[killer_color.ToLower()], !is_character_select);
+      if(lives <= 0 && level.S.numPlayers - level.S.ranking.Count - 1 <= 1){
+        level.S.lastKill(this, colors[killer_color.ToLower()]);
+      }
+      else{
+        level.S.KillPause(transform.position, colors[killer_color.ToLower()], !is_character_select);
+      }
 
-      // turn off poison
-      poisoned = false;
-      poisonGO.SetActive(false);
-      thrust = jump_speed;
-      speed = run_speed;
+      // // turn off poison
+      // poisoned = false;
+      // poisonGO.SetActive(false);
+      // thrust = jump_speed;
+      // speed = run_speed;
 
       // reset bullet count
       numBullets = 1;
@@ -1301,6 +1319,7 @@ public class player : MonoBehaviour{
       dying = true;
       body.velocity = new Vector3(0f, 0f, 0f);
       yield return new WaitForSeconds(0.3f);
+      dying = false;
 
       // set position off screen
       Vector3 pos = transform.position;
@@ -1315,7 +1334,7 @@ public class player : MonoBehaviour{
       // respawn after 1 second
       yield return new WaitForSeconds(1f);
 
-    if(lives == 0 && (level.S.gamemode == GameMode.SURVIVAL)){
+      if(lives == 0 && (level.S.gamemode == GameMode.SURVIVAL)){
         dead = true;
         level.S.alive_players.Remove(this.gameObject);
         transform.position = offscreen;
@@ -1324,15 +1343,17 @@ public class player : MonoBehaviour{
         Debug.Log("dead player");
       }
 
-        if (!dead)
-        {
-            transform.position = level.S.findRespawn();
-  		    transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
-            body.velocity = new Vector2(0f, 0f);
-            player_orientation = orientation.down;
-            level.S.alive_players.Insert(0, gameObject);
-            player_animator.Play("Appear");
-        }      
+      if(!dead){
+        transform.position = level.S.findRespawn();
+	      transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
+        body.velocity = new Vector2(0f, 0f);
+        player_orientation = orientation.down;
+        Vector3 circle_position = new Vector3(transform.position.x - 0.02f, transform.position.x + 0.01f, 0f);
+        GameObject respawn_circle = Instantiate(Resources.Load("__Prefabs/respawn_circle"), circle_position, transform.rotation) as GameObject;
+        respawn_circle.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("general/pulse_" + player_color.ToLower());
+        level.S.alive_players.Insert(0, gameObject);
+        player_animator.Play("Appear");
+      }      
       respawning = true;
   	}
 

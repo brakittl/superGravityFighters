@@ -133,12 +133,12 @@ public class level : MonoBehaviour {
 
       if(!tabletop){
         podium = podium_m;
-        podium_tt.SetActive(false);
       }
       else{
         podium = podium_tt;
-        podium_m.SetActive(false);
       }
+      podium_tt.SetActive(false);
+      podium_m.SetActive(false);
 
       // podium = GameObject.Find("Podium");
       // if(podium != null){
@@ -514,21 +514,24 @@ public class level : MonoBehaviour {
     yield return new WaitForSeconds(0.005f);
     gameObject.transform.position = originalPos;
 
-      CameraShake();
-      yield return new WaitForSeconds(0.005f);
-      gameObject.transform.position = originalPos;
+    CameraShake();
+    yield return new WaitForSeconds(0.005f);
+    gameObject.transform.position = originalPos;
 
-      CameraShake();
-      yield return new WaitForSeconds(0.005f);
-      gameObject.transform.position = originalPos;
+    CameraShake();
+    yield return new WaitForSeconds(0.005f);
+    gameObject.transform.position = originalPos;
 
     CameraShake();
     gameObject.transform.position = originalPos;
     camera_shaking = false;
 
-        if (gamemode == GameMode.SURVIVAL && create_streak){
+    if(gamemode == GameMode.SURVIVAL){
       Destroy(streak);
-        }
+    }
+
+    // yield return new WaitForSeconds(0.02f);
+
     Time.timeScale = 1;
     running = false;
   }
