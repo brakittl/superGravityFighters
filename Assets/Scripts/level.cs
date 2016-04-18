@@ -36,7 +36,7 @@ public class level : MonoBehaviour {
   public Canvas PostGameUITabletop;
 
   public GameObject gravity_stone;
-  public Vector3 stone_position;
+  Vector3 stone_position = new Vector3(0f, 0f, 0f);
 
   public Sprite gold, silver, bronze;
   List<Vector3> podiumPositions = new List<Vector3>(){ new Vector3(-1.56f, 5f, 0f), new Vector3(-0.29f, 5f, 0f), new Vector3(0.98f, 5f, 0f), new Vector3(2.22f, 5f, 0f) };
@@ -1123,6 +1123,7 @@ public class level : MonoBehaviour {
     }
 
     if(first != null){
+      first.GetComponent<Animator>().SetBool("grounded", false);
       first.GetComponent<player>().player_number *= -1;
       first.GetComponent<player>().Gravity("down", 0f, 0f, false);
       if(!tabletop){
@@ -1147,6 +1148,7 @@ public class level : MonoBehaviour {
     }
 
     if(second != null){
+      second.GetComponent<Animator>().SetBool("grounded", false);
       second.GetComponent<player>().player_number *= -1;
       if(!tabletop){
         second.GetComponent<player>().Gravity("down", 0f, 0f, false);
@@ -1176,6 +1178,7 @@ public class level : MonoBehaviour {
     }
 
     if(third != null){
+      third.GetComponent<Animator>().SetBool("grounded", false);
       third.GetComponent<player>().player_number *= -1;
       if(!tabletop){
         third.GetComponent<player>().Gravity("down", 0f, 0f, false);
@@ -1205,6 +1208,7 @@ public class level : MonoBehaviour {
     }
 
     if(fourth != null){
+      fourth.GetComponent<Animator>().SetBool("grounded", false);
       fourth.GetComponent<player>().player_number *= -1;
       if(!tabletop){
         fourth.GetComponent<player>().Gravity("down", 0f, 0f, false);

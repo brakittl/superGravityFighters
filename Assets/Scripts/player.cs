@@ -132,8 +132,8 @@ public class player : MonoBehaviour{
     Color black = new Color();
     public Dictionary<string, Color> colors;
 
-    // character select
-    bool is_character_select;
+    // control bools
+    bool is_character_select, tabletop;
 
   // ==[helper functions]=======================================================
   // ===========================================================================
@@ -181,12 +181,21 @@ public class player : MonoBehaviour{
         mac = "";
       }
 
+      // check for character_select_scene
       if(SceneManager.GetActiveScene().name == "_character_select" ||
          SceneManager.GetActiveScene().name == "_character_select_tabletop"){
         is_character_select = true;
       }
       else{
         is_character_select = false;
+      }
+
+      // tabletop or monitor
+      if(PlayerPrefs.GetString("screen") == "MONITOR"){
+        tabletop = false;
+      }
+      else{
+        tabletop = true;
       }
 
       // initialize variables
@@ -291,6 +300,51 @@ public class player : MonoBehaviour{
         
   	}
 
+    void TabletopGravity(string direction){
+      if(player_number == 2){
+        if(direction == "up"){
+          Gravity("left", 0f, -90f, false);
+        }
+        else if(direction == "down"){
+          Gravity("right", 0f, 90f, false);
+        }
+        else if(direction == "left"){
+          Gravity("down", -transform.localEulerAngles.y, 0f, false);
+        }
+        else if(direction == "right"){
+          Gravity("up", transform.localEulerAngles.y, 180f, false);
+        }
+      }
+      if(player_number == 3){
+        if(direction == "up"){
+          Gravity("down", -transform.localEulerAngles.y, 0f, false);
+        }
+        else if(direction == "down"){
+          Gravity("up", transform.localEulerAngles.y, 180f, false);
+        }
+        else if(direction == "left"){
+          Gravity("right", 0f, 90f, false);
+        }
+        else if(direction == "right"){
+          Gravity("left", 0f, -90f, false);
+        }
+      }
+      else if(player_number == 4){
+        if(direction == "up"){
+          Gravity("right", 0f, 90f, false);
+        }
+        else if(direction == "down"){
+          Gravity("left", 0f, -90f, false);
+        }
+        else if(direction == "left"){
+          Gravity("up", transform.localEulerAngles.y, 180f, false);
+        }
+        else if(direction == "right"){
+          Gravity("down", -transform.localEulerAngles.y, 0f, false);
+        }
+      }
+    }
+
   // ==[updates]================================================================
   // ===========================================================================
 
@@ -361,7 +415,6 @@ public class player : MonoBehaviour{
             rt_text.color = colors[player_color.ToLower() + "_ui"];
           }
         }
-
       }
 
       // ==[pausing]============================================================
@@ -388,39 +441,55 @@ public class player : MonoBehaviour{
   		if(!poisoned && !dead && !dying){
   			// up
   			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis") < -0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up){
-  				Gravity("up", transform.localEulerAngles.y, 180f, false);
+  				if(!tabletop){
+            Gravity("up", transform.localEulerAngles.y, 180f, false);
+          }
+          else{
+            TabletopGravity("up");
+          }
           gravitySwapCount++;
           if(PlayerPrefs.GetFloat("sfx") != 0){
             sound.PlayOneShot(gravitySwap, gravVolume);
           }
-
         }
   			// down
   			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis") > 0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S)) && player_orientation != orientation.down){
-  				Gravity("down", -transform.localEulerAngles.y, 0f, false);
+  				if(!tabletop){
+            Gravity("down", -transform.localEulerAngles.y, 0f, false);
+          }
+          else{
+            TabletopGravity("down");
+          }
           gravitySwapCount++;
           if(PlayerPrefs.GetFloat("sfx") != 0){
             sound.PlayOneShot(gravitySwap, gravVolume);
           }
-
         }
   			// left
   			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis") < -0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " X Button") || Input.GetKey(KeyCode.A)) && player_orientation != orientation.left){
-  				Gravity("left", 0f, -90f, false);
+  				if(!tabletop){
+            Gravity("left", 0f, -90f, false);
+          }
+          else{
+            TabletopGravity("left");
+          }
           gravitySwapCount++;
           if(PlayerPrefs.GetFloat("sfx") != 0){
             sound.PlayOneShot(gravitySwap, gravVolume);
           }
-
         }
   			// right
   			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis") > 0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " B Button") || Input.GetKey(KeyCode.D)) && player_orientation != orientation.right){
-  				Gravity("right", 0f, 90f, false);
+  				if(!tabletop){
+            Gravity("right", 0f, 90f, false);
+          }
+          else{
+            TabletopGravity("right");
+          }
           gravitySwapCount++;
           if(PlayerPrefs.GetFloat("sfx") != 0){
             sound.PlayOneShot(gravitySwap, gravVolume);
           }
-
         }
   		}
 
