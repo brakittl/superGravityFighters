@@ -22,7 +22,7 @@ public class level : MonoBehaviour {
 
   public Vector3[] respawnPoints;
   public List<player> ranking = new List<player>();
-  int numPlayers;
+  public int numPlayers;
   // Texture2D black = new Texture2D(1, 1);
 
   public bool gameOver;
@@ -44,7 +44,7 @@ public class level : MonoBehaviour {
   GameObject streak;
   public bool pause = false, running = false;
 
-  float shakeIntensity = 0.2f;
+  float shakeIntensity = 0.15f;
   bool camera_shaking = false;
   public bool block_camera_shake;
 
@@ -198,8 +198,16 @@ public class level : MonoBehaviour {
   }
 
   void Update(){
-    // disable all control if current scene is not a map
-    if(!isMap){
+
+        if (deathZoom)
+        {
+            gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, target_position, 1.5f * Time.deltaTime);
+        }
+            
+        
+
+        // disable all control if current scene is not a map
+        if (!isMap){
       return;
     }
 
@@ -264,7 +272,7 @@ public class level : MonoBehaviour {
     else{
 
       if(!camera_shaking){
-        MoveCamera();
+        //MoveCamera();
       }
 
       if(gamemode == GameMode.SURVIVAL){
@@ -464,11 +472,8 @@ public class level : MonoBehaviour {
     rot.z = Random.Range(0, 90);
     if(gamemode == GameMode.SURVIVAL && create_streak){
       streak = Instantiate(killStreak, pos, Quaternion.Euler(rot)) as GameObject;
-			//print(streak.GetComponent<MeshRenderer>().material.color);
 			streak.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", player_color);
-			//print(streak.GetComponent<MeshRenderer>().material.color);
     }
-    
     CameraShake();
     yield return new WaitForSeconds(0.005f);
     gameObject.transform.position = originalPos;
@@ -492,10 +497,10 @@ public class level : MonoBehaviour {
     CameraShake();
     gameObject.transform.position = originalPos;
     camera_shaking = false;
-    
-    if(gamemode == GameMode.SURVIVAL && create_streak){
+
+        if (gamemode == GameMode.SURVIVAL && create_streak){
       Destroy(streak);
-    }
+        }
     Time.timeScale = 1;
     running = false;
   }
@@ -507,7 +512,35 @@ public class level : MonoBehaviour {
     gameObject.transform.position = pos;
   }
 
-  public Vector3 findRespawn(){
+    public void lastKill(player lastDead, Color player_color)
+    {
+        if (!running)
+        {
+            running = true;
+            StartCoroutine(lastDeath(lastDead, player_color));
+        }        
+    }
+
+    bool deathZoom = false;
+    IEnumerator lastDeath(player lastDead, Color player_color)
+    {
+        Time.timeScale = 0.1f;
+        Vector3 rot = transform.rotation.eulerAngles;
+
+        rot.z = Random.Range(0, 90);
+        streak = Instantiate(killStreak, lastDead.gameObject.transform.position, Quaternion.Euler(rot)) as GameObject;
+        streak.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", player_color);
+
+        deathZoom = true;
+        target_position = lastDead.transform.position;
+        yield return new WaitForSeconds(0.1f);
+
+        Time.timeScale = 1;
+        deathZoom = false;
+        Destroy(streak);
+    }
+
+    public Vector3 findRespawn(){
     
     Vector3 respawnPoint = new Vector3(0, 0, 0);
     float closestPlayerDist = 10000f;

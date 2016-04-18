@@ -1189,7 +1189,6 @@ public class player : MonoBehaviour{
   	}
 
   	public void KillPlayer(string killer_color){
-		print(killer_color);
       if(PlayerPrefs.GetFloat("sfx") != 0){
         sound.PlayOneShot(death);
         sound.PlayOneShot(swordSlash);
@@ -1201,7 +1200,10 @@ public class player : MonoBehaviour{
   	  up_slash.GetComponent<BoxCollider2D>().enabled = false;
   	  down_slash.GetComponent<BoxCollider2D>().enabled = false;
       lives--;
-      level.S.KillPause(transform.position, colors[killer_color.ToLower()], !is_character_select);
+        if(lives <= 0 && level.S.numPlayers - level.S.ranking.Count - 1 <= 1)
+            level.S.lastKill(this, colors[killer_color.ToLower()]);
+        else
+            level.S.KillPause(transform.position, colors[killer_color.ToLower()], !is_character_select);
 
       // turn off poison
       poisoned = false;
@@ -1211,7 +1213,8 @@ public class player : MonoBehaviour{
 
       numBullets = 1;
 
-      player_animator.Play("Death");
+        body.velocity = new Vector3(0f, 0f, 0f);
+        player_animator.Play("Death");
 
       level.S.alive_players.Remove(gameObject);
 
@@ -1230,11 +1233,7 @@ public class player : MonoBehaviour{
   	IEnumerator Wait(){
 
       Time.timeScale = 0.1f;
-
-      dying = true;
-      body.velocity = new Vector3(0f, 0f, 0f);
       yield return new WaitForSeconds(0.3f);
-      dying = false;
 
       Vector3 pos = transform.position;
   		transform.position = offscreen;
@@ -1246,15 +1245,7 @@ public class player : MonoBehaviour{
 
       yield return new WaitForSeconds(1f);
 
-      transform.position = level.S.findRespawn();
-  		transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
-      body.velocity = new Vector2(0f, 0f);
-      player_orientation = orientation.down;
-      level.S.alive_players.Insert(0, gameObject);
-      player_animator.Play("Appear");
-  		
-      if(lives == 0 && (level.S.gamemode == GameMode.SURVIVAL)){
-        //halo.SetActive(true);
+    if(lives == 0 && (level.S.gamemode == GameMode.SURVIVAL)){
         dead = true;
         level.S.alive_players.Remove(this.gameObject);
         transform.position = offscreen;
@@ -1262,7 +1253,16 @@ public class player : MonoBehaviour{
         level.S.ranking.Add(this);
         Debug.Log("dead player");
       }
-      
+
+        if (!dead)
+        {
+            transform.position = level.S.findRespawn();
+  		    transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
+            body.velocity = new Vector2(0f, 0f);
+            player_orientation = orientation.down;
+            level.S.alive_players.Insert(0, gameObject);
+            player_animator.Play("Appear");
+        }      
       respawning = true;
   	}
 
