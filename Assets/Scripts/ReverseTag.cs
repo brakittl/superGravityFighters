@@ -12,6 +12,10 @@ public class ReverseTag : MonoBehaviour {
 	public float total_current_time_with_player;
 	GameObject pulse_instance_1;
 
+	public bool five_points_left, ten_points_left, twenty_points_left, thirty_points_left;
+
+	public AudioClip five_pts_mp3, ten_pts_mp3, twenty_pts_mp3, thirty_pts_mp3;
+
   AudioSource sound;
   public AudioClip stealSound;
 
@@ -23,6 +27,7 @@ public class ReverseTag : MonoBehaviour {
   LayerMask ignore_layers = 1 << LayerMask.NameToLayer("Default"); // only check for collisions with layerX
 
 	void Start(){
+		five_points_left = ten_points_left = twenty_points_left = thirty_points_left = false;
 		attached_to_player = false;
 		ResetTimers();
     sound = GetComponent<AudioSource>();
@@ -37,6 +42,7 @@ public class ReverseTag : MonoBehaviour {
 			total_current_time_with_player += Time.deltaTime;
 			transform.parent.GetComponent<player>().rt_total_time += Time.deltaTime;
 			transform.parent.GetComponent<player>().rt_points = (int)(transform.parent.GetComponent<player>().rt_total_time / time_until_point);
+			CheckPoints(transform.parent.GetComponent<player>().rt_points);
 			transform.localPosition = new Vector3(-0.06f, 0.15f, 0f);
 			transform.localEulerAngles = new Vector3(0f, 0f, 0f);
 			if(total_current_time_with_player >= transform.parent.GetComponent<player>().rt_longest_continuous_hold){
@@ -101,6 +107,30 @@ public class ReverseTag : MonoBehaviour {
     }
     return false;
   }
+
+	void CheckPoints(int points)
+	{
+		if (((level.S.rt_point_limit - points) == 30) && !thirty_points_left)
+		{
+			sound.PlayOneShot(thirty_pts_mp3);
+			thirty_points_left = true;
+		}
+		else if (((level.S.rt_point_limit - points) == 20) && !twenty_points_left)
+		{
+			sound.PlayOneShot(twenty_pts_mp3);
+			twenty_points_left = true;
+		}
+		else if (((level.S.rt_point_limit - points) == 10) && !ten_points_left)
+		{
+			sound.PlayOneShot(ten_pts_mp3);
+			ten_points_left = true;
+		}
+		else if (((level.S.rt_point_limit - points) == 5) && !five_points_left)
+		{
+			sound.PlayOneShot(five_pts_mp3);
+			five_points_left = true;
+		}
+	}
 
   void SetNewTarget(){
     target_position = new Vector3(Random.Range(-1.5f, 1.5f), Random.Range(-1.5f, 1.5f), 0f);
