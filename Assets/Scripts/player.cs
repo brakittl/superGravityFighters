@@ -1344,13 +1344,14 @@ public class player : MonoBehaviour{
       }
 
       if(!dead){
-        transform.position = level.S.findRespawn();
+        Vector3 respawn_position = level.S.findRespawn();
+        Vector3 circle_position = new Vector3(respawn_position.x - 0.02f, respawn_position.y + 0.01f, 0f);
+        Instantiate(Resources.Load<GameObject>("__Prefabs/_respawn_circles/respawn_circle_" + player_color.ToLower()), circle_position, transform.rotation);
+        transform.position = respawn_position;
 	      transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
         body.velocity = new Vector2(0f, 0f);
         player_orientation = orientation.down;
-        Vector3 circle_position = new Vector3(transform.position.x - 0.02f, transform.position.x + 0.01f, 0f);
-        GameObject respawn_circle = Instantiate(Resources.Load("__Prefabs/respawn_circle"), circle_position, transform.rotation) as GameObject;
-        respawn_circle.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("general/pulse_" + player_color.ToLower());
+        // respawn_circle.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("general/pulse_" + player_color.ToLower());
         level.S.alive_players.Insert(0, gameObject);
         player_animator.Play("Appear");
       }      
