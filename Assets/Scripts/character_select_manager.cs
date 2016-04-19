@@ -11,6 +11,8 @@ public class character_select_manager : MonoBehaviour {
   public GameObject ready;
   public GameObject ready_text;
 
+  public GameObject camera;
+
   string[] player_prefab_names = new string[] {"black_player", "blue_player", "green_player",  "purple_player", "red_player", "yellow_player"};
 
   public Dictionary<string, int> selected_character = new Dictionary<string, int>(){
@@ -95,7 +97,6 @@ public class character_select_manager : MonoBehaviour {
           if(ready_character["P" + i] >= 0){
             PlayerPrefs.SetInt("P" + i + "Num", ready_character["P" + i]);
             PlayerPrefs.SetString("P" + i, player_prefab_names[ready_character["P" + i]]);
-                        
           }
           else{
             PlayerPrefs.SetInt("P" + i + "Num", -2);
@@ -103,11 +104,10 @@ public class character_select_manager : MonoBehaviour {
           }
         }
 
-        foreach(string p_string in player_prefab_names)
-                {
-                    print(p_string);
-                }
-
+        foreach(string p_string in player_prefab_names){
+          print(p_string);
+        }
+        PlayerPrefs.SetFloat("audio_time", camera.GetComponent<AudioSource>().time);
         SceneManager.LoadScene("_map_game_select");
       }
     }    

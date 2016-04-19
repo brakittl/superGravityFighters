@@ -1267,7 +1267,7 @@ public class level : MonoBehaviour {
 
     if(gamemode == GameMode.DEATHMATCH || gamemode == GameMode.SURVIVAL){
       place.FindChild("killsText").GetComponent<Text>().text = "Kills: " + p.playersKilled.Count;
-      place.FindChild("deathsText").GetComponent<Text>().text = "Deaths: " + (10 - p.lives);
+      place.FindChild("deathsText").GetComponent<Text>().text = "Deaths: " + (PlayerPrefs.GetInt("lives") - p.lives);
     }
     else if(gamemode == GameMode.REVERSE_TAG){
       place.FindChild("killsText").GetComponent<Text>().text = "Points: " + p.rt_points;

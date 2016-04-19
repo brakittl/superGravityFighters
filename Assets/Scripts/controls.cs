@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class controls : MonoBehaviour {
 
 	public string mac = "";
+  public GameObject camera;
   
   // Use this for initialization
   void Start(){
@@ -30,6 +31,7 @@ public class controls : MonoBehaviour {
        Input.GetButtonDown(mac + "Controller 1 Back Button") ||
        Input.GetButtonDown(mac + "Controller 1 Start Button") ||
        Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.B)){
+      PlayerPrefs.SetFloat("audio_time", camera.GetComponent<AudioSource>().time);
       SceneManager.LoadScene("_title");
     }
   

@@ -98,6 +98,7 @@ public class EndGame : MonoBehaviour {
     if (readyCount >= standing.Capacity)
     {
       //SceneManager.LoadScene("_scene_MapSelect");
+      PlayerPrefs.SetFloat("audio_time", gameObject.GetComponent<AudioSource>().time);
       SceneManager.LoadScene("_scene_Menu");
     }
   }

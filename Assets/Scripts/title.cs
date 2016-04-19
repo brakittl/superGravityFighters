@@ -15,6 +15,8 @@ public class title : MonoBehaviour {
   Color red = new Color();
   Color white = new Color();
 
+  public GameObject camera;
+
   bool axis_held;
 
 	// Use this for initialization
@@ -97,19 +99,24 @@ public class title : MonoBehaviour {
         PlayerPrefs.SetString("P4", "none");
 
         if(PlayerPrefs.GetString("screen") == "MONITOR"){
+          PlayerPrefs.SetFloat("audio_time", camera.GetComponent<AudioSource>().time);
           SceneManager.LoadScene("_character_select");
         }
         else{
+          PlayerPrefs.SetFloat("audio_time", camera.GetComponent<AudioSource>().time);
           SceneManager.LoadScene("_character_select_tabletop");
         }
       }
       if(i == 1){
+        PlayerPrefs.SetFloat("audio_time", camera.GetComponent<AudioSource>().time);
         SceneManager.LoadScene("_options");
       }
       if(i == 2){
+        PlayerPrefs.SetFloat("audio_time", camera.GetComponent<AudioSource>().time);
         SceneManager.LoadScene("_controls");
       }
       if(i == 3){
+        PlayerPrefs.SetFloat("audio_time", camera.GetComponent<AudioSource>().time);
         SceneManager.LoadScene("_credits");
       }
 
