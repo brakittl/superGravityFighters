@@ -15,6 +15,8 @@ public class game_options : MonoBehaviour {
   public int lives_index = 4;
   public int rt_index = 1;
 
+  public GameObject camera;
+
   Color red = new Color();
   Color white = new Color();
 
@@ -95,6 +97,7 @@ public class game_options : MonoBehaviour {
        Input.GetButtonDown(mac + "Controller 1 B Button") ||
        Input.GetButtonDown(mac + "Controller 1 Back Button") ||
        Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.B)){
+      PlayerPrefs.SetFloat("audio_time", camera.GetComponent<AudioSource>().time);
       SceneManager.LoadScene("_map_game_select");
     }
 

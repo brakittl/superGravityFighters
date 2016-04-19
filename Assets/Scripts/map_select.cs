@@ -18,6 +18,8 @@ public class map_select : MonoBehaviour {
   public Text abilities;
   public Text map_name;
 
+  public GameObject camera;
+
   Color red = new Color();
   Color white = new Color();
   
@@ -131,9 +133,11 @@ public class map_select : MonoBehaviour {
       || Input.GetKeyDown(KeyCode.Escape)){
 
       if(PlayerPrefs.GetString("screen") == "MONITOR"){
+        PlayerPrefs.SetFloat("audio_time", camera.GetComponent<AudioSource>().time);
         SceneManager.LoadScene("_character_select");
       }
       else{
+        PlayerPrefs.SetFloat("audio_time", camera.GetComponent<AudioSource>().time);
         SceneManager.LoadScene("_character_select_tabletop");
       }
       
@@ -151,18 +155,23 @@ public class map_select : MonoBehaviour {
       }
 
       if(map == 0){
+        PlayerPrefs.SetFloat("audio_time", camera.GetComponent<AudioSource>().time);
         SceneManager.LoadScene("_galaxy");
       }
       else if(map == 1){
+        PlayerPrefs.SetFloat("audio_time", camera.GetComponent<AudioSource>().time);
         SceneManager.LoadScene("_city");
       }
       else if(map == 2){
+        PlayerPrefs.SetFloat("audio_time", camera.GetComponent<AudioSource>().time);
         SceneManager.LoadScene("_desert");
       }
       else if(map == 3){
+        PlayerPrefs.SetFloat("audio_time", camera.GetComponent<AudioSource>().time);
         SceneManager.LoadScene("_forest");
       }
       else if(map == 4){
+        PlayerPrefs.SetFloat("audio_time", camera.GetComponent<AudioSource>().time);
         SceneManager.LoadScene("_volcano");
       }
 

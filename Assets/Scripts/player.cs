@@ -267,7 +267,7 @@ public class player : MonoBehaviour{
           rt_text_GO.SetActive(true);
         }
 
-        // lives = PlayerPrefs.GetInt("lives");
+        lives = PlayerPrefs.GetInt("lives");
 
         // initialize hearts/skulls
         hearts = new GameObject[10];

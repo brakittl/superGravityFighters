@@ -35,6 +35,8 @@ public class character_select : MonoBehaviour {
   public int prefab_number = 0;
   public GameObject player_object;
 
+  public GameObject camera;
+
   Color character_color = new Color(1, 1, 1, 1);
 
   bool joined;
@@ -121,6 +123,7 @@ public class character_select : MonoBehaviour {
       if(Input.GetButtonDown(mac + "Controller " + player_num + " B Button") ||
          Input.GetButtonDown(mac + "Controller " + player_num + " Back Button") ||
          Input.GetKeyDown(KeyCode.B)){
+        PlayerPrefs.SetFloat("audio_time", camera.GetComponent<AudioSource>().time);
         SceneManager.LoadScene("_title");
       }
 

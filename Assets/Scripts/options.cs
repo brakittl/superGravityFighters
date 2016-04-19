@@ -15,6 +15,8 @@ public class options : MonoBehaviour {
 
   bool axis_held_x, axis_held_y;
 
+  public GameObject camera;
+
   // Use this for initialization
   void Start(){
     // Mac Check
@@ -112,6 +114,7 @@ public class options : MonoBehaviour {
        Input.GetButtonDown(mac + "Controller 1 B Button") ||
        Input.GetButtonDown(mac + "Controller 1 Back Button") ||
        Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.B)){
+      PlayerPrefs.SetFloat("audio_time", camera.GetComponent<AudioSource>().time);
       SceneManager.LoadScene("_title");
     }
 
@@ -155,6 +158,7 @@ public class options : MonoBehaviour {
       if(menu_objects[i].text == "ON"){
         menu_objects[i].text = "OFF";
         PlayerPrefs.SetFloat("music", 0);
+        PlayerPrefs.SetFloat("audio_time", 0f);
       }
       else{
         menu_objects[i].text = "ON";
