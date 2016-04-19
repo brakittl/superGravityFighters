@@ -1188,7 +1188,9 @@ public class player : MonoBehaviour{
       // decrement lives
       lives--;
         if(lives <= 0 && level.S.numPlayers - level.S.ranking.Count - 1 <= 1)
-            level.S.lastKill(this, colors[killer_color.ToLower()]);
+            level.S.lastKill(this, colors[killer_color.ToLower()], 0.4f);
+        else if(lives <= 0)
+            level.S.lastKill(this, colors[killer_color.ToLower()], 0.2f);
         else
             level.S.KillPause(transform.position, colors[killer_color.ToLower()], !is_character_select);
 

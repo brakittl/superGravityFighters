@@ -198,7 +198,7 @@ public class level : MonoBehaviour {
 
         if (deathZoom)
         {
-            gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, target_position, 1.5f * Time.deltaTime);
+            gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, target_position, 2f * Time.deltaTime);
         }
             
         
@@ -511,17 +511,17 @@ public class level : MonoBehaviour {
     gameObject.transform.position = pos;
   }
 
-    public void lastKill(player lastDead, Color player_color)
+    public void lastKill(player lastDead, Color player_color, float waitTime)
     {
         if (!running)
         {
             running = true;
-            StartCoroutine(lastDeath(lastDead, player_color));
+            StartCoroutine(lastDeath(lastDead, player_color, waitTime));
         }        
     }
 
     bool deathZoom = false;
-    IEnumerator lastDeath(player lastDead, Color player_color)
+    IEnumerator lastDeath(player lastDead, Color player_color, float waitTime)
     {
         Time.timeScale = 0.1f;
         Vector3 rot = transform.rotation.eulerAngles;
@@ -532,7 +532,7 @@ public class level : MonoBehaviour {
 
         deathZoom = true;
         target_position = lastDead.transform.position;
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(waitTime);
 
         Time.timeScale = 1;
         deathZoom = false;
