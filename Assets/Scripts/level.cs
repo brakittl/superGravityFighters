@@ -52,6 +52,7 @@ public class level : MonoBehaviour {
   float shakeIntensity = 0.15f;
   bool camera_shaking = false;
   public bool block_camera_shake;
+    Vector3 normalPosition;
 
   AudioSource music;
   public AudioClip victoryMusic;
@@ -91,6 +92,7 @@ public class level : MonoBehaviour {
 
   void Start(){
 
+        normalPosition = gameObject.transform.position;
     // Mac Check
     if(Application.platform == RuntimePlatform.OSXEditor ||
        Application.platform == RuntimePlatform.OSXPlayer ||
@@ -235,6 +237,10 @@ public class level : MonoBehaviour {
         {
             gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, target_position, 2f * Time.deltaTime);
         }
+        else
+        {
+            gameObject.transform.position = normalPosition;
+        }
             
         
 
@@ -243,7 +249,7 @@ public class level : MonoBehaviour {
       return;
     }
 
-    if(gameOver){
+    if(gameOver && !deathZoom){
       
       if(!playingVictory){
         music.clip = victoryMusic;
