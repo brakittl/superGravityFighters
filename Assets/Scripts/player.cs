@@ -71,7 +71,7 @@ public class player : MonoBehaviour{
 
   	// sounds
   	AudioSource sound;
-  	public AudioClip gunshot, block, death, swordSlash, gravitySwap, shieldPulse;
+  	public AudioClip gunshot, block, death, swordSlash, gravitySwap, shieldPulse, defeat;
     float gravVolume = 0.1f;
 
     // bullet information
@@ -1188,9 +1188,15 @@ public class player : MonoBehaviour{
       // decrement lives
       lives--;
         if(lives <= 0 && level.S.numPlayers - level.S.ranking.Count - 1 <= 1)
+        {
             level.S.lastKill(this, colors[killer_color.ToLower()], 0.4f);
-        else if(lives <= 0)
+            sound.PlayOneShot(defeat);
+        }
+        else if (lives <= 0)
+        {
             level.S.lastKill(this, colors[killer_color.ToLower()], 0.2f);
+            sound.PlayOneShot(defeat);
+        }
         else
             level.S.KillPause(transform.position, colors[killer_color.ToLower()], !is_character_select);
 
