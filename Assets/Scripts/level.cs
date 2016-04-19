@@ -492,6 +492,20 @@ public class level : MonoBehaviour {
     }
   }
 
+    void OnGUI()
+    {
+        
+        if (deathZoom)
+        {
+            float w = 0.3f, h = 0.2f;
+            GUIStyle style = new GUIStyle();
+            style.normal.textColor = Color.red;
+            style.fontSize = 45;
+            GUI.Label(new Rect((Screen.width*(1-w))/2, (Screen.height*(1-h))/2, Screen.width * w, Screen.height * h), 
+                "Game Over", style);
+        }
+    }
+
   public Vector3 returnPosition(int i){
     return respawnPoints[i];
   }
