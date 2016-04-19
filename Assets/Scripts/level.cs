@@ -26,15 +26,21 @@ public class level : MonoBehaviour {
 
   public bool gameOver;
   public int readyCount;
+  
   public GameObject PostGameOb;
   public GameObject PostGameBoxes;
   public Canvas PostGameUI;
 
+  public GameObject PostGameObTabletop;
+  public GameObject PostGameBoxesTabletop;
+  public Canvas PostGameUITabletop;
+
   public GameObject gravity_stone;
-  public Vector3 stone_position;
+  Vector3 stone_position = new Vector3(0f, 0f, 0f);
 
   public Sprite gold, silver, bronze;
   List<Vector3> podiumPositions = new List<Vector3>(){ new Vector3(-1.56f, 5f, 0f), new Vector3(-0.29f, 5f, 0f), new Vector3(0.98f, 5f, 0f), new Vector3(2.22f, 5f, 0f) };
+  List<Vector3> tabletopPositions = new List<Vector3>(){ new Vector3(-1.11f, -1.06f, 0f), new Vector3(2.09f, -1.11f, 0f), new Vector3(1.1f, 1.11f, 0f), new Vector3(-2.13f, 1.14f, 0f) };
 
   public List<GameObject> alive_players;
   public Vector3 target_position;
@@ -50,15 +56,18 @@ public class level : MonoBehaviour {
   AudioSource music;
   public AudioClip victoryMusic;
   bool playingVictory = false;
+  bool tabletop;
+
+  public GameObject pg_canvas, pg_boxes, pg_canvas_tt, pg_boxes_tt, podium_m, podium_tt; 
 
   public Dictionary<string, string> medals = new Dictionary<string, string>(){
     { "SKY DIVER","most consecutive\nairtime" },
     { "TELEPORTER","most border\nteleports" },
     { "CAUTIOUS","least border\nteleports" },
-    { "AIRBORNE","most time\nin air" },
-    { "GROUNDED","least\nairtime" },
-    { "HOARDER","most bullets\npicked up" },
-    { "POVERTY","least bullets\npicked up" },
+    { "AIRBORNE","most\nair time" },
+    { "GROUNDED","least\nair time" },
+    { "HOARDER","most bullets\ncollected" },
+    { "POVERTY","least bullets\ncollected" },
     { "ASTRONAUT","most gravity\nswaps" },
     { "STEADY","least gravity\nswaps" },
     { "SURVIVOR","longest\nlife" },
@@ -68,16 +77,16 @@ public class level : MonoBehaviour {
     { "SNIPER","best bullet\naccuracy" },
     { "ASSASSIN","most sword\nkills" },
     { "GUNSLINGER","most gun\nkills" },
-    { "PACIFIST","least\nkills" },
+    { "PACIFIST","least total\nkills" },
     { "ATHLETE","most distance\ntraveled" },
     { "CAMPER","least distance\ntraveled" },
-    { "WHOOPS","most\nsuicides" },
+    { "WHOOPS","most self\nsuicides" },
     { "PARTICIPANT","you had\nfun :)" },
-    { "THUG LIFE","most\nsteals" },
-    { "GOOD PERSON","least\nsteals" },
+    { "THUG LIFE","most stone\nsteals" },
+    { "GOOD PERSON","least stone\nsteals" },
     { "IRON GRIP","longest single\npossession" },
     { "BUTTERFINGERS","shortest single\npossession" },
-    { "QUICKDRAW","first\npossession" }
+    { "QUICKDRAW","first stone\npossession" }
   };
 
   void Start(){
@@ -105,6 +114,13 @@ public class level : MonoBehaviour {
 
     block_camera_shake = true;
 
+    if(PlayerPrefs.GetString("screen") == "MONITOR"){
+      tabletop = false;
+    }
+    else{
+      tabletop = true;
+    }
+
     // ==[game mode]============================================================
     // =========================================================================
 
@@ -113,19 +129,38 @@ public class level : MonoBehaviour {
 
     if(isMap){
 
-      // rt_point_limit = PlayerPrefs.GetInt("rt_point_limit");
-      podium = GameObject.Find("Podium");
-      if(podium != null){
-        podium.SetActive(false);
+      rt_point_limit = PlayerPrefs.GetInt("rt_point_limit");
+
+      if(!tabletop){
+        podium = podium_m;
       }
-      PostGameOb = GameObject.Find("PostGameCanvas");
-      PostGameBoxes = GameObject.Find("PostGameBoxes");
-      if(PostGameOb != null){
-        PostGameOb.SetActive(false);
+      else{
+        podium = podium_tt;
       }
-      if(PostGameBoxes != null){
-        PostGameBoxes.SetActive(false);
+      podium_tt.SetActive(false);
+      podium_m.SetActive(false);
+
+      // podium = GameObject.Find("Podium");
+      // if(podium != null){
+      //   podium.SetActive(false);
+      // }
+      
+      if(!tabletop){
+        PostGameOb = pg_canvas;
+        PostGameBoxes = pg_boxes;
+        pg_canvas_tt.SetActive(false);
+        pg_boxes_tt.SetActive(false);
       }
+      else{
+        PostGameOb = pg_canvas_tt;
+        PostGameBoxes = pg_boxes_tt;
+        pg_canvas.SetActive(false);
+        pg_boxes.SetActive(false);
+      }
+
+      PostGameOb.SetActive(false);
+      PostGameBoxes.SetActive(false);
+
       gameOver = false;
       player1Ready = player2Ready = player3Ready = player4Ready = false;
     }
@@ -268,11 +303,6 @@ public class level : MonoBehaviour {
     }
     else{
 
-
-      // if(!camera_shaking){
-      //   MoveCamera();
-      // }
-
       if(gamemode == GameMode.SURVIVAL){
         // check number of dead players
         int deadCount = 0;
@@ -303,8 +333,7 @@ public class level : MonoBehaviour {
             activePlayers.Add(player4.GetComponent<player>());
           }
 
-          foreach (player p in activePlayers)
-          {
+          foreach (player p in activePlayers){
             p.gameOver = true;
           }
 
@@ -485,21 +514,24 @@ public class level : MonoBehaviour {
     yield return new WaitForSeconds(0.005f);
     gameObject.transform.position = originalPos;
 
-      CameraShake();
-      yield return new WaitForSeconds(0.005f);
-      gameObject.transform.position = originalPos;
+    CameraShake();
+    yield return new WaitForSeconds(0.005f);
+    gameObject.transform.position = originalPos;
 
-      CameraShake();
-      yield return new WaitForSeconds(0.005f);
-      gameObject.transform.position = originalPos;
+    CameraShake();
+    yield return new WaitForSeconds(0.005f);
+    gameObject.transform.position = originalPos;
 
     CameraShake();
     gameObject.transform.position = originalPos;
     camera_shaking = false;
 
-        if (gamemode == GameMode.SURVIVAL && create_streak){
+    if(gamemode == GameMode.SURVIVAL){
       Destroy(streak);
-        }
+    }
+
+    // yield return new WaitForSeconds(0.02f);
+
     Time.timeScale = 1;
     running = false;
   }
@@ -541,32 +573,32 @@ public class level : MonoBehaviour {
 
     public Vector3 findRespawn(){
     
-    Vector3 respawnPoint = new Vector3(0, 0, 0);
-    float closestPlayerDist = 10000f;
-    float closest = 0;
-    GameObject closestP = null;
-    GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-    
-    foreach(Vector3 point in respawnPoints){
+      Vector3 respawnPoint = new Vector3(0, 0, 0);
+      float closestPlayerDist = 10000f;
+      float closest = 0;
+      GameObject closestP = null;
+      GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+      
+      foreach(Vector3 point in respawnPoints){
 
-      // find closest player to this point   
-      closestP = null;
-      foreach(GameObject player in players){
-        if((Mathf.Abs(Vector3.Distance(point, player.transform.position)) < closestPlayerDist) || (closestP == null)){
-          closestPlayerDist = Mathf.Abs(Vector3.Distance(point, player.transform.position));
-          closestP = player;
+        // find closest player to this point   
+        closestP = null;
+        foreach(GameObject player in players){
+          if((Mathf.Abs(Vector3.Distance(point, player.transform.position)) < closestPlayerDist) || (closestP == null)){
+            closestPlayerDist = Mathf.Abs(Vector3.Distance(point, player.transform.position));
+            closestP = player;
+          }
+        }
+
+        // if the closest player is further than the closest so far set that as respawn
+        if(Mathf.Abs(Vector3.Distance(point, closestP.transform.position)) > closest){
+          respawnPoint = point;
+          closest = Mathf.Abs(Vector3.Distance(point, closestP.transform.position));
         }
       }
 
-      // if the closest player is further than the closest so far set that as respawn
-      if(Mathf.Abs(Vector3.Distance(point, closestP.transform.position)) > closest){
-        respawnPoint = point;
-        closest = Mathf.Abs(Vector3.Distance(point, closestP.transform.position));
-      }
+      return respawnPoint;
     }
-
-    return respawnPoint;
-  }
 
   void AwardMedals(){
     List<player> activePlayers = new List<player>();
@@ -1043,6 +1075,21 @@ public class level : MonoBehaviour {
     }
   }
 
+  void TabletopPlaces(Transform place, int player_number, int first_place, int second_place, int third_place, int fourth_place){
+    if(first_place == player_number){
+      place.FindChild("trophy").GetComponent<Image>().sprite = gold;
+    }
+    else if(second_place == player_number){
+      place.FindChild("trophy").GetComponent<Image>().sprite = silver;
+    }
+    else if(third_place == player_number){
+      place.FindChild("trophy").GetComponent<Image>().sprite = bronze;
+    }
+    else{
+      place.FindChild("trophy").GetComponent<Image>().enabled = false;
+    }
+  }
+
   void DisplayResults(){
 
     // stop moving camera
@@ -1066,12 +1113,36 @@ public class level : MonoBehaviour {
     place3 = PostGameOb.transform.Find("3place");
     place4 = PostGameOb.transform.Find("4place");
 
+    int first_place = numPlayers >= 1 ? first.GetComponent<player>().player_number : -1;
+    int second_place = numPlayers >= 2 ? second.GetComponent<player>().player_number : -1;
+    int third_place = numPlayers >= 3 ? third.GetComponent<player>().player_number : -1;
+    int fourth_place = numPlayers >= 4 ? fourth.GetComponent<player>().player_number : -1;
+
+    if(tabletop){
+      first = player1;
+      second = player2;
+      third = player3;
+      fourth = player4;
+    }
+
     if(first != null){
+      first.GetComponent<Animator>().SetBool("grounded", false);
       first.GetComponent<player>().player_number *= -1;
       first.GetComponent<player>().Gravity("down", 0f, 0f, false);
-      place1.FindChild("trophy").GetComponent<Image>().sprite = gold;
+      if(!tabletop){
+        place1.FindChild("trophy").GetComponent<Image>().sprite = gold;
+      }
+      else{
+        TabletopPlaces(place1, 1, first_place, second_place, third_place, fourth_place);
+      }
       first.transform.localScale = new Vector3(1.2f, 1.2f, 0f);
-      first.transform.position = podiumPositions[0];
+      if(!tabletop){
+        first.transform.position = podiumPositions[0];
+      }
+      else{
+        first.transform.position = tabletopPositions[0];
+        first.GetComponent<Animator>().Play("Appear");
+      }
       first.GetComponent<SpriteRenderer>().sortingOrder = 100;
       setResultsUI(place1, first.GetComponent<player>(), first.GetComponent<player>().medals);
     }
@@ -1080,11 +1151,28 @@ public class level : MonoBehaviour {
     }
 
     if(second != null){
+      second.GetComponent<Animator>().SetBool("grounded", false);
       second.GetComponent<player>().player_number *= -1;
-      second.GetComponent<player>().Gravity("down", 0f, 0f, false);
-      place2.FindChild("trophy").GetComponent<Image>().sprite = silver;
+      if(!tabletop){
+        second.GetComponent<player>().Gravity("down", 0f, 0f, false);
+      }
+      else{
+        second.GetComponent<player>().Gravity("right", 0f, 90f, false);
+      }
+      if(!tabletop){
+        place2.FindChild("trophy").GetComponent<Image>().sprite = silver;
+      }
+      else{
+        TabletopPlaces(place2, 2, first_place, second_place, third_place, fourth_place);
+      }
       second.transform.localScale = new Vector3(1.2f, 1.2f, 0f);
-      second.transform.position = podiumPositions[1];
+      if(!tabletop){
+        second.transform.position = podiumPositions[1];
+      }
+      else{
+        second.transform.position = tabletopPositions[1];
+        second.GetComponent<Animator>().Play("Appear");
+      }
       second.GetComponent<SpriteRenderer>().sortingOrder = 100;
       setResultsUI(place2, second.GetComponent<player>(), second.GetComponent<player>().medals);
     }
@@ -1093,11 +1181,28 @@ public class level : MonoBehaviour {
     }
 
     if(third != null){
+      third.GetComponent<Animator>().SetBool("grounded", false);
       third.GetComponent<player>().player_number *= -1;
-      third.GetComponent<player>().Gravity("down", 0f, 0f, false);
-      place3.FindChild("trophy").GetComponent<Image>().sprite = bronze;
+      if(!tabletop){
+        third.GetComponent<player>().Gravity("down", 0f, 0f, false);
+      }
+      else{
+        third.GetComponent<player>().Gravity("up", 0f, 180f, false);
+      }
+      if(!tabletop){
+        place3.FindChild("trophy").GetComponent<Image>().sprite = bronze;
+      }
+      else{
+        TabletopPlaces(place3, 3, first_place, second_place, third_place, fourth_place);
+      }
       third.transform.localScale = new Vector3(1.2f, 1.2f, 0f);
-      third.transform.position = podiumPositions[2];
+      if(!tabletop){
+        third.transform.position = podiumPositions[2];
+      }
+      else{
+        third.transform.position = tabletopPositions[2];
+        third.GetComponent<Animator>().Play("Appear");
+      }
       third.GetComponent<SpriteRenderer>().sortingOrder = 100;
       setResultsUI(place3, third.GetComponent<player>(), third.GetComponent<player>().medals);
     }
@@ -1106,16 +1211,47 @@ public class level : MonoBehaviour {
     }
 
     if(fourth != null){
+      fourth.GetComponent<Animator>().SetBool("grounded", false);
       fourth.GetComponent<player>().player_number *= -1;
-      fourth.GetComponent<player>().Gravity("down", 0f, 0f, false);
-      place4.FindChild("trophy").GetComponent<Image>().enabled = false;
+      if(!tabletop){
+        fourth.GetComponent<player>().Gravity("down", 0f, 0f, false);
+      }
+      else{
+        fourth.GetComponent<player>().Gravity("left", 0f, -90f, false);
+      }
+      if(!tabletop){
+        place4.FindChild("trophy").GetComponent<Image>().enabled = false;
+      }
+      else{
+        TabletopPlaces(place4, 4, first_place, second_place, third_place, fourth_place);
+      }
       fourth.transform.localScale = new Vector3(1.2f, 1.2f, 0f);
-      fourth.transform.position = podiumPositions[3];
+      if(!tabletop){
+        fourth.transform.position = podiumPositions[3];
+      }
+      else{
+        fourth.transform.position = tabletopPositions[3];
+        fourth.GetComponent<Animator>().Play("Appear");
+      }
       fourth.GetComponent<SpriteRenderer>().sortingOrder = 100;
       setResultsUI(place4, fourth.GetComponent<player>(), fourth.GetComponent<player>().medals);
     }
     else{
       place4.gameObject.SetActive(false);
+    }
+  }
+
+  string SetInfo(string medal){
+    if(!tabletop){
+      return medals[medal];
+    }
+    else{
+      if(medal == "PARTICIPANT"){
+        return "you\nhad\nfun :)";
+      }
+      else{
+        return medals[medal].Replace(' ', '\n');
+      }
     }
   }
 
@@ -1140,19 +1276,19 @@ public class level : MonoBehaviour {
 
     if(earnedMedals.Count > 0){
       medal1 = earnedMedals[Random.Range(0, earnedMedals.Count)];
-      info1 = medals[medal1];
+      info1 = SetInfo(medal1);
       earnedMedals.Remove(medal1);
       medal1 += ":";
     }
     if(earnedMedals.Count > 0){
       medal2 = earnedMedals[Random.Range(0, earnedMedals.Count)];
-      info2 = medals[medal2];
+      info2 = SetInfo(medal2);
       earnedMedals.Remove(medal2);
       medal2 += ":";
     }
     if(earnedMedals.Count > 0){
       medal3 = earnedMedals[Random.Range(0, earnedMedals.Count)];
-      info3 = medals[medal3];
+      info3 = SetInfo(medal3);
       earnedMedals.Remove(medal3);
       medal3 += ":";
     }

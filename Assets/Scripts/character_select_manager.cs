@@ -89,7 +89,8 @@ public class character_select_manager : MonoBehaviour {
       if(Input.GetButtonUp(mac + "Controller 1 Start Button")
       || Input.GetButtonUp(mac + "Controller 2 Start Button")
       || Input.GetButtonUp(mac + "Controller 3 Start Button")
-      || Input.GetButtonUp(mac + "Controller 4 Start Button")){
+      || Input.GetButtonUp(mac + "Controller 4 Start Button")
+      || Input.GetKeyDown(KeyCode.Return)){
         for(int i = 1; i <= 4; i++){
           if(ready_character["P" + i] >= 0){
             PlayerPrefs.SetInt("P" + i + "Num", ready_character["P" + i]);

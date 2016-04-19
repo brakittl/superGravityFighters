@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
 public class player : MonoBehaviour{
-
+    
   // ==[variables]==============================================================
   // ===========================================================================
 
@@ -1432,6 +1432,4 @@ public class player : MonoBehaviour{
         }
       }
     }
-
-
 }
