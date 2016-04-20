@@ -1458,44 +1458,44 @@ public class player : MonoBehaviour{
       }
       else if(PlayerPrefs.GetString("screen") == "TABLETOP"){
         if(player_number == 2){
-          if(orientation == "left" && player_orientation != orientation.up){
+          if(direction == "left" && player_orientation != orientation.up){
             Gravity("up", transform.localEulerAngles.y, 180f, true);
           }
-          if(orientation == "right" && player_orientation != orientation.down){
+          if(direction == "right" && player_orientation != orientation.down){
             Gravity("down", -transform.localEulerAngles.y, 0f, true);
           }
-          if(orientation == "down" && player_orientation != orientation.left){
+          if(direction == "down" && player_orientation != orientation.left){
             Gravity("left", 0f, -90f, true);
           }
-          if(orientation == "up" && player_orientation != orientation.right){
+          if(direction == "up" && player_orientation != orientation.right){
             Gravity("right", 0f, 90f, true);
           }
         }
         else if(player_number == 3){
-          if(orientation == "down" && player_orientation != orientation.up){
+          if(direction == "down" && player_orientation != orientation.up){
             Gravity("up", transform.localEulerAngles.y, 180f, true);
           }
-          if(orientation == "up" && player_orientation != orientation.down){
+          if(direction == "up" && player_orientation != orientation.down){
             Gravity("down", -transform.localEulerAngles.y, 0f, true);
           }
-          if(orientation == "right" && player_orientation != orientation.left){
+          if(direction == "right" && player_orientation != orientation.left){
             Gravity("left", 0f, -90f, true);
           }
-          if(orientation == "left" && player_orientation != orientation.right){
+          if(direction == "left" && player_orientation != orientation.right){
             Gravity("right", 0f, 90f, true);
           }
         }
         else if(player_number == 4){
-          if(orientation == "right" && player_orientation != orientation.up){
+          if(direction == "right" && player_orientation != orientation.up){
             Gravity("up", transform.localEulerAngles.y, 180f, true);
           }
-          if(orientation == "left" && player_orientation != orientation.down){
+          if(direction == "left" && player_orientation != orientation.down){
             Gravity("down", -transform.localEulerAngles.y, 0f, true);
           }
-          if(orientation == "up" && player_orientation != orientation.left){
+          if(direction == "up" && player_orientation != orientation.left){
             Gravity("left", 0f, -90f, true);
           }
-          if(orientation == "down" && player_orientation != orientation.right){
+          if(direction == "down" && player_orientation != orientation.right){
             Gravity("right", 0f, 90f, true);
           }
         }
