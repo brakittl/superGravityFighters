@@ -1444,7 +1444,7 @@ public class player : MonoBehaviour{
         }
       }
       else if(PlayerPrefs.GetString("screen") == "TABLETOP"){
-        if(player_number == 2){
+        if(player_number == 4){
           if(direction == "left" && player_orientation != orientation.up){
             Gravity("up", transform.localEulerAngles.y, 180f, false);
           }
@@ -1472,7 +1472,7 @@ public class player : MonoBehaviour{
             Gravity("right", 0f, 90f, false);
           }
         }
-        else if(player_number == 4){
+        else if(player_number == 2){
           if(direction == "right" && player_orientation != orientation.up){
             Gravity("up", transform.localEulerAngles.y, 180f, false);
           }
