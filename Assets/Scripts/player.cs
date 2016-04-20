@@ -71,8 +71,7 @@ public class player : MonoBehaviour{
 
   	// sounds
   	AudioSource sound;
-  	public AudioClip gunshot, block, death, swordSlash, gravitySwap, shieldPulse, defeat;
-    float gravVolume = 0.5f;
+  	public AudioClip gunshot, block, death, swordSlash, shieldPulse, defeat;
 
     // bullet information
     public GameObject bullet, extraBullet;
@@ -390,35 +389,23 @@ public class player : MonoBehaviour{
   			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis") < -0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W))){
   				SwapGravity("up");
           gravitySwapCount++;
-          if(PlayerPrefs.GetFloat("sfx") != 0){
-            sound.PlayOneShot(gravitySwap, gravVolume);
-          }
         }
   			// down
   			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis") > 0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S))){
   				SwapGravity("down");
           gravitySwapCount++;
-          if(PlayerPrefs.GetFloat("sfx") != 0){
-            sound.PlayOneShot(gravitySwap, gravVolume);
-          }
 
         }
   			// left
   			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis") < -0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " X Button") || Input.GetKey(KeyCode.A))){
   				SwapGravity("left");
           gravitySwapCount++;
-          if(PlayerPrefs.GetFloat("sfx") != 0){
-            sound.PlayOneShot(gravitySwap, gravVolume);
-          }
 
         }
   			// right
   			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis") > 0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " B Button") || Input.GetKey(KeyCode.D))){
   				SwapGravity("right");
           gravitySwapCount++;
-          if(PlayerPrefs.GetFloat("sfx") != 0){
-            sound.PlayOneShot(gravitySwap, gravVolume);
-          }
 
         }
   		}
