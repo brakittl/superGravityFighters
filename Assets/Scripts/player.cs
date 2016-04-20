@@ -1446,13 +1446,13 @@ public class player : MonoBehaviour{
         if(direction == "up" && player_orientation != orientation.up){
           Gravity("up", transform.localEulerAngles.y, 180f, true);
         }
-        if(direction == "down" && player_orientation != orientation.up){
+        if(direction == "down" && player_orientation != orientation.down){
           Gravity("down", -transform.localEulerAngles.y, 0f, true);
         }
-        if(direction == "left" && player_orientation != orientation.up){
+        if(direction == "left" && player_orientation != orientation.left){
           Gravity("left", 0f, -90f, true);
         }
-        if(direction == "right" && player_orientation != orientation.up){
+        if(direction == "right" && player_orientation != orientation.right){
           Gravity("right", 0f, 90f, true);
         }
       }
