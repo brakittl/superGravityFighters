@@ -1431,59 +1431,59 @@ public class player : MonoBehaviour{
 
       if(PlayerPrefs.GetString("screen") == "MONITOR" || player_number == 1){
         if(direction == "up" && player_orientation != orientation.up){
-          Gravity("up", transform.localEulerAngles.y, 180f, true);
+          Gravity("up", transform.localEulerAngles.y, 180f, false);
         }
         if(direction == "down" && player_orientation != orientation.down){
-          Gravity("down", -transform.localEulerAngles.y, 0f, true);
+          Gravity("down", -transform.localEulerAngles.y, 0f, false);
         }
         if(direction == "left" && player_orientation != orientation.left){
-          Gravity("left", 0f, -90f, true);
+          Gravity("left", 0f, -90f, false);
         }
         if(direction == "right" && player_orientation != orientation.right){
-          Gravity("right", 0f, 90f, true);
+          Gravity("right", 0f, 90f, false);
         }
       }
       else if(PlayerPrefs.GetString("screen") == "TABLETOP"){
         if(player_number == 2){
           if(direction == "left" && player_orientation != orientation.up){
-            Gravity("up", transform.localEulerAngles.y, 180f, true);
+            Gravity("up", transform.localEulerAngles.y, 180f, false);
           }
           if(direction == "right" && player_orientation != orientation.down){
-            Gravity("down", -transform.localEulerAngles.y, 0f, true);
+            Gravity("down", -transform.localEulerAngles.y, 0f, false);
           }
           if(direction == "down" && player_orientation != orientation.left){
-            Gravity("left", 0f, -90f, true);
+            Gravity("left", 0f, -90f, false);
           }
           if(direction == "up" && player_orientation != orientation.right){
-            Gravity("right", 0f, 90f, true);
+            Gravity("right", 0f, 90f, false);
           }
         }
         else if(player_number == 3){
           if(direction == "down" && player_orientation != orientation.up){
-            Gravity("up", transform.localEulerAngles.y, 180f, true);
+            Gravity("up", transform.localEulerAngles.y, 180f, false);
           }
           if(direction == "up" && player_orientation != orientation.down){
-            Gravity("down", -transform.localEulerAngles.y, 0f, true);
+            Gravity("down", -transform.localEulerAngles.y, 0f, false);
           }
           if(direction == "right" && player_orientation != orientation.left){
-            Gravity("left", 0f, -90f, true);
+            Gravity("left", 0f, -90f, false);
           }
           if(direction == "left" && player_orientation != orientation.right){
-            Gravity("right", 0f, 90f, true);
+            Gravity("right", 0f, 90f, false);
           }
         }
         else if(player_number == 4){
           if(direction == "right" && player_orientation != orientation.up){
-            Gravity("up", transform.localEulerAngles.y, 180f, true);
+            Gravity("up", transform.localEulerAngles.y, 180f, false);
           }
           if(direction == "left" && player_orientation != orientation.down){
-            Gravity("down", -transform.localEulerAngles.y, 0f, true);
+            Gravity("down", -transform.localEulerAngles.y, 0f, false);
           }
           if(direction == "up" && player_orientation != orientation.left){
-            Gravity("left", 0f, -90f, true);
+            Gravity("left", 0f, -90f, false);
           }
           if(direction == "down" && player_orientation != orientation.right){
-            Gravity("right", 0f, 90f, true);
+            Gravity("right", 0f, 90f, false);
           }
         }
       }
