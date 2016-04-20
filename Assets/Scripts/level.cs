@@ -236,12 +236,12 @@ public class level : MonoBehaviour {
         if (deathZoom)
         {
             gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, target_position, 2f * Time.deltaTime);
-            GetComponent<Camera>().orthographicSize = Mathf.Lerp(GetComponent<Camera>().orthographicSize, 1, 3f * Time.deltaTime);
+            //GetComponent<Camera>().orthographicSize = Mathf.Lerp(GetComponent<Camera>().orthographicSize, 1, 3f * Time.deltaTime);
         }
         else
         {
             gameObject.transform.position = normalPosition;
-            GetComponent<Camera>().orthographicSize = 1.76f;
+            //GetComponent<Camera>().orthographicSize = 1.76f;
         }
             
         
@@ -567,17 +567,17 @@ public class level : MonoBehaviour {
     gameObject.transform.position = pos;
   }
 
-    public void lastKill(player lastDead, Color player_color, float waitTime)
+    public void lastKill(player lastDead, Color player_color, float waitTime, bool last)
     {
         if (!running)
         {
             running = true;
-            StartCoroutine(lastDeath(lastDead, player_color, waitTime));
+            StartCoroutine(lastDeath(lastDead, player_color, waitTime, last));
         }        
     }
 
     bool deathZoom = false;
-    IEnumerator lastDeath(player lastDead, Color player_color, float waitTime)
+    IEnumerator lastDeath(player lastDead, Color player_color, float waitTime, bool last)
     {
         Time.timeScale = 0.1f;
         Vector3 rot = transform.rotation.eulerAngles;
@@ -585,8 +585,9 @@ public class level : MonoBehaviour {
         rot.z = Random.Range(0, 90);
         streak = Instantiate(killStreak, lastDead.gameObject.transform.position, Quaternion.Euler(rot)) as GameObject;
         streak.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", player_color);
-
-        deathZoom = true;
+        
+        if(last)
+            deathZoom = true;
         target_position = lastDead.transform.position;
         yield return new WaitForSeconds(waitTime);
 

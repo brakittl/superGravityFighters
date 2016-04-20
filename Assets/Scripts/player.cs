@@ -1188,12 +1188,12 @@ public class player : MonoBehaviour{
       lives--;
         if(lives <= 0 && level.S.numPlayers - level.S.ranking.Count - 1 <= 1)
         {
-            level.S.lastKill(this, colors[killer_color.ToLower()], 0.4f);
+            level.S.lastKill(this, colors[killer_color.ToLower()], 0.4f, true);
             sound.PlayOneShot(defeat, 5.5f);
         }
         else if (lives <= 0)
         {
-            level.S.lastKill(this, colors[killer_color.ToLower()], 0.2f);
+            level.S.lastKill(this, colors[killer_color.ToLower()], 0.2f, false);
             sound.PlayOneShot(defeat, 5.5f);
         }
         else
