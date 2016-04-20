@@ -72,7 +72,7 @@ public class player : MonoBehaviour{
   	// sounds
   	AudioSource sound;
   	public AudioClip gunshot, block, death, swordSlash, gravitySwap, shieldPulse, defeat;
-    float gravVolume = 0.1f;
+    float gravVolume = 0.3f;
 
     // bullet information
     public GameObject bullet, extraBullet;
