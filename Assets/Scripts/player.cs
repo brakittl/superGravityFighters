@@ -387,17 +387,16 @@ public class player : MonoBehaviour{
       // swap gravity orientation
   		if(!poisoned && !dead && !dying){
   			// up
-  			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis") < -0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W)) && player_orientation != orientation.up){
-  				Gravity("up", transform.localEulerAngles.y, 180f, false);
+  			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis") < -0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " Y Button") || Input.GetKey(KeyCode.W))){
+  				SwapGravity("up");
           gravitySwapCount++;
           if(PlayerPrefs.GetFloat("sfx") != 0){
             sound.PlayOneShot(gravitySwap, gravVolume);
           }
-
         }
   			// down
-  			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis") > 0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S)) && player_orientation != orientation.down){
-  				Gravity("down", -transform.localEulerAngles.y, 0f, false);
+  			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis") > 0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " A Button") || Input.GetKey(KeyCode.S))){
+  				SwapGravity("down");
           gravitySwapCount++;
           if(PlayerPrefs.GetFloat("sfx") != 0){
             sound.PlayOneShot(gravitySwap, gravVolume);
@@ -405,8 +404,8 @@ public class player : MonoBehaviour{
 
         }
   			// left
-  			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis") < -0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " X Button") || Input.GetKey(KeyCode.A)) && player_orientation != orientation.left){
-  				Gravity("left", 0f, -90f, false);
+  			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis") < -0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " X Button") || Input.GetKey(KeyCode.A))){
+  				SwapGravity("left");
           gravitySwapCount++;
           if(PlayerPrefs.GetFloat("sfx") != 0){
             sound.PlayOneShot(gravitySwap, gravVolume);
@@ -414,8 +413,8 @@ public class player : MonoBehaviour{
 
         }
   			// right
-  			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis") > 0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " B Button") || Input.GetKey(KeyCode.D)) && player_orientation != orientation.right){
-  				Gravity("right", 0f, 90f, false);
+  			if(((Input.GetAxis(mac + "Controller " + player_number + " Right Stick X Axis") > 0.4f && Math.Abs(Input.GetAxis(mac + "Controller " + player_number + " Right Stick Y Axis")) < 0.4f) || Input.GetButtonDown(mac + "Controller " + player_number + " B Button") || Input.GetKey(KeyCode.D))){
+  				SwapGravity("right");
           gravitySwapCount++;
           if(PlayerPrefs.GetFloat("sfx") != 0){
             sound.PlayOneShot(gravitySwap, gravVolume);
@@ -1260,14 +1259,16 @@ public class player : MonoBehaviour{
         Debug.Log("dead player");
       }
 
-        if (!dead)
-        {
-            transform.position = level.S.findRespawn();
-  		    transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
-            body.velocity = new Vector2(0f, 0f);
-            player_orientation = orientation.down;
-            level.S.alive_players.Insert(0, gameObject);
-            player_animator.Play("Appear");
+        if (!dead){
+		      Vector3 respawn_position = level.S.findRespawn();
+          Vector3 circle_position = new Vector3(respawn_position.x - 0.02f, respawn_position.y + 0.01f, 0f);
+          Instantiate(Resources.Load<GameObject>("__Prefabs/_respawn_circles/respawn_circle_" + player_color.ToLower()), circle_position, transform.rotation);
+          transform.position = respawn_position;
+          transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
+          body.velocity = new Vector2(0f, 0f);
+          player_orientation = orientation.down;
+          level.S.alive_players.Insert(0, gameObject);
+          player_animator.Play("Appear");
         }      
       respawning = true;
   	}
@@ -1434,6 +1435,68 @@ public class player : MonoBehaviour{
           else if(move_down){
             move_left = true;
             move_down = false;
+          }
+        }
+      }
+    }
+
+    void SwapGravity(string direction){
+
+      if(PlayerPrefs.GetString("screen") == "MONITOR" || player_number == 1){
+        if(direction == "up" && player_orientation != orientation.up){
+          Gravity("up", transform.localEulerAngles.y, 180f, true);
+        }
+        if(direction == "down" && player_orientation != orientation.up){
+          Gravity("down", -transform.localEulerAngles.y, 0f, true);
+        }
+        if(direction == "left" && player_orientation != orientation.up){
+          Gravity("left", 0f, -90f, true);
+        }
+        if(direction == "right" && player_orientation != orientation.up){
+          Gravity("right", 0f, 90f, true);
+        }
+      }
+      else if(PlayerPrefs.GetString("screen") == "TABLETOP"){
+        if(player_number == 2){
+          if(orientation == "left" && player_orientation != orientation.up){
+            Gravity("up", transform.localEulerAngles.y, 180f, true);
+          }
+          if(orientation == "right" && player_orientation != orientation.down){
+            Gravity("down", -transform.localEulerAngles.y, 0f, true);
+          }
+          if(orientation == "down" && player_orientation != orientation.left){
+            Gravity("left", 0f, -90f, true);
+          }
+          if(orientation == "up" && player_orientation != orientation.right){
+            Gravity("right", 0f, 90f, true);
+          }
+        }
+        else if(player_number == 3){
+          if(orientation == "down" && player_orientation != orientation.up){
+            Gravity("up", transform.localEulerAngles.y, 180f, true);
+          }
+          if(orientation == "up" && player_orientation != orientation.down){
+            Gravity("down", -transform.localEulerAngles.y, 0f, true);
+          }
+          if(orientation == "right" && player_orientation != orientation.left){
+            Gravity("left", 0f, -90f, true);
+          }
+          if(orientation == "left" && player_orientation != orientation.right){
+            Gravity("right", 0f, 90f, true);
+          }
+        }
+        else if(player_number == 4){
+          if(orientation == "right" && player_orientation != orientation.up){
+            Gravity("up", transform.localEulerAngles.y, 180f, true);
+          }
+          if(orientation == "left" && player_orientation != orientation.down){
+            Gravity("down", -transform.localEulerAngles.y, 0f, true);
+          }
+          if(orientation == "up" && player_orientation != orientation.left){
+            Gravity("left", 0f, -90f, true);
+          }
+          if(orientation == "down" && player_orientation != orientation.right){
+            Gravity("right", 0f, 90f, true);
           }
         }
       }
