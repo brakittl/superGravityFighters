@@ -69,8 +69,8 @@ public class character_select : MonoBehaviour {
 
     resize = new Vector3(1f, 1f, 1f);
 
-    // if(player_num > Input.GetJoystickNames().Length){
-    if(player_num > 4){
+    if(player_num > Input.GetJoystickNames().Length){
+    //if(player_num > 4){
       // deactivate player if controller not connected
       this.gameObject.SetActive(false);
       join_button.SetActive(false);

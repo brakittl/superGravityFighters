@@ -236,10 +236,12 @@ public class level : MonoBehaviour {
         if (deathZoom)
         {
             gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, target_position, 2f * Time.deltaTime);
+            GetComponent<Camera>().orthographicSize = Mathf.Lerp(GetComponent<Camera>().orthographicSize, 1, 3f * Time.deltaTime);
         }
         else
         {
             gameObject.transform.position = normalPosition;
+            GetComponent<Camera>().orthographicSize = 1.76f;
         }
             
         
@@ -341,6 +343,7 @@ public class level : MonoBehaviour {
 
           foreach (player p in activePlayers){
             p.gameOver = true;
+            p.respawning = false;
           }
 
           GameObject.Find("ui").SetActive(false);
@@ -355,6 +358,7 @@ public class level : MonoBehaviour {
                 player temp = activePlayers[i];
                 activePlayers[i] = activePlayers[j];
                 activePlayers[j] = temp;
+
               }
             }
           }

@@ -72,7 +72,7 @@ public class player : MonoBehaviour{
   	// sounds
   	AudioSource sound;
   	public AudioClip gunshot, block, death, swordSlash, gravitySwap, shieldPulse, defeat;
-    float gravVolume = 0.3f;
+    float gravVolume = 0.5f;
 
     // bullet information
     public GameObject bullet, extraBullet;
@@ -1190,12 +1190,12 @@ public class player : MonoBehaviour{
         if(lives <= 0 && level.S.numPlayers - level.S.ranking.Count - 1 <= 1)
         {
             level.S.lastKill(this, colors[killer_color.ToLower()], 0.4f);
-            sound.PlayOneShot(defeat);
+            sound.PlayOneShot(defeat, 5.5f);
         }
         else if (lives <= 0)
         {
             level.S.lastKill(this, colors[killer_color.ToLower()], 0.2f);
-            sound.PlayOneShot(defeat);
+            sound.PlayOneShot(defeat, 5.5f);
         }
         else
             level.S.KillPause(transform.position, colors[killer_color.ToLower()], !is_character_select);
@@ -1237,7 +1237,7 @@ public class player : MonoBehaviour{
       dying = true;
       body.velocity = new Vector3(0f, 0f, 0f);
       yield return new WaitForSeconds(0.3f);
-
+        dying = false;
       // set position off screen
       Vector3 pos = transform.position;
   		transform.position = offscreen;
