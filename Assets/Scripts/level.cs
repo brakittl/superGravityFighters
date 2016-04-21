@@ -1145,10 +1145,18 @@ public class level : MonoBehaviour {
     int fourth_place = numPlayers >= 4 ? fourth.GetComponent<player>().player_number : -1;
 
     if(tabletop){
-      first = player1;
-      second = player2;
-      third = player3;
-      fourth = player4;
+      if(first != null){
+        first = player1;
+      }
+      if(second != null){
+        second = player2;
+      }
+      if(third != null){
+        third = player3;
+      }
+      if(fourth != null){
+        fourth = player4;
+      }
     }
 
     if(first != null){

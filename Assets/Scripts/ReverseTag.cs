@@ -63,7 +63,6 @@ public class ReverseTag : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D col){
-    print(col.gameObject.tag);
 		if(col.gameObject != transform.parent && (col.gameObject.tag == "Player") && (invincibility_time <= 0)){
       
       GameObject g = GameObject.Find(col.name);
