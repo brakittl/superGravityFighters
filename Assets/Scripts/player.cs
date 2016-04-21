@@ -149,6 +149,20 @@ public class player : MonoBehaviour{
 
     void SetPlayerNumber(int sent_number){
       player_number = sent_number;
+		if (level.S.tabletop)
+		{
+			if(sent_number == 4){
+				Gravity("left", 0f, -90f, true);
+			}
+			else if(sent_number == 3){
+				Gravity("up", 0f, 180f, true);
+			}
+			else if(sent_number == 2) {
+				Gravity("right", 0f, 90f, true);
+			}
+
+
+		}
     }
 
     void SetGravityFromCharacterSelect(string orientation){
@@ -1270,6 +1284,20 @@ public class player : MonoBehaviour{
           transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, -transform.localEulerAngles.y, 0f);
           body.velocity = new Vector2(0f, 0f);
           player_orientation = orientation.down;
+			if (level.S.tabletop)
+			{
+				if(player_number == 4){
+					Gravity("left", 0f, -90f, true);
+				}
+				else if(player_number == 3){
+					Gravity("up", 0f, 180f, true);
+				}
+				else if(player_number == 2) {
+					Gravity("right", 0f, 90f, true);
+				}
+
+
+			}
           level.S.alive_players.Insert(0, gameObject);
           player_animator.Play("Appear");
         }      

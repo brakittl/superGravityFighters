@@ -61,7 +61,7 @@ public class level : MonoBehaviour {
   AudioSource music;
   public AudioClip victoryMusic;
   bool playingVictory = false;
-  bool tabletop;
+  public bool tabletop;
 
   public GameObject pg_canvas, pg_boxes, pg_canvas_tt, pg_boxes_tt, podium_m, podium_tt; 
 
