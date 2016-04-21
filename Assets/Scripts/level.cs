@@ -516,14 +516,14 @@ public class level : MonoBehaviour {
     return respawnPoints[i];
   }
   
-  public void KillPause(Vector3 playerPos, Color player_color, bool create_streak, float wait, bool deadPlayer){
+  public void KillPause(Vector3 playerPos, Color player_color, bool create_streak, float wait){
     if(!running){
       running = true;
-      StartCoroutine(Pause(playerPos, player_color, create_streak, wait, deadPlayer));
+      StartCoroutine(Pause(playerPos, player_color, create_streak, wait));
     }
   }
 
-  IEnumerator Pause(Vector3 pos, Color player_color, bool create_streak, float wait, bool deadPlayer){
+  IEnumerator Pause(Vector3 pos, Color player_color, bool create_streak, float wait){
     Time.timeScale = 0.1f;
     Vector3 rot = transform.rotation.eulerAngles, originalPos = gameObject.transform.position;
 

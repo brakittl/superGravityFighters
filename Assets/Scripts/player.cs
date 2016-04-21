@@ -1181,11 +1181,11 @@ public class player : MonoBehaviour{
         else if (lives <= 0)
         {
             //level.S.lastKill(this, colors[killer_color.ToLower()], 0.05f);
-            level.S.KillPause(transform.position, colors[killer_color.ToLower()], !is_character_select, 0.05f, true);
+            level.S.KillPause(transform.position, colors[killer_color.ToLower()], !is_character_select, 0.05f);
             sound.PlayOneShot(defeat, 5.5f);
         }
         else
-            level.S.KillPause(transform.position, colors[killer_color.ToLower()], !is_character_select, 0f, false);
+            level.S.KillPause(transform.position, colors[killer_color.ToLower()], !is_character_select, 0f);
 
       // turn off poison
       poisoned = false;
