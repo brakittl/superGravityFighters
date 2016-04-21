@@ -30,6 +30,7 @@ public class player : MonoBehaviour{
   	public float rt_longest_continuous_hold = 0; // longest time holding the "gem" without losing it
   	public float hit_by_pulse_times = 0;
     float pulse_hit_count = 0;
+	public bool five_points_left, ten_points_left, twenty_points_left, thirty_points_left;
     // point limit is in level script, call with level.S.rt_point_limit
 
   	// orientation
@@ -186,6 +187,8 @@ public class player : MonoBehaviour{
 
   	void Start(){
       // Mac Check
+		five_points_left = ten_points_left = twenty_points_left = thirty_points_left = false;
+
       if(Application.platform == RuntimePlatform.OSXEditor
         || Application.platform == RuntimePlatform.OSXPlayer
         || Application.platform == RuntimePlatform.OSXPlayer){
