@@ -604,12 +604,6 @@ public class player : MonoBehaviour{
   		// ==[respawn and death]==================================================
   		// =======================================================================
 
-  		// respawn
-  		if(respawn && respawning){
-  			respawning = false;
-  			StartCoroutine(Blink());
-  		}
-
   		if(!player_animator.GetBool("block")){
   			shield.GetComponent<PolygonCollider2D>().enabled = false;
   		}
@@ -1302,6 +1296,7 @@ public class player : MonoBehaviour{
           player_animator.Play("Appear");
         }      
       respawning = true;
+        respawn = false;
   	}
 
   	IEnumerator Blink(){
