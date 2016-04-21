@@ -37,6 +37,8 @@ public class character_select : MonoBehaviour {
 
   public GameObject camera;
 
+  int last_cycle = 1;
+
   Color character_color = new Color(1, 1, 1, 1);
 
   bool joined;
@@ -102,7 +104,7 @@ public class character_select : MonoBehaviour {
     if(player_object != null){
       if(manager.GetComponent<character_select_manager>().character_is_selected("P" + player_num, prefab_number)){
         player_object.GetComponent<SpriteRenderer>().color = Color.black;
-        Cycle(1);
+        Cycle(last_cycle);
         axis_in_use = false;
       }
       else {
@@ -280,6 +282,7 @@ public class character_select : MonoBehaviour {
   // cycles player prefab
   void Cycle(int value){
 
+    last_cycle = value;
     axis_in_use = true;
 
     Destroy(player_object);
