@@ -103,10 +103,6 @@ public class character_select_manager : MonoBehaviour {
             PlayerPrefs.SetString("P" + i, "none");
           }
         }
-
-        foreach(string p_string in player_prefab_names){
-          print(p_string);
-        }
         PlayerPrefs.SetFloat("audio_time", camera.GetComponent<AudioSource>().time);
         SceneManager.LoadScene("_map_game_select");
       }
