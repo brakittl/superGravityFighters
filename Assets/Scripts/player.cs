@@ -238,6 +238,12 @@ public class player : MonoBehaviour{
       GameObject ui = GameObject.Find("ui");
       if(ui != null){
         ui_found = true;
+        if(PlayerPrefs.GetString("screen") == "TABLETOP"){
+          ui.SetActive(false);
+        }
+        else{
+          GameObject.Find("tabletop_ui").SetActive(false);
+        }
       }
       else{
         ui_found = false;
@@ -247,15 +253,24 @@ public class player : MonoBehaviour{
 
         // get bullet information
         string bullet_image_string = "ui/p" + player_number.ToString() + "/" + player_number.ToString() + "_bullet";
+        if(PlayerPrefs.GetString("screen") == "TABLETOP"){
+          bullet_image_string = "tabletop_" + bullet_image_string;
+        }
         bullet_image = GameObject.Find(bullet_image_string);
         bullet_image.GetComponent<Image>().sprite = get_sprite_by_name(bullet_sprites, player_color.ToLower() + "_bullet_1");
         string bullet_text_string = "ui/p" + player_number.ToString() + "/" + player_number.ToString() + "_bullet_text";
+        if(PlayerPrefs.GetString("screen") == "TABLETOP"){
+          bullet_text_string = "tabletop_" + bullet_text_string;
+        }
         bullet_text = GameObject.Find(bullet_text_string).GetComponent<Text>();
         bullet_image.SetActive(true);
         GameObject.Find(bullet_text_string).SetActive(true);
 
         // get rt score text
         string rt_string = "ui/p" + player_number.ToString() + "/" + player_number.ToString() + "_rt_score";
+        if(PlayerPrefs.GetString("screen") == "TABLETOP"){
+          rt_string = "tabletop_" + rt_string;
+        }
         rt_text_GO = GameObject.Find(rt_string);
         rt_text = rt_text_GO.GetComponent<Text>();
 
@@ -272,6 +287,9 @@ public class player : MonoBehaviour{
         hearts = new GameObject[10];
         for(int i = 0; i < 10; ++i){
           string heart_string = "ui/p" + player_number.ToString() + "/" + player_number.ToString() + "_" + (i + 1).ToString();
+          if(PlayerPrefs.GetString("screen") == "TABLETOP"){
+            heart_string = "tabletop_" + heart_string;
+          }
           GameObject current_heart = GameObject.Find(heart_string);
           if(current_heart != null){
             if(level.S.gamemode == GameMode.SURVIVAL){
@@ -288,7 +306,7 @@ public class player : MonoBehaviour{
       }
 
         
-  	}
+    }
 
   // ==[updates]================================================================
   // ===========================================================================
