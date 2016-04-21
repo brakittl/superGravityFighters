@@ -21,6 +21,10 @@ public class level : MonoBehaviour {
   public bool player1Ready, player2Ready, player3Ready, player4Ready;
 
   public Vector3[] respawnPoints;
+  public Vector3[] respawnPoints_tableTop_player_up;
+  public Vector3[] respawnPoints_tableTop_player_left;
+  public Vector3[] respawnPoints_tableTop_player_right;
+
   public List<player> ranking = new List<player>();
   public int numPlayers;
 
@@ -529,7 +533,23 @@ public class level : MonoBehaviour {
   }
 
   public Vector3 returnPosition(int i){
-    return respawnPoints[i];
+		if (!tabletop)
+		{
+    		return respawnPoints[i];
+		}
+		if (i == 1)
+		{
+			return respawnPoints_tableTop_player_right[i];
+		}
+		else if (i == 2)
+		{
+			return respawnPoints_tableTop_player_up[i];
+		}
+		else if (i == 3)
+		{
+			return respawnPoints_tableTop_player_left[i];
+		}
+		else return respawnPoints[i];
   }
   
   public void KillPause(Vector3 playerPos, Color player_color, bool create_streak, float wait){
@@ -613,15 +633,34 @@ public class level : MonoBehaviour {
         Destroy(streak);
     }
 
-    public Vector3 findRespawn(){
+	public Vector3 findRespawn(int player_number){
     
       Vector3 respawnPoint = new Vector3(0, 0, 0);
       float closestPlayerDist = 10000f;
       float closest = 0;
       GameObject closestP = null;
       GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-      
-      foreach(Vector3 point in respawnPoints){
+
+		Vector3[] respawn = respawnPoints;
+
+		if (tabletop)
+		{
+			if (player_number == 2)
+			{
+				respawn = respawnPoints_tableTop_player_right;
+			}
+			else if (player_number == 3)
+			{
+				respawn = respawnPoints_tableTop_player_up;
+			}
+			else if (player_number == 4)
+			{
+				respawn = respawnPoints_tableTop_player_left;
+			}
+
+		}
+
+      foreach(Vector3 point in respawn){
 
         // find closest player to this point   
         closestP = null;
