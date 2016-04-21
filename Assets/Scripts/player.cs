@@ -965,6 +965,10 @@ public class player : MonoBehaviour{
   		can_move = !(player_animator.GetBool("attack") && grounded == 1);
   		can_move = can_move && !(player_animator.GetBool("block") && grounded == 1);
 
+      if(gameOver){
+        can_move = false;
+      }
+
   		if(can_move){
 
         // initialize rotation and flip
