@@ -1,10 +1,37 @@
 fileFormatVersion: 2
 guid: bda0c0160cf0249eaa24af99f14e000a
-timeCreated: 1460332477
+timeCreated: 1461194104
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - podium: {instanceID: 0}
+  - player1: {instanceID: 0}
+  - player2: {instanceID: 0}
+  - player3: {instanceID: 0}
+  - player4: {instanceID: 0}
+  - first: {instanceID: 0}
+  - second: {instanceID: 0}
+  - third: {instanceID: 0}
+  - fourth: {instanceID: 0}
+  - PostGameOb: {instanceID: 0}
+  - PostGameBoxes: {instanceID: 0}
+  - PostGameUI: {instanceID: 0}
+  - PostGameObTabletop: {instanceID: 0}
+  - PostGameBoxesTabletop: {instanceID: 0}
+  - PostGameUITabletop: {instanceID: 0}
+  - gravity_stone: {instanceID: 0}
+  - gold: {instanceID: 0}
+  - silver: {instanceID: 0}
+  - bronze: {instanceID: 0}
+  - killStreak: {fileID: 148494, guid: b5476252ed02e32408a8bef6004515d4, type: 2}
+  - victoryMusic: {instanceID: 0}
+  - pg_canvas: {instanceID: 0}
+  - pg_boxes: {instanceID: 0}
+  - pg_canvas_tt: {instanceID: 0}
+  - pg_boxes_tt: {instanceID: 0}
+  - podium_m: {instanceID: 0}
+  - podium_tt: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

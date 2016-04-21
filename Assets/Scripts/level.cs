@@ -521,6 +521,7 @@ public class level : MonoBehaviour {
       GUIStyle style = new GUIStyle();
       style.normal.textColor = Color.red;
       style.fontSize = 45;
+      style.alignment = TextAnchor. MiddleCenter;
       DrawOutline(new Rect((Screen.width*(1-w))/2, (Screen.height*(1-h))/2, Screen.width * w, Screen.height * h), "Game Over", style, Color.black, Color.white)
       // GUI.Label(, "Game Over", style);
     }
@@ -530,22 +531,21 @@ public class level : MonoBehaviour {
     return respawnPoints[i];
   }
   
-  public void KillPause(Vector3 playerPos, Color player_color, bool create_streak){
+  public void KillPause(Vector3 playerPos, Color player_color, bool create_streak, float wait, bool deadPlayer){
     if(!running){
       running = true;
-      StartCoroutine(Pause(playerPos, player_color, create_streak));
+      StartCoroutine(Pause(playerPos, player_color, create_streak, wait, deadPlayer));
     }
   }
 
-  IEnumerator Pause(Vector3 pos, Color player_color, bool create_streak){
+  IEnumerator Pause(Vector3 pos, Color player_color, bool create_streak, float wait, bool deadPlayer){
     Time.timeScale = 0.1f;
     Vector3 rot = transform.rotation.eulerAngles, originalPos = gameObject.transform.position;
 
     rot.z = Random.Range(0, 90);
-    if(gamemode == GameMode.SURVIVAL){
-      streak = Instantiate(killStreak, pos, Quaternion.Euler(rot)) as GameObject;
-			streak.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", player_color);
-    }
+    streak = Instantiate(killStreak, pos, Quaternion.Euler(rot)) as GameObject;
+	streak.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", player_color);
+
 
     CameraShake();
     yield return new WaitForSeconds(0.005f);
@@ -566,12 +566,11 @@ public class level : MonoBehaviour {
     CameraShake();
     gameObject.transform.position = originalPos;
     camera_shaking = false;
+        yield return new WaitForSeconds(wait);
 
-    if(gamemode == GameMode.SURVIVAL){
+        if (gamemode == GameMode.SURVIVAL){
       Destroy(streak);
     }
-
-    // yield return new WaitForSeconds(0.02f);
 
     Time.timeScale = 1;
     running = false;
@@ -584,17 +583,17 @@ public class level : MonoBehaviour {
     gameObject.transform.position = pos;
   }
 
-    public void lastKill(player lastDead, Color player_color, float waitTime, bool last)
+    public void lastKill(player lastDead, Color player_color, float waitTime)
     {
         if (!running)
         {
             running = true;
-            StartCoroutine(lastDeath(lastDead, player_color, waitTime, last));
+            StartCoroutine(lastDeath(lastDead, player_color, waitTime));
         }        
     }
 
     bool deathZoom = false;
-    IEnumerator lastDeath(player lastDead, Color player_color, float waitTime, bool last)
+    IEnumerator lastDeath(player lastDead, Color player_color, float waitTime)
     {
         Time.timeScale = 0.1f;
         Vector3 rot = transform.rotation.eulerAngles;
@@ -602,10 +601,10 @@ public class level : MonoBehaviour {
         rot.z = Random.Range(0, 90);
         streak = Instantiate(killStreak, lastDead.gameObject.transform.position, Quaternion.Euler(rot)) as GameObject;
         streak.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", player_color);
-        
-        if(last)
-            deathZoom = true;
-        target_position = lastDead.transform.position;
+
+        deathZoom = true;
+
+        target_position = lastDead.gameObject.transform.position;
         yield return new WaitForSeconds(waitTime);
 
         Time.timeScale = 1;
