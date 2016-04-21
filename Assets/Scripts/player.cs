@@ -68,6 +68,7 @@ public class player : MonoBehaviour{
   	// gravity
   	Vector2 right, left, down, up;
     public float terminal_velocity = 10f;
+	bool tabletopGravity1stSpawn = false;
 
   	// sounds
   	AudioSource sound;
@@ -320,6 +321,29 @@ public class player : MonoBehaviour{
   // ===========================================================================
 
   	void Update(){
+
+
+		if (!tabletopGravity1stSpawn)
+		{
+			tabletopGravity1stSpawn = true;
+			if (level.S.tabletop)
+			{
+				if(player_number == 4){
+					Gravity("left", 0f, -90f, false);
+				}
+				else if(player_number == 3){
+					Gravity("up", 0f, 180f, false);
+				}
+				else if(player_number == 2) {
+					Gravity("right", 0f, 90f, false);
+				}
+
+
+			}
+
+
+
+		}
 
       // ==[win conditions]=====================================================
       // =======================================================================
