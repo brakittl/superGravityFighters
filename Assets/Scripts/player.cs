@@ -12,6 +12,8 @@ public class player : MonoBehaviour{
 
     public string mac = "";
 
+    // random shit
+
     // endgame
     public bool gameOver;
 
