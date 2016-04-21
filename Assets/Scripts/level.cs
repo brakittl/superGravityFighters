@@ -465,6 +465,7 @@ public class level : MonoBehaviour {
 
           GameObject.FindGameObjectWithTag("TagBall").SetActive(false);
           GameObject.Find("ui").SetActive(false);
+          GameObject.Find("tabletop_ui").SetActive(false);
           GameObject.Find("border").SetActive(false);
           GameObject.Find("colliders").SetActive(false);
           podium.SetActive(true);
