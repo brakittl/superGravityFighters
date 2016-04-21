@@ -339,11 +339,15 @@ public class player : MonoBehaviour{
 				}
 
 
+
 			}
 
-
-
+			Vector3 respawn_position = transform.position;
+			Vector3 circle_position = new Vector3(respawn_position.x - 0.02f, respawn_position.y + 0.01f, 0f);
+			Instantiate(Resources.Load<GameObject>("__Prefabs/_respawn_circles/respawn_circle_" + player_color.ToLower()), circle_position, transform.rotation);
+			player_animator.Play("Appear");
 		}
+
 
       // ==[win conditions]=====================================================
       // =======================================================================
