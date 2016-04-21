@@ -351,6 +351,7 @@ public class level : MonoBehaviour {
           }
 
           GameObject.Find("ui").SetActive(false);
+          GameObject.Find("tabletop_ui").SetActive(false);
           GameObject.Find("border").SetActive(false);
           GameObject.Find("colliders").SetActive(false);
           podium.SetActive(true);
@@ -362,7 +363,6 @@ public class level : MonoBehaviour {
                 player temp = activePlayers[i];
                 activePlayers[i] = activePlayers[j];
                 activePlayers[j] = temp;
-
               }
             }
           }
