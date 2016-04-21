@@ -1228,21 +1228,7 @@ public class player : MonoBehaviour{
       Vector3 pos = transform.position;
 
 
-        GameObject[] gos = GameObject.FindGameObjectsWithTag("player");
-        int livesLeft = 0;
-        foreach(GameObject g in gos)
-        {
-            player other = g.GetComponent<player>();
-            if(other.name != this.name)
-            {
-                livesLeft += other.lives;
-            }
-        }
-
-        if(livesLeft >= 0)
-        {
-            transform.position = offscreen;
-        }
+       transform.position = offscreen;
 
   		
       Gravity("down", -transform.localEulerAngles.y, 0f, false);

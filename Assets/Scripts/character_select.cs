@@ -112,7 +112,6 @@ public class character_select : MonoBehaviour {
 
     // join
     if(!joined){
-
       // join game
       if(Input.GetButtonDown(mac + "Controller " + player_num + " X Button") ||
          Input.GetKeyDown(KeyCode.X)){
