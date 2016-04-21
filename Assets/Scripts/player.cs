@@ -115,7 +115,7 @@ public class player : MonoBehaviour{
     public GameObject rt_text_GO;
     public Text bullet_text;
     public Text rt_text;
-    bool ui_found;
+    public bool ui_found;
 
     // medals earned
     public List<String> medals = new List<string>();
@@ -252,12 +252,6 @@ public class player : MonoBehaviour{
       GameObject ui = GameObject.Find("ui");
       if(ui != null){
         ui_found = true;
-        if(PlayerPrefs.GetString("screen") == "TABLETOP"){
-          ui.SetActive(false);
-        }
-        else{
-          GameObject.Find("tabletop_ui").SetActive(false);
-        }
       }
       else{
         ui_found = false;
