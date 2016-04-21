@@ -523,8 +523,8 @@ public class level : MonoBehaviour {
       style.fontSize = 45;
       style.font = Resources.Load<Font>("uni");
       style.alignment = TextAnchor. MiddleCenter;
-            DrawOutline(new Rect((Screen.width * (1 - w)) / 2, (Screen.height * (1 - h)) / 2, Screen.width * w, Screen.height * h), "Game Over", style, Color.black, Color.white);
-      // GUI.Label(, "Game Over", style);
+            DrawOutline(new Rect((Screen.width * (1 - w)) / 2, (Screen.height * (1 - h)) / 2, Screen.width * w, Screen.height * h),
+                "Game Over", style, Color.black, Color.white);
     }
   }
 
