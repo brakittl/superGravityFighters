@@ -496,7 +496,7 @@ public class level : MonoBehaviour {
     }
   }
 
-  public static function DrawOutline(Rect position, string text, GUIStyle style, Color outColor, Color inColor){
+  void DrawOutline(Rect position, string text, GUIStyle style, Color outColor, Color inColor){
     var backupStyle = style;
     style.normal.textColor = outColor;
     position.x--;
@@ -521,8 +521,9 @@ public class level : MonoBehaviour {
       GUIStyle style = new GUIStyle();
       style.normal.textColor = Color.red;
       style.fontSize = 45;
+      style.font = Resources.Load<Font>("uni");
       style.alignment = TextAnchor. MiddleCenter;
-      DrawOutline(new Rect((Screen.width*(1-w))/2, (Screen.height*(1-h))/2, Screen.width * w, Screen.height * h), "Game Over", style, Color.black, Color.white)
+            DrawOutline(new Rect((Screen.width * (1 - w)) / 2, (Screen.height * (1 - h)) / 2, Screen.width * w, Screen.height * h), "Game Over", style, Color.black, Color.white);
       // GUI.Label(, "Game Over", style);
     }
   }

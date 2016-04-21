@@ -1180,7 +1180,6 @@ public class player : MonoBehaviour{
         }
         else if (lives <= 0)
         {
-            //level.S.lastKill(this, colors[killer_color.ToLower()], 0.05f);
             level.S.KillPause(transform.position, colors[killer_color.ToLower()], !is_character_select, 0.05f);
             sound.PlayOneShot(defeat, 5.5f);
         }
@@ -1227,7 +1226,25 @@ public class player : MonoBehaviour{
         dying = false;
       // set position off screen
       Vector3 pos = transform.position;
-  		transform.position = offscreen;
+
+
+        GameObject[] gos = GameObject.FindGameObjectsWithTag("player");
+        int livesLeft = 0;
+        foreach(GameObject g in gos)
+        {
+            player other = g.GetComponent<player>();
+            if(other.name != this.name)
+            {
+                livesLeft += other.lives;
+            }
+        }
+
+        if(livesLeft >= 0)
+        {
+            transform.position = offscreen;
+        }
+
+  		
       Gravity("down", -transform.localEulerAngles.y, 0f, false);
 
       // instantiate bullet pickup if player has extra bullets
