@@ -496,21 +496,36 @@ public class level : MonoBehaviour {
     }
   }
 
-    void OnGUI()
-    {
-        
-        if (deathZoom)
-        {
-            float w = 0.3f, h = 0.2f;
-            GUIStyle style = new GUIStyle();
-            style.normal.textColor = Color.red;
-            style.fontSize = 45;
-            style.font = Resources.Load<Font>("uni");
-            style.alignment = TextAnchor. MiddleCenter;
-            GUI.Label(new Rect((Screen.width*(1-w))/2, (Screen.height*(1-h))/2, Screen.width * w, Screen.height * h), 
-                "Game Over", style);
-        }
+  public static function DrawOutline(Rect position, string text, GUIStyle style, Color outColor, Color inColor){
+    var backupStyle = style;
+    style.normal.textColor = outColor;
+    position.x--;
+    GUI.Label(position, text, style);
+    position.x += 2;
+    GUI.Label(position, text, style);
+    position.x--;
+    position.y--;
+    GUI.Label(position, text, style);
+    position.y += 2;
+    GUI.Label(position, text, style);
+    position.y--;
+    style.normal.textColor = inColor;
+    GUI.Label(position, text, style);
+    style = backupStyle;
+  }
+
+  void OnGUI(){
+      
+    if(deathZoom){
+      float w = 0.3f, h = 0.2f;
+      GUIStyle style = new GUIStyle();
+      style.normal.textColor = Color.red;
+      style.fontSize = 45;
+      style.alignment = TextAnchor. MiddleCenter;
+      DrawOutline(new Rect((Screen.width*(1-w))/2, (Screen.height*(1-h))/2, Screen.width * w, Screen.height * h), "Game Over", style, Color.black, Color.white)
+      // GUI.Label(, "Game Over", style);
     }
+  }
 
   public Vector3 returnPosition(int i){
     return respawnPoints[i];
