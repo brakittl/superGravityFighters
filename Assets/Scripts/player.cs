@@ -1263,7 +1263,7 @@ public class player : MonoBehaviour{
       }
 
         if (!dead){
-		      Vector3 respawn_position = level.S.findRespawn();
+			Vector3 respawn_position = level.S.findRespawn(player_number);
           Vector3 circle_position = new Vector3(respawn_position.x - 0.02f, respawn_position.y + 0.01f, 0f);
           Instantiate(Resources.Load<GameObject>("__Prefabs/_respawn_circles/respawn_circle_" + player_color.ToLower()), circle_position, transform.rotation);
           transform.position = respawn_position;
